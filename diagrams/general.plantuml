@@ -1,0 +1,39 @@
+@startuml логика_системы
+autonumber
+skinparam sequence {
+    MessageAlignment center
+    ParticipantPadding 30
+} 
+Actor "Пользователь" as user order 1
+participant "Пользовательский интерфейс" as ui order 2
+participant "Backend" as backend order 3
+participant "Сервис хранения\nданных (API)" as db_api order 4 
+participant "Расчетный модуль" as module order 5
+
+title Диаграмма
+
+Group Поиск гостиницы
+    user -> ui : Задает критерии поиска
+    note right: Ориентировочный район\nи достопримечательности,\nдата заезда и выезда
+    ui -> backend : Отдает критерии поиска
+    backend -> db_api : Отдает критерии поиска\n+ эвристика
+    backend <- db_api : ID достоприм-ей\nи подходящих гостиниц
+    backend -> module : ID достоприм-ей\nи подходящих гостиниц
+    module -[#Orange]> db_api : ID достоприм-ей\nи подходящих гостиниц
+    db_api -[#green]> module : Матрица расстояний\nдостоприм-ей и гостиниц
+    module -> backend : ID выбранных гостиниц
+    note left: ?
+    backend -> ui : ID выбранных гостиниц
+    ui -> user : Таблица ID выбранных гостиниц
+end
+
+Group Построение маршрута
+    user -> ui : Выбирает гостиницы
+    ui -> backend : ID гостиницы
+    backend -> db_api : ID гостиницы
+    backend <- db_api : Координаты точек
+    ui <- backend : Координаты точек
+    user <- ui : Визуализация маршрута
+end
+
+@enduml

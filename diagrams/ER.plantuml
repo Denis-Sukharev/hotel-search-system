@@ -1,0 +1,65 @@
+@startuml база_данных
+
+!define Table(name,desc) class name as "desc"
+!define primary_key(x) <b>x</b>
+!define unique(x) <color:green>x</color>
+!define not_null(x) <u>x</u>
+!define foreign_key(x) <color:red>x</color>
+
+Table(user, "user\n(user в системе)") {
+    primary_key(user_id) SERIAL
+    not_null(unique(username)) VARCHAR[30]
+    not_null(password) VARCHAR[30]
+    }
+
+Table(search, "search\n(запрос)") {
+    primary_key(search_id) SERIAL
+    not_null(foreign_key(user_id)) INTEGER
+    not_null(start_date) DATE
+    not_null(end_date) DATE
+    }
+
+Table(city, "city") {
+    primary_key(city_id) SERIAL
+    not_null(foreign_key(search_id)) INTEGER
+    not_null(name) VARCHAR[30]
+    }
+
+Table(zone, "zone") {
+    primary_key(zone_id) SERIAL
+    not_null(foreign_key(city_id)) INTEGER
+    not_null(name) VARCHAR[30]
+    }
+
+Table(eat, "eat\n('поесть')") {
+    primary_key(eat_id) SERIAL
+    not_null(foreign_key(zone_id)) INTEGER
+    not_null(name) VARCHAR[30]
+    not_null(latitude) DOUBLE PRECISION
+    not_null(longitude) DOUBLE PRECISION 
+    }
+
+Table(watch, "watch\n('посмотреть')") {
+    primary_key(watch_id) SERIAL
+    not_null(foreign_key(zone_id)) INTEGER
+    not_null(name) VARCHAR[30]
+    not_null(latitude) DOUBLE PRECISION
+    not_null(longitude) DOUBLE PRECISION 
+    }
+
+Table(hotel, "hotel") {
+    primary_key(hotel_id) SERIAL
+    not_null(foreign_key(zone_id)) INTEGER
+    not_null(name) VARCHAR[30]
+    not_null(latitude) DOUBLE PRECISION
+    not_null(longitude) DOUBLE PRECISION  
+    }
+
+user "1" -- "*" search
+search "*" -- "1" city : Ограничение на 1 город
+city "1" -- "*" zone : Ограничение на 1 район
+zone "1" -- "*" eat
+zone "1" -- "*" watch
+zone "1" -- "*" hotel
+
+@enduml 
