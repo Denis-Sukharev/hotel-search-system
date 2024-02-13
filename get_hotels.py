@@ -32,12 +32,12 @@ def add_data_to_db(name, latitude, longitude):
     conn.close()
 
 
-for link in hotel_links[:3]:
+for link in hotel_links[:5]:
     href = link['href']
     new_url = f'https://m.101hotels.com{href}#map'
     
-    pause = random.uniform(0.1, 0.5)
-    time.sleep(pause)
+    # pause = random.uniform(0.1, 0.5)
+    # time.sleep(pause)
     
     new_html = requests.get(new_url)
     
