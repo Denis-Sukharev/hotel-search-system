@@ -33,11 +33,6 @@ cursor.execute('''CREATE TABLE poi_coordinates (
                longitude DOUBLE PRECISION NOT NULL,
                FOREIGN KEY (poi_id) REFERENCES poi(poi_id));''')
 
-cursor.execute('''DELETE FROM poi_coordinates;
-               DELETE FROM poi;
-               DELETE FROM district;
-               DELETE FROM city;''')
-
 conn.commit()
 cursor.close()
 conn.close()
