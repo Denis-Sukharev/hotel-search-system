@@ -16,15 +16,15 @@ def check_point_repetition(variant):
     for route, _ in variant:
         for point in route[1:-1]:
             if point in visited_points:
-                return True # Найдено повторение точки
+                return True # найдено повторение точки
             visited_points.add(point)
-    return False # Повторений не найдено
+    return False # не найдено повторение точки
 
 # Функция, которая после check_point_repetition среди ее резульатов будет выбирать оптимальным решением тот вариант в котором содержится бОльшее число точек и минимальная сумма времени
 def find_optimal_variant(variants):
     max_points = 0
     min_total_time = float('inf')
-    optimal_variant = None
+    optimal_variant = []
 
     for variant in variants:
         total_time = sum(time for _, time in variant)
@@ -41,9 +41,8 @@ def find_optimal_solution(time_matrix, distance_matrix, start_node, time_limit, 
     remaining_points = set(points_sequence)
     all_routes = []
     optimal_routes = []
-    
+
     for day in range(1, days + 1):
-        print(f"День: {day}")
         routes_info = []
         for r in range(1, len(points_sequence) + 1):
             for route in itertools.permutations(remaining_points, r):
@@ -53,32 +52,45 @@ def find_optimal_solution(time_matrix, distance_matrix, start_node, time_limit, 
                     routes_info.append((route, route_time))
         routes_info.sort(key=lambda x: (len(x[0]) - 2, x[1]), reverse=True)
         for route, time in routes_info:
-            print(f"Маршрут: {route}, Время: {time}, Расстояние: {sum(distance_matrix[route[i-1]][route[i]] for i in range(1, len(route)))}")
             all_routes.append((route, time))
         if routes_info:
             optimal_route = routes_info[0][0]
             remaining_points -= set(optimal_route[1:-1])
             optimal_routes.append((optimal_route, routes_info[0][1]))
         else:
-            print("Невозможно построить маршрут на текущий день.")
             break
     
-    print("\nВсе возможные маршруты:")
-    variants = list(itertools.combinations(all_routes, days))
-    filtered_variants = [variant for variant in variants if not check_point_repetition(variant)]
-    for i, variant in enumerate(filtered_variants, start=1):
+    variants = list(itertools.permutations(all_routes, days))
+    unique_variants = set(variant for variant in variants if not check_point_repetition(variant))
+    optimal_variant = find_optimal_variant(unique_variants)
+    
+    print("Все возможные маршруты:")
+    for i, variant in enumerate(unique_variants, start=1):
         print(f"{i}) ", end="")
         for route, time in variant:
             print(f"Маршрут: {route}, Время: {time}, Расстояние: {sum(distance_matrix[route[i-1]][route[i]] for i in range(1, len(route)))}", end=", ")
         print()
     
-    optimal_variant = find_optimal_variant(filtered_variants)
-    
     print("\nОптимальное решение:")
-    for route, time in optimal_variant:
-        print(f"Маршрут: {route}, Время: {time}, Расстояние: {sum(distance_matrix[route[i-1]][route[i]] for i in range(1, len(route)))}")
-    total_time = sum(time for _, time in optimal_variant)
-    print(f"Суммарное время: {total_time}")
+    if optimal_variant:
+        total_time = sum(time for _, time in optimal_variant)
+        if total_time == 0:
+            print("Оптимальный маршрут не найден")
+        else:
+            for route, time in optimal_variant:
+                print(f"Маршрут: {route}, Время: {time}, Расстояние: {sum(distance_matrix[route[i-1]][route[i]] for i in range(1, len(route)))}")
+            print(f"Суммарное время: {total_time}")
+
+            # проверка на наличие всех точек из points_sequence в оптимальном решении
+            optimal_points = set()
+            for route, _ in optimal_variant:
+                optimal_points.update(route[1:-1])
+
+            missing_points = set(points_sequence) - optimal_points
+            if missing_points:
+                print(f"Предупреждение: Точки не учтены в оптимальном решении: {missing_points}")
+    else:
+        print("Невозможно построить оптимальный маршрут")
 
 if __name__ == "__main__":
     time_matrix = pd.read_csv('D:\\vkrb\\csv\\time_matrix.csv', header=None).values
