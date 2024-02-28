@@ -8,7 +8,7 @@ if __name__ == "__main__":
     time_matrix = pd.read_csv('D:\\vkrb\\csv\\time_matrix.csv', header=None).values
     distance_matrix = pd.read_csv('D:\\vkrb\\csv\\distance_matrix.csv', header=None).values
     start_node = 0
-    time_limit = 20
+    time_limit = 50
     days = 2
     points_sequence = [1, 2, 3]
 

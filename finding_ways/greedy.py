@@ -1,6 +1,3 @@
-# Жадный алгоритм
-import numpy as np
-import pandas as pd
 from itertools import permutations
 
 def generate_routes(points_sequence):

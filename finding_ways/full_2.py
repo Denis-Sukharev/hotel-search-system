@@ -1,6 +1,4 @@
-# Полный перебор за несколько дней
 import itertools
-import pandas as pd
 
 def is_valid_route(route, matrix, time_limit):
     total_time = 0

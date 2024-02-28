@@ -1,6 +1,4 @@
-# Полный перебор за один день
 import itertools
-import pandas as pd
 
 def brute_force_algorithm(time_matrix, start_point, points_sequence, max_time_per_day):
     shortest_route = 0
