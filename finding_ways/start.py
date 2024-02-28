@@ -2,6 +2,7 @@ import pandas as pd
 from greedy import greedy_algorithm, calculate_total_distance
 from full_1 import brute_force_algorithm
 from full_2 import find_optimal_solution
+from full_3 import find_optimal_solution_2
 
 if __name__ == "__main__":
     # ВВОДНЫЕ ДАННЫЕ:
@@ -35,6 +36,24 @@ if __name__ == "__main__":
 
     else:
         print(f"Невозможно построить маршруты в указанные дни жадным алгоритмом\nПопробуйте уменьшить количество точек или увеличить дни пребывания")
+
+    
+    
+    # ДОПОЛНИТЕЛЬНО. Поиск решения полным перебором с чтобы соблюсти все точки:
+    found_solution = False
+
+    while not found_solution and days <= 30:
+        found_solution = find_optimal_solution_2(time_matrix, distance_matrix, start_node, time_limit, days, points_sequence)
+
+        if found_solution:
+            break
+        else:
+            days += 1
+    if not found_solution:
+        print(f"Не удается найти решение")
+    
+    
+
 
 # # Ограничение 20, 2:
 # 0,5,10,15
