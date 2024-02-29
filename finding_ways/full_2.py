@@ -15,9 +15,9 @@ def check_point_repetition(variant):
     for route, _ in variant:
         for point in route[1:-1]:
             if point in visited_points:
-                return True # найдено повторение точки
+                return True
             visited_points.add(point)
-    return False # не найдено повторение точки
+    return False
 
 # Функция, которая после check_point_repetition среди ее резульатов будет выбирать оптимальным решением тот вариант, в котором содержится бОльшее число точек и минимальная сумма времени
 def find_optimal_variant(variants):
@@ -81,7 +81,6 @@ def find_optimal_solution(time_matrix, distance_matrix, start_node, time_limit, 
                 print(f"День: {i}, Маршрут: {route}, Время: {time}, Расстояние: {total_distance}")
             # print(f"Суммарное время: {total_time}")
             
-            # проверка на наличие всех точек из points_sequence в оптимальном решении
             optimal_points = set()
             for route, _ in optimal_variant:
                 optimal_points.update(route[1:-1])

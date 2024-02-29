@@ -9,7 +9,7 @@ if __name__ == "__main__":
     time_matrix = pd.read_csv('D:\\vkrb\\csv\\time_matrix.csv', header=None).values
     distance_matrix = pd.read_csv('D:\\vkrb\\csv\\distance_matrix.csv', header=None).values
     start_node = 0
-    time_limit = 50
+    time_limit = 40
     days = 2
     points_sequence = [1, 2, 3]
 
@@ -23,16 +23,16 @@ if __name__ == "__main__":
         find_optimal_solution(time_matrix, distance_matrix, start_node, time_limit, days, points_sequence)
 
     # ЖАДНЫЙ АЛГОРИТМ:
-    routes_greedy, times_greedy, possible_greedy, unsatisfied_points_greedy = greedy_algorithm(time_matrix, start_node, points_sequence, days, time_limit)
+    routes_greedy, times_greedy, any_day_possible, unsatisfied_points = greedy_algorithm(time_matrix, start_node, points_sequence, days, time_limit)
 
-    if possible_greedy:
+    if any_day_possible:
         print("\nРешение жадным алгоритмом:")
         for i in range(len(routes_greedy)):
             total_distance_greedy = calculate_total_distance(routes_greedy[i], distance_matrix)
             print(f"День: {i+1}, Маршрут: {routes_greedy[i]}, Время: {times_greedy[i]}, Расстояние: {total_distance_greedy}")
 
-        if unsatisfied_points_greedy:
-            print(f"Точки не учтены: {unsatisfied_points_greedy}")
+        if unsatisfied_points:
+            print(f"Точки не учтены: {unsatisfied_points}")
 
     else:
         print(f"Невозможно построить маршруты в указанные дни жадным алгоритмом\nПопробуйте уменьшить количество точек или увеличить дни пребывания")
