@@ -19,7 +19,7 @@ def brute_force_algorithm(time_matrix, start_point, points_sequence, _):
 
     return shortest_route, shortest_time, bool(shortest_route), unsatisfied_points
 
-if __name__ == "__main__":
+'''if __name__ == "__main__":
     time_matrix = pd.read_csv('D:\\vkrb\\csv\\time_matrix.csv', header=None).values
     distance_matrix = pd.read_csv('D:\\vkrb\\csv\\distance_matrix.csv', header=None).values
     start_node = 0
@@ -33,5 +33,5 @@ if __name__ == "__main__":
         print("Маршрут за 1 день полным перебором:")
         print(f"Маршрут: {best_route}, Время: {best_time}, Расстояние: {sum(distance_matrix[best_route[i - 1]][best_route[i]] for i in range(1, len(best_route)))}")
     # else:
-    #     print("Невозможно построить маршрут полным перебором за 1 день")
+    #     print("Невозможно построить маршрут полным перебором за 1 день")'''
 
