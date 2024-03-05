@@ -1,5 +1,7 @@
 @startuml база_данных
 
+skinparam Linetype ortho
+
 !define Table(name) class name
 !define primary_key(x) <b>x</b>
 !define unique(x) <color:green>x</color>
@@ -8,25 +10,25 @@
 
 Table(city) {
     primary_key(city_id) SERIAL
-    not_null(name) VARCHAR[30]
+    not_null(name) VARCHAR[300]
     }
 
 Table(district) {
     primary_key(district_id) SERIAL
     not_null(foreign_key(city_id)) INTEGER
-    not_null(name) VARCHAR[30]
+    not_null(name) VARCHAR[300]
     }
 
 Table(poi) {
     primary_key(poi_id) SERIAL
     not_null(foreign_key(district_id)) INTEGER
-    not_null(name) VARCHAR[100] 
+    not_null(name) VARCHAR[300] 
 }
 
-Table(poi_type) {
+Table(poi_category) {
     primary_key(id) SERIAL
     not_null(foreign_key(poi_id)) INTEGER
-    not_null(type) VARCHAR[100] 
+    not_null(category) VARCHAR[300] 
 }
 
 Table(poi_coordinates) {
@@ -36,17 +38,11 @@ Table(poi_coordinates) {
     not_null(longitude) DOUBLE PRECISION  
 }
 
-Table(poi_time) {
+Table(hotel_rating) {
     primary_key(id) SERIAL
     not_null(foreign_key(poi_id)) INTEGER
-    opening_time TIME
-    closing_time TIME
-}
-
-Table(poi_duration) {
-    primary_key(id) SERIAL
-    not_null(foreign_key(poi_id)) INTEGER
-    duration INTEGER
+    rating DOUBLE PRECISION
+    time TIMESTAMP DEFAULT NOW()
 }
 
 Table(hotel_stars) {
@@ -55,28 +51,40 @@ Table(hotel_stars) {
     stars DOUBLE PRECISION
 }
 
-Table(hotel_rating) {
+Table(poi_type) {
     primary_key(id) SERIAL
     not_null(foreign_key(poi_id)) INTEGER
-    rating DOUBLE PRECISION
-    time TIMESTAMP DEFAULT NOW()
+    not_null(type) VARCHAR[300] 
 }
 
-Table(hotel_price) {
-    primary_key(id) SERIAL
-    not_null(foreign_key(poi_id)) INTEGER
-    price INTEGER
-}
+' Table(poi_time) {
+'     primary_key(id) SERIAL
+'     not_null(foreign_key(poi_id)) INTEGER
+'     opening_time TIME
+'     closing_time TIME
+' }
 
-city "1" --> "*" district
-district "1" --> "*" poi
+' Table(poi_duration) {
+'     primary_key(id) SERIAL
+'     not_null(foreign_key(poi_id)) INTEGER
+'     duration INTEGER
+' }
 
+' Table(hotel_price) {
+'     primary_key(id) SERIAL
+'     not_null(foreign_key(poi_id)) INTEGER
+'     price INTEGER
+' }
+
+city "1" <-- "*" district
+district "1" <-- "*" poi
 poi "1" --> "1" poi_coordinates
+poi "*" --> "1" poi_category
 poi "*" --> "1" poi_type
-poi "*" --> "1" poi_time
-poi "*" --> "1" poi_duration
 poi "*" --> "1" hotel_stars
 poi "*" --> "1" hotel_rating
-poi "*" --> "1" hotel_price
+' poi "*" --> "1" poi_time
+' poi "*" --> "1" poi_duration
+' poi "*" --> "1" hotel_price
 
 @enduml 
