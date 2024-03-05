@@ -72,32 +72,17 @@ def find_optimal_solution(time_matrix, distance_matrix, start_node, time_limit, 
 
     if optimal_variant:
         print("Решение полным перебором за несколько дней:")
-        total_time = sum(time for _, time in optimal_variant)
-        if total_time == 0:
-            print("Оптимальный маршрут не найден")
-        else:
-            for i, (route, time) in enumerate(optimal_variant, start=1):
-                total_distance = sum(distance_matrix[route[i-1]][route[i]] for i in range(1, len(route)))
-                print(f"День: {i}, Маршрут: {route}, Время: {time}, Расстояние: {total_distance}")
-            # print(f"Суммарное время: {total_time}")
+        for i, (route, time) in enumerate(optimal_variant, start=1):
+            total_distance = sum(distance_matrix[route[i-1]][route[i]] for i in range(1, len(route)))
+            print(f"День: {i}, Маршрут: {route}, Время: {time}, Расстояние: {total_distance}")
+            # print(f"Суммарное время: {sum(time for _, time in optimal_variant)}")
             
-            optimal_points = set()
-            for route, _ in optimal_variant:
-                optimal_points.update(route[1:-1])
+        optimal_points = set()
+        for route, _ in optimal_variant:
+            optimal_points.update(route[1:-1])
 
-            missing_points = set(points_sequence) - optimal_points
-            if missing_points:
-                print(f"Точки не учтены: {missing_points}")
+        missing_points = set(points_sequence) - optimal_points
+        if missing_points:
+            print(f"Точки не учтены: {missing_points}")
     else:
-        print("Невозможно построить маршруты полным перебором\nПопробуйте уменьшить количество точек или увеличить дни пребывания")
-
-'''if __name__ == "__main__":
-    time_matrix = pd.read_csv('D:\\vkrb\\csv\\time_matrix.csv', header=None).values
-    distance_matrix = pd.read_csv('D:\\vkrb\\csv\\distance_matrix.csv', header=None).values
-    start_node = 0
-    time_limit = 50
-    days = 2
-    points_sequence = [1, 2, 3]
-
-    find_optimal_solution(time_matrix, distance_matrix, start_node, time_limit, days, points_sequence)
-'''
+        print("Невозможно предложить решение полным перебором. Точки находятся слишком далеко")

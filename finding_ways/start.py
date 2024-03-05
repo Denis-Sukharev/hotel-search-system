@@ -9,7 +9,7 @@ if __name__ == "__main__":
     time_matrix = pd.read_csv('D:\\vkrb\\csv\\time_matrix.csv', header=None).values
     distance_matrix = pd.read_csv('D:\\vkrb\\csv\\distance_matrix.csv', header=None).values
     start_node = 0
-    time_limit = 40
+    time_limit = 10
     days = 2
     points_sequence = [1, 2, 3]
 
@@ -35,40 +35,58 @@ if __name__ == "__main__":
             print(f"Точки не учтены: {unsatisfied_points}")
 
     else:
-        print(f"Невозможно построить маршруты в указанные дни жадным алгоритмом\nПопробуйте уменьшить количество точек или увеличить дни пребывания")
+        print(f"\nНевозможно предложить решение жадным алгоритмом. Точки находятся слишком далеко")
 
     
     
     # ДОПОЛНИТЕЛЬНО. Поиск решения полным перебором с чтобы соблюсти все точки:
-    found_solution = False
+    # found_solution = False
 
-    while not found_solution and days <= 30:
-        found_solution = find_optimal_solution_2(time_matrix, distance_matrix, start_node, time_limit, days, points_sequence)
+    # while not found_solution and days <= 30:
+    #     found_solution = find_optimal_solution_2(time_matrix, distance_matrix, start_node, time_limit, days, points_sequence)
 
-        if found_solution:
-            break
-        else:
-            days += 1
-    if not found_solution:
-        print(f"Не удается найти решение")
-    
-    
+    #     if found_solution:
+    #         break
+    #     else:
+    #         days += 1
+    # if not found_solution:
+    #     print(f"\nНе удается найти решение")
 
 
-# # Ограничение 20, 2:
-# 0,5,10,15
-# 20,0,15,5
-# 8,1,0,10
-# 0,0,0,0
-    
-# # Ограничение 50, 2:
-# 0,10,20,40
-# 15,0,15,20
-# 30,15,0,10
-# 20,20,20,0
+# 1) Построение маршрута за один день (идеальные условия):
+'''Ограничение 20, 2
+0,5,10,15
+20,0,15,5
+8,1,0,10
+0,0,0,0'''           
 
-# # Ограничение 40, 3:
-# 0,20,20,20
-# 20,0,20,20
-# 20,20,0,20
-# 20,20,20,0
+# 2) Построение маршрутов за несколько дней (дневное время < время маршрута со всеми точками):
+'''Ограничение 50, 2
+0,10,20,40
+15,0,15,20
+30,15,0,10
+20,20,20,0'''
+
+# 3) Построение маршрутов не со всеми точками (дней указано меньше, чем необходимо):
+'''Ограничение 40, 2
+0,20,20,20
+20,0,20,20
+20,20,0,20
+20,20,20,0'''
+
+# 4) Невозможно предложить решение (дневное время < время до самой ближайшей точки):
+'''Ограничение 10, 2
+0,20,20,20
+20,0,20,20
+20,20,0,20
+20,20,20,0'''
+
+# 5) !!! [Оптимальное решение выполняется только у жадного алгоритма]:
+'''Ограничение 10, 2
+0,4,20,5
+4,0,20,20
+20,20,0,20
+5,0,20,0'''
+
+
+
