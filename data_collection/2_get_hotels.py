@@ -1,10 +1,13 @@
+import geopy
 from geopy.geocoders import Nominatim
+from geopy.exc import GeocoderInsufficientPrivileges
 import requests
 from bs4 import BeautifulSoup
 import re
 import psycopg2
 import time
 import random
+import time
 
 conn = psycopg2.connect(
     host="localhost",
@@ -69,7 +72,7 @@ def add_hotel_stars_to_db(poi_id, stars):
 def get_district(latitude, longitude):
     geolocator = Nominatim(user_agent="geoapiExercises")
 
-    pause = random.uniform(1,2)
+    pause = random.uniform(1,3)
     time.sleep(pause)
 
     location = geolocator.reverse((latitude, longitude), exactly_one=True)
@@ -92,11 +95,11 @@ s = BeautifulSoup(html.content, 'html.parser')
 results = s.find(id='hotels-list')
 hotel_links = results.find_all('a', class_='link__trigger')
 
-for link in hotel_links[:3]:
+for link in hotel_links:
     href = link['href']
     new_url = f'https://m.101hotels.com{href}#map'
 
-    pause = random.uniform(1,2)
+    pause = random.uniform(1,3)
     time.sleep(pause)
     
     new_html = requests.get(new_url)
@@ -104,7 +107,7 @@ for link in hotel_links[:3]:
     poi_type = link.find(class_='link__description').get_text(strip=True)
         
     rating_match = re.search(r'<span class="hotel-rating-item__rating-number">(\d+\.\d+)</span>', new_html.text)
-    rating = rating_match.group(1)
+    rating = rating_match.group(1) if rating_match else '0.0'
 
     stars_match = re.search(r'<div class="hotel__stars">(.+)</div>', new_html.text)
     stars_string = stars_match.group(1) if stars_match else ''
@@ -113,23 +116,28 @@ for link in hotel_links[:3]:
     coord = re.search(r'center:\s\[(\d+\.\d+)\,(\d+\.\d+)\]', new_html.text)
     if coord:
         lat, lon = coord.groups()
-        district = get_district(lat, lon)
+        try:
+            district = get_district(lat, lon)
         
-        if district:
-            district_id = add_district_to_db(city_id, district)
-            poi_id = add_poi_to_db(district_id, hotel_name)
-            add_coordinates_to_db(poi_id, lat, lon)
-            add_poi_category_to_db(poi_id, 'residence')
-            add_poi_type_to_db(poi_id, poi_type)
-            add_hotel_rating_to_db(poi_id, rating)
-            
-            if stars_count > 0:
-                add_hotel_stars_to_db(poi_id, stars_count)
+            if district:
+                district_id = add_district_to_db(city_id, district)
+                poi_id = add_poi_to_db(district_id, hotel_name)
+                add_coordinates_to_db(poi_id, lat, lon)
+                add_poi_category_to_db(poi_id, 'Проживание')
+                add_poi_type_to_db(poi_id, poi_type)
+                add_hotel_rating_to_db(poi_id, rating)
+                
+                if stars_count > 0:
+                    add_hotel_stars_to_db(poi_id, stars_count)
 
-            print(f"УСПЕШНО: {hotel_name}")
-       
-        else:
-            print(f"'{hotel_name}' ЗА ПРЕДЕЛАМИ '{city}'")
+                print(f"УСПЕШНО: {hotel_name}")
+        
+            else:
+                print(f"'{hotel_name}' ЗА ПРЕДЕЛАМИ '{city}'")
+        except geopy.exc.GeocoderInsufficientPrivileges as error:
+            print(error)
+            time.sleep(3600)
+            continue
 
 cursor.close()
 conn.close()
