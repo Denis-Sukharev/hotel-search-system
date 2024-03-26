@@ -63,8 +63,7 @@ conn.commit()
 cursor.close()
 conn.close()
 
-
-
+# Можно добавить:
 '''CREATE TABLE poi_time (
     id SERIAL PRIMARY KEY,
     poi_id INTEGER NOT NULL,
