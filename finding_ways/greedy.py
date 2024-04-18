@@ -6,25 +6,25 @@ def generate_routes(points_sequence):
         routes.extend(permutations(points_sequence, r))
     return routes
 
-def greedy_algorithm(time_matrix, start_point, points_sequence, days, time_limit):
+def greedy_algorithm(time_matrix, distance_matrix, start_point, points_sequence, days, time_limit):
     routes_per_day = []
     time_per_day = []
     any_day_possible = False
     unsatisfied_points = set(points_sequence)
     
     for _ in range(days):
-        sorted_routes = sorted(generate_routes(unsatisfied_points), key=len, reverse=True) # сортировка по длине маршрута + сортировка в порядке убывания
+        sorted_routes = sorted(generate_routes(unsatisfied_points), key=len, reverse=True)
         
         for route in sorted_routes:
             route = [start_point] + list(route) + [start_point]
-            time = sum(time_matrix[route[i]][route[i+1]] for i in range(len(route)-1))
+            time = sum(time_matrix.loc[route[i], route[i+1]] for i in range(len(route)-1))
             
             if time <= time_limit:
                 routes_per_day.append(route)
                 time_per_day.append(time)
                 
                 for point in route[1:-1]:
-                    unsatisfied_points.remove(point)  # удаляем точку из копии, так как она уже в маршруте
+                    unsatisfied_points.remove(point)
                 any_day_possible = True
                 break
 
@@ -32,27 +32,5 @@ def greedy_algorithm(time_matrix, start_point, points_sequence, days, time_limit
 
 
 def calculate_total_distance(route, distance_matrix):
-    total_distance = sum(distance_matrix[route[i - 1]][route[i]] for i in range(1, len(route))) + distance_matrix[route[-1]][route[0]]
+    total_distance = sum(distance_matrix.loc[route[i - 1], route[i]] for i in range(1, len(route))) + distance_matrix.loc[route[-1], route[0]]
     return total_distance
-
-'''if __name__ == "__main__":
-    time_matrix = pd.read_csv('D:\\vkrb\\csv\\time_matrix.csv', header=None).values
-    distance_matrix = pd.read_csv('D:\\vkrb\\csv\\distance_matrix.csv', header=None).values
-    start_point = 0
-    points_sequence = [1, 2, 3]
-    days = 2
-    time_limit = 50
-
-    routes, times, any_day_possible, unsatisfied_points = greedy_algorithm(time_matrix, start_point, points_sequence, days, max_time_per_day)
-
-    if any_day_possible:
-        print("\nРешение жадным алгоритмом:")
-        for i in range(len(routes)):
-            total_distance = calculate_total_distance(routes[i], distance_matrix)
-            print(f"День: {i+1}, Маршрут: {routes[i]}, Время: {times[i]}, Расстояние: {total_distance}")
-
-        if unsatisfied_points:
-            print(f"Точки не учтены: {unsatisfied_points}")
-
-    else:
-        print(f"Невозможно построить маршруты в указанные дни жадным алгоритмом\nПопробуйте уменьшить количество точек или увеличить дни пребывания")'''
