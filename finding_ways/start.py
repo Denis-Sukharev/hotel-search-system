@@ -2,91 +2,74 @@ import pandas as pd
 from greedy import greedy_algorithm, calculate_total_distance
 from full_1 import brute_force_algorithm
 from full_2 import find_optimal_solution
-from full_3 import find_optimal_solution_2
 
 if __name__ == "__main__":
-    # ВВОДНЫЕ ДАННЫЕ:
-    time_matrix = pd.read_csv('D:\\vkrb\\csv\\time_matrix.csv', header=None).values
-    distance_matrix = pd.read_csv('D:\\vkrb\\csv\\distance_matrix.csv', header=None).values
-    start_node = 0
-    time_limit = 10
-    days = 2
-    points_sequence = [1, 2, 3]
+    hotels = pd.read_csv('D:\\vkrb\\csv\\hotels.csv')
+    results = []
 
-    # ПОЛНЫЙ ПЕРЕБОР:
-    best_route_brute, best_time_brute, is_possible_brute, unsatisfied_points_brute = brute_force_algorithm(time_matrix, start_node, points_sequence, time_limit)
+    for index, hotel in hotels.iterrows():
+        start_node = hotel['poi_id']
+        print(f"\nОбработка отеля {hotel['name']} (poi_id: {start_node}):")
 
-    if is_possible_brute:
-        print("Маршрут за 1 день полным перебором:")
-        print(f"Маршрут: {best_route_brute}, Время: {best_time_brute}, Расстояние: {sum(distance_matrix[best_route_brute[i - 1]][best_route_brute[i]] for i in range(1, len(best_route_brute)))}")
-    else:
-        find_optimal_solution(time_matrix, distance_matrix, start_node, time_limit, days, points_sequence)
+        # ВВОДНЫЕ ДАННЫЕ:
+        matrix = pd.read_csv('D:\\vkrb\\csv\\matrix.csv')
+        time_matrix = matrix.set_index(['mapped_object_start', 'mapped_object_finish'])['duration'].unstack(fill_value=0)
+        distance_matrix = matrix.set_index(['mapped_object_start', 'mapped_object_finish'])['distance'].unstack(fill_value=0)
+        time_limit = 7200
+        days = 7
+        points_sequence = [11126, 12197, 14228]
 
-    # ЖАДНЫЙ АЛГОРИТМ:
-    routes_greedy, times_greedy, any_day_possible, unsatisfied_points = greedy_algorithm(time_matrix, start_node, points_sequence, days, time_limit)
+        # ПОЛНЫЙ ПЕРЕБОР:
+        best_route_brute, best_time_brute, is_possible_brute = brute_force_algorithm(time_matrix, start_node, points_sequence, time_limit)
 
-    if any_day_possible:
-        print("\nРешение жадным алгоритмом:")
-        for i in range(len(routes_greedy)):
-            total_distance_greedy = calculate_total_distance(routes_greedy[i], distance_matrix)
-            print(f"День: {i+1}, Маршрут: {routes_greedy[i]}, Время: {times_greedy[i]}, Расстояние: {total_distance_greedy}")
+        if is_possible_brute:
+            total_distance_brute = sum(distance_matrix[best_route_brute[i - 1]][best_route_brute[i]] for i in range(1, len(best_route_brute)))
+            print("Маршрут за 1 день полным перебором:")
+            print(f"Маршрут: {best_route_brute}, Время: {best_time_brute}, Расстояние: {total_distance_brute}")
+            total_time_brute = best_time_brute
+            route_list_str = best_route_brute
+        else:
+            total_time_brute, total_distance_brute, route_list_str, missing_points = find_optimal_solution(time_matrix, distance_matrix, start_node, time_limit, days, points_sequence)
 
-        if unsatisfied_points:
-            print(f"Точки не учтены: {unsatisfied_points}")
+        # ЖАДНЫЙ АЛГОРИТМ:
+        routes_greedy, times_greedy, any_day_possible, unsatisfied_points = greedy_algorithm(time_matrix, distance_matrix, start_node, points_sequence, days, time_limit)
 
-    else:
-        print(f"\nНевозможно предложить решение жадным алгоритмом. Точки находятся слишком далеко")
+        if any_day_possible:
+            print("\nРешение жадным алгоритмом:")
+            total_distance_greedy = sum([calculate_total_distance(route, distance_matrix) for route in routes_greedy])
 
-    
-    
-    # ДОПОЛНИТЕЛЬНО. Поиск решения полным перебором с чтобы соблюсти все точки:
-    # found_solution = False
+            for i, route in enumerate(routes_greedy, 1):
+                total_distance_route = calculate_total_distance(route, distance_matrix)
+                print(f"День: {i}, Маршрут: {route}, Время: {times_greedy[i-1]}, Расстояние: {total_distance_route}")
 
-    # while not found_solution and days <= 30:
-    #     found_solution = find_optimal_solution_2(time_matrix, distance_matrix, start_node, time_limit, days, points_sequence)
+            if unsatisfied_points:
+                print(f"Точки не учтены: {unsatisfied_points}")
 
-    #     if found_solution:
-    #         break
-    #     else:
-    #         days += 1
-    # if not found_solution:
-    #     print(f"\nНе удается найти решение")
+            total_time_greedy = sum(times_greedy)
 
+            if total_time_brute <= total_time_greedy:
 
-# 1) Построение маршрута за один день (идеальные условия):
-'''Ограничение 20, 2
-0,5,10,15
-20,0,15,5
-8,1,0,10
-0,0,0,0'''           
+                results.append({
+                    'hotel': hotel['name'],
+                    'route': [list(route) for route in routes_greedy] if route_list_str == [] else route_list_str,
+                    'time': total_time_brute,
+                    'distance': total_distance_brute,
+                    'unsatisfied_points': unsatisfied_points if route_list_str == best_route_brute else (unsatisfied_points if route_list_str == [] else missing_points)
+                })
+            else:
+                min_time = min(total_time_greedy, total_time_brute) if is_possible_brute else total_time_greedy
+                results.append({
+                'hotel': hotel['name'],
+                'route': [list(route) for route in routes_greedy] if min_time == total_time_greedy else [list(best_route_brute)],
+                'time': total_time_brute if min_time == total_time_brute else total_time_greedy,
+                'distance': total_distance_brute if min_time == total_time_brute else total_distance_greedy,
+                'unsatisfied_points': unsatisfied_points
+            })
+        else:
+            print(f"\nНевозможно предложить решение жадным алгоритмом. Точки находятся слишком далеко")
 
-# 2) Построение маршрутов за несколько дней (дневное время < время маршрута со всеми точками):
-'''Ограничение 50, 2
-0,10,20,40
-15,0,15,20
-30,15,0,10
-20,20,20,0'''
+    results.sort(key=lambda x: (len(x['unsatisfied_points']), x['time']))
 
-# 3) Построение маршрутов не со всеми точками (дней указано меньше, чем необходимо):
-'''Ограничение 40, 2
-0,20,20,20
-20,0,20,20
-20,20,0,20
-20,20,20,0'''
-
-# 4) Невозможно предложить решение (дневное время < время до самой ближайшей точки):
-'''Ограничение 10, 2
-0,20,20,20
-20,0,20,20
-20,20,0,20
-20,20,20,0'''
-
-# 5) !!! [Оптимальное решение выполняется только у жадного алгоритма]:
-'''Ограничение 10, 2
-0,4,20,5
-4,0,20,20
-20,20,0,20
-5,0,20,0'''
-
-
-
+    print("\n")
+    for i, result in enumerate(results, 1):
+        print(f"{i}: {result['hotel']}, маршрут: {result['route']}, общее время: {result['time']}, общее расстояние: {result['distance']}, неучтенные точки : {result['unsatisfied_points']}")
