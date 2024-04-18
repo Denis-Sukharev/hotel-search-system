@@ -1,10 +1,8 @@
 import itertools
-import pandas as pd
 
 def brute_force_algorithm(time_matrix, start_point, points_sequence, max_time_day):
     shortest_route = 0
     shortest_time = float('inf')
-    unsatisfied_points = set(points_sequence)
 
     all_permutations = itertools.permutations(points_sequence)
 
@@ -16,7 +14,6 @@ def brute_force_algorithm(time_matrix, start_point, points_sequence, max_time_da
             if time < shortest_time:
                 shortest_route = route
                 shortest_time = time
-            unsatisfied_points -= set(route[1:-1])
 
-    return shortest_route, shortest_time, bool(shortest_route), unsatisfied_points
+    return shortest_route, shortest_time, bool(shortest_route)
 
