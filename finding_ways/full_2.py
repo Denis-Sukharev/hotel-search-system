@@ -3,13 +3,11 @@ import itertools
 def is_valid_route(route, matrix, time_limit):
     total_time = 0
     for i in range(len(route) - 1):
-        total_time += matrix[route[i]][route[i+1]]
+        total_time += matrix.loc[route[i], route[i+1]]
         if total_time > time_limit:
             return False
     return True
 
-# Функция, которая сверяет повторения точек между каждым вариантом маршрутов
-# Например, 1) Маршрут: (0, 1, 3, 0), Время: 50, Маршрут: (0, 2, 1, 0), Время: 50, тут есть повторение точек 1 поэтому его мы в следующий раз не выводим
 def check_point_repetition(variant):
     visited_points = set()
     for route, _ in variant:
@@ -19,7 +17,6 @@ def check_point_repetition(variant):
             visited_points.add(point)
     return False
 
-# Функция, которая после check_point_repetition среди ее резульатов будет выбирать оптимальным решением тот вариант, в котором содержится бОльшее число точек и минимальная сумма времени
 def find_optimal_variant(variants):
     max_points = 0
     min_total_time = float('inf')
@@ -40,6 +37,10 @@ def find_optimal_solution(time_matrix, distance_matrix, start_node, time_limit, 
     remaining_points = set(points_sequence)
     all_routes = []
     optimal_routes = []
+    total_distance = 0
+    total_time = 0
+    route_list_str = []
+    missing_points = set()
 
     for day in range(1, days + 1):
         routes_info = []
@@ -47,11 +48,13 @@ def find_optimal_solution(time_matrix, distance_matrix, start_node, time_limit, 
             for route in itertools.permutations(remaining_points, r):
                 route = (start_node,) + route + (start_node,)
                 if is_valid_route(route, time_matrix, time_limit):
-                    route_time = sum(time_matrix[route[i]][route[i+1]] for i in range(len(route) - 1))
+                    route_time = sum(time_matrix.loc[route[i], route[i+1]] for i in range(len(route) - 1))
                     routes_info.append((route, route_time))
+                    total_distance += sum(distance_matrix.loc[route[i-1], route[i]] for i in range(1, len(route)))
         routes_info.sort(key=lambda x: (len(x[0]) - 2, x[1]), reverse=True)
         for route, time in routes_info:
             all_routes.append((route, time))
+            total_time += time
         if routes_info:
             optimal_route = routes_info[0][0]
             remaining_points -= set(optimal_route[1:-1])
@@ -63,20 +66,14 @@ def find_optimal_solution(time_matrix, distance_matrix, start_node, time_limit, 
     unique_variants = set(variant for variant in variants if not check_point_repetition(variant))
     optimal_variant = find_optimal_variant(unique_variants)
     
-    '''print("Все возможные маршруты:")
-    for i, variant in enumerate(unique_variants, start=1):
-        print(f"{i}) ", end="")
-        for route, time in variant:
-            print(f"Маршрут: {route}, Время: {time}, Расстояние: {sum(distance_matrix[route[i-1]][route[i]] for i in range(1, len(route)))}", end=", ")
-        print()'''
-
     if optimal_variant:
         print("Решение полным перебором за несколько дней:")
+        total_distance = sum(distance_matrix.loc[route[i-1], route[i]] for route, _ in optimal_variant for i in range(1, len(route)))
+        route_list_str = [[point for point in route] for route, _ in optimal_variant]
         for i, (route, time) in enumerate(optimal_variant, start=1):
-            total_distance = sum(distance_matrix[route[i-1]][route[i]] for i in range(1, len(route)))
-            print(f"День: {i}, Маршрут: {route}, Время: {time}, Расстояние: {total_distance}")
-            # print(f"Суммарное время: {sum(time for _, time in optimal_variant)}")
-            
+            print(f"День: {i}, Маршрут: {route_list_str[i-1]}, Время: {time}, Расстояние: {sum(distance_matrix.loc[route[i-1], route[i]] for i in range(1, len(route)))}")
+        total_route_times = [time for _, time in optimal_variant]
+        total_time = sum(total_route_times)
         optimal_points = set()
         for route, _ in optimal_variant:
             optimal_points.update(route[1:-1])
@@ -86,3 +83,6 @@ def find_optimal_solution(time_matrix, distance_matrix, start_node, time_limit, 
             print(f"Точки не учтены: {missing_points}")
     else:
         print("Невозможно предложить решение полным перебором. Точки находятся слишком далеко")
+
+    return total_time, total_distance, route_list_str, missing_points
+
