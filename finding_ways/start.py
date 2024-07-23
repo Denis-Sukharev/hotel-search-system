@@ -1,11 +1,40 @@
+import os
 import pandas as pd
 from greedy import greedy_algorithm, calculate_total_distance
 from full_1 import brute_force_algorithm
 from full_2 import find_optimal_solution
 
+def save_best_routes(results):
+    if not os.path.exists('best_routes'):
+        os.makedirs('best_routes')
+
+    for result in results[:5]:
+        filename = f"best_routes/{result['hotel'].replace(' ', '_')}.csv"
+        with open(filename, 'w') as f:
+            if isinstance(result['route'][0], list):  # Проверяем, если данные маршруты встречаются в квадратных скобках
+                for route in result['route']:
+                    for point in route:
+                        f.write(f"{point}\n")
+                    f.write("\n")  # Добавляем пустую строку между маршрутами
+            else:
+                for coordinate in result['route']:
+                    f.write(f"{coordinate}\n")
+
+
 if __name__ == "__main__":
     hotels = pd.read_csv('D:\\vkrb\\csv\\hotels.csv')
     results = []
+
+    hours = int(input("Введите временное ограничение (в часах): "))
+    time_limit = hours * 3600
+    days = int(input("Введите количество дней: "))
+    poi_data = pd.read_csv('D:\\vkrb\\csv\\poi.csv')
+    print("Доступные достопримечательности:")
+    for index, row in poi_data.iterrows():
+        print(f"{row['poi_id']}, {row['name']}")
+
+    poi_ids_input = input("Введите до 9 ID точек через запятую: ")
+    points_sequence = [int(poi_id.strip()) for poi_id in poi_ids_input.split(',') if poi_id.strip()][:9]
 
     for index, hotel in hotels.iterrows():
         start_node = hotel['poi_id']
@@ -14,10 +43,7 @@ if __name__ == "__main__":
         # ВВОДНЫЕ ДАННЫЕ:
         matrix = pd.read_csv('D:\\vkrb\\csv\\matrix.csv')
         time_matrix = matrix.set_index(['mapped_object_start', 'mapped_object_finish'])['duration'].unstack(fill_value=0)
-        distance_matrix = matrix.set_index(['mapped_object_start', 'mapped_object_finish'])['distance'].unstack(fill_value=0)
-        time_limit = 7200
-        days = 7
-        points_sequence = [11126, 12197, 14228]
+        distance_matrix = matrix.set_index(['mapped_object_start', 'mapped_object_finish'])['distance'].unstack(fill_value=0)      
 
         # ПОЛНЫЙ ПЕРЕБОР:
         best_route_brute, best_time_brute, is_possible_brute = brute_force_algorithm(time_matrix, start_node, points_sequence, time_limit)
@@ -71,5 +97,7 @@ if __name__ == "__main__":
     results.sort(key=lambda x: (len(x['unsatisfied_points']), x['time']))
 
     print("\n")
-    for i, result in enumerate(results, 1):
+    for i, result in enumerate(results[:5], 1):
         print(f"{i}: {result['hotel']}, маршрут: {result['route']}, общее время: {result['time']}, общее расстояние: {result['distance']}, неучтенные точки : {result['unsatisfied_points']}")
+
+    save_best_routes(results)
