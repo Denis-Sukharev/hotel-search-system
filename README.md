@@ -1,16 +1,18 @@
 # Инстуркция по установке и запуске программного обеспечения для оптимизации маршрутов путешествий
 
-## Настройка
+## Серверная часть
+
+### Настройка
 Установите все пакеты из файла installer.txt
 
 Например, используйте pip
-```
+```bash
 pip install -r installer.txt
 ```
 
-## Запуск
+### Запуск
 * Команда для запуска скрипта вычисления матрицы расстояний
-```
+```bash
 python compute_distance_matrix.py -i coords_wineries.csv -o crimea_matrix.csv -p params.yaml -t matrix
 ```
 
@@ -20,7 +22,7 @@ python compute_distance_matrix.py -i coords_wineries.csv -o crimea_matrix.csv -p
 `-t/--target` - целевое название (directions или matrix)
 
 * Команда для запуска скрипта оптимизации маршрута
-```
+```bash
 python optimize_route.py -i crimea_matrix.csv -t distance -o route.json -s 1 -e 1
 ```
 `-i/--input` - путь к csv-файлу с матрицей расстояний
@@ -38,3 +40,31 @@ python optimize_route.py -i crimea_matrix.csv -t distance -o route.json -s 1 -e 
 
 5. Запуск proxy.py, который создаст файл matrix.csv, содержащий матрицу времени и расстояний всех точек
 6. Запуск finding_ways/start.py, который найдет лучшие варианты гостиниц
+
+---
+
+## Веб-клиент
+
+Предварительно необходимо установить:
+1. [NodeJS](https://nodejs.org/en)
+2. [Nmp](https://www.npmjs.com/)
+
+Находясь в корневой папке проекта переходим в папку веб-клиента
+```bash
+cd ./client
+```
+
+Устанавливаем зависимости:
+```bash
+npm install
+```
+
+Запуск проекта в режиме разработки (исползуется Vite):
+```bash
+npm run dev
+```
+
+Сборка приложения:
+```bash
+npm build
+```
