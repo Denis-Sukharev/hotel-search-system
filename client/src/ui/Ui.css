@@ -1,0 +1,11 @@
+#Ui{
+    background-color: yellow;
+    
+    width: 100%;
+    height: 100%;
+    
+    margin: 15px;
+
+    display: flex;
+    box-sizing: border-box;
+}
