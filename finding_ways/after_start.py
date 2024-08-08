@@ -3,10 +3,10 @@ import pandas as pd
 import re
 
 def replace_poi_ids_with_coordinates(file_path, points_data):
-    with open(file_path, 'r') as f:
+    with open(file_path, 'r', encoding='utf-8') as f:
         lines = f.readlines()
 
-    with open(file_path, 'w') as f:
+    with open(file_path, 'w', encoding='utf-8') as f:
         prev_line = None
         for line in lines:
             line = line.strip()
@@ -26,7 +26,7 @@ def replace_poi_ids_with_coordinates(file_path, points_data):
                         prev_line = current_line
 
 if __name__ == "__main__":
-    points_data = pd.read_csv('csv/all_points.csv', index_col='poi_id')
+    points_data = pd.read_csv('D:\\Project\\csv\\all_points.csv', index_col='poi_id')
 
     folder_path = 'best_routes'
     for filename in os.listdir(folder_path):
