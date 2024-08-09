@@ -4,7 +4,7 @@ function Map() {
     return ( 
         <>
             <div id="Map">
-                hello
+                    map
             </div>
         </>
      );

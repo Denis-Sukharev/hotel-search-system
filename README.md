@@ -41,9 +41,14 @@ python optimize_route.py -i crimea_matrix.csv -t distance -o route.json -s 1 -e 
 5. Запуск proxy.py, который создаст файл matrix.csv, содержащий матрицу времени и расстояний всех точек
 6. Запуск finding_ways/start.py, который найдет лучшие варианты гостиниц
 
+### Внешние ресурсы
+
+1. База гостиниц Москвы [101 Hotels](https://m.101hotels.com/main/cities/moskva/alphabetically#B)
 ---
 
 ## Веб-клиент
+
+### Установка зависимостей и запуск
 
 Предварительно необходимо установить:
 1. [NodeJS](https://nodejs.org/en)
@@ -68,3 +73,21 @@ npm run dev
 ```bash
 npm build
 ```
+
+### Внешние ресурсы
+
+1. Библиотека компонентов [Material uI](https://mui.com/material-ui/)
+
+Установка
+```bash
+npm install @mui/material @emotion/react @emotion/styled
+```
+
+2. Шрифт [Roboto](https://fonts.google.com/specimen/Roboto)
+
+Установка
+```bash
+npm install @fontsource/roboto
+```
+
+3. Карты [OpenRoute Service](https://openrouteservice.org/)
