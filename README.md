@@ -52,7 +52,7 @@ python optimize_route.py -i crimea_matrix.csv -t distance -o route.json -s 1 -e 
 
 Предварительно необходимо установить:
 1. [NodeJS](https://nodejs.org/en)
-2. [Nmp](https://www.npmjs.com/)
+2. [Nmp](https://www.npmjs.com/) (Устанавливается с NodeJS)
 
 Находясь в корневой папке проекта переходим в папку веб-клиента
 ```bash
