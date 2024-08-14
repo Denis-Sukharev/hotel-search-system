@@ -1,0 +1,66 @@
+#PoiTabPanel {
+
+}
+
+#Poifilter {
+
+}
+
+#search-block {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+#poi-search-text-field {
+    flex: 1;
+}
+
+.PoiCard {
+    width: 100%;
+    min-height: 120px;
+
+    display: flex;
+    flex-direction: row;
+
+    gap: 5px;
+}
+
+.PoiCard p {
+    margin: 0px;
+}
+
+.PoiCard img {
+    width: 100px;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+.poi-card-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.poi-card-header {
+    display: flex;
+    flex-direction: row;
+}
+
+.poi-card-name {
+    display: flex;
+    flex: 1;
+    font-size: 18px;
+    align-items: center;
+}
+
+.poi-card-name span {
+
+}
+
+.poi-card-description {
+    display: flex;
+    flex-direction: column;
+    font-size: 14px;
+    gap: 5px;
+}
