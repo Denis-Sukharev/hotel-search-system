@@ -73,6 +73,26 @@ async def select_id_hotel(id_poi):
             poi = cur.fetchall()
             return poi 
 
+
+@router.get("/hotel/count")# кол-во hotel
+async def select_id_hotel():
+    with conn:
+        with conn.cursor() as cur:  
+            cur.execute("""
+                        SELECT count(poi.poi_id) FROM poi INNER JOIN poi_category ON poi.poi_id = poi_category.poi_id AND poi_category.category = 'Проживание';
+                        """)            
+            poi = cur.fetchall()
+            return poi
+
+@router.get("/poi/count")# кол-во poi
+async def select_id_hotel():
+    with conn:
+        with conn.cursor() as cur:  
+            cur.execute("""
+                        SELECT count(poi.poi_id) FROM poi INNER JOIN poi_category ON poi.poi_id = poi_category.poi_id AND poi_category.category <> 'Проживание';
+                        """)            
+            poi = cur.fetchall()
+            return poi
 '''
 class Hotel(BaseModel):
     name: str
