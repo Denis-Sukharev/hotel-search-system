@@ -1,80 +1,14 @@
 import './PoiTabPanel.css';
+import { PoiFilter } from './components/PoiFilter';
+import { PoiCard } from './components/PoiCard.jsx';
 import testPoiList from './testPoiLis.json';
 
 import {useState, useEffect} from 'react';  
 
 import TextField from '@mui/material/TextField';
 import IconButton from '@mui/material/IconButton';
-import Chip from '@mui/material/Chip';
 
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
-import AddLocationIcon from '@mui/icons-material/AddLocation';
-import LocationOffIcon from '@mui/icons-material/LocationOff';
-
-// const [poiList, setPoiList] = useState([{}]);
-
-const PoiCard = (props) => {
-    const {poiId, poiName, poiDescription, poiImageUrl, poiType, poiCoordX, poiCoordY, poiSet} = props;
-    
-    return (
-        <>
-            <div className='PoiCard' id={"poi-card"+poiId}>
-                <img src={poiImageUrl} alt={poiName}/>
-
-                <div className="poi-card-content">
-                    <div className="poi-card-header">
-                        <div className="poi-card-name">
-                            <span>{poiName}</span>
-                        </div>
-
-                        <IconButton
-                            size='large'
-                        >   
-                            {poiSet && <AddLocationIcon fontSize='inherit'/>}
-                            {!poiSet && <LocationOffIcon fontSize='inherit'/>}                            
-                        </IconButton>
-                    </div>
-
-                    <div className="poi-card-description">
-                        <div>
-                            <p>
-                                {poiDescription}
-                            </p>
-                        </div>
-                        
-                        <div>
-                            <Chip
-                                label={poiType}
-                                variant='outlined'
-                                size='small'
-                            />
-                        </div>
-                        
-                        <div>
-                            <p>
-                            X: {poiCoordX} Y: {poiCoordY} 
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </>
-    );
-};
-
-const PoiFilter = (props) => {
-    const {visible, ...other} = props;
-
-    return (
-        <>
-            {visible === true && (
-                <div if="Poifilter">
-                    фильтр
-                </div>
-            )}
-        </>
-    )
-};
 
 function PoiTabPanel() {
     const [poiSearchValue, setPoiSearchValue] = useState('');
@@ -101,7 +35,6 @@ function PoiTabPanel() {
                         size="large"
                         onClick={() => {
                             setPoiFilterVisible(!poiFilterVisible);
-                            console.log(testPoiList);
                         }}
                     >
                         <FilterAltIcon

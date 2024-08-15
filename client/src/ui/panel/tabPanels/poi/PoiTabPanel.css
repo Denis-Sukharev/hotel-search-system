@@ -1,9 +1,7 @@
 #PoiTabPanel {
-
-}
-
-#Poifilter {
-
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
 }
 
 #search-block {
@@ -16,6 +14,7 @@
     flex: 1;
 }
 
+/* Poi Card */
 .PoiCard {
     width: 100%;
     min-height: 120px;
@@ -63,4 +62,46 @@
     flex-direction: column;
     font-size: 14px;
     gap: 5px;
+}
+
+/* POI FILTER */
+#PoiFilter {
+    color: #717171;
+
+    font-size: 14px;
+}
+
+.poi-filter-list-title {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    user-select: none;
+    cursor: pointer;
+}
+
+.poi-filter-section {
+    display: flex;
+    width: 100%;
+    margin-bottom: 5px;
+}
+
+.poi-filter-section-column {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.checkbox-container {
+    /* flex: 1; */
+    width: 48%;
+}
+
+hr {
+    border: 1px solid #b6b6b6;
+
+    display: flex;
+    flex: 1;
+
+    margin-left: 5px;
 }

@@ -34,7 +34,7 @@ function Panel() {
         <>
             <div id="Panel">
                 <div id="panel-content">
-                    <div>
+                    <div id="panel-city-block">
                         Город: <u>Москва</u>
                     </div>
 
