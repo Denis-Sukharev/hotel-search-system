@@ -5,7 +5,18 @@ import AddLocationIcon from '@mui/icons-material/AddLocation';
 import LocationOffIcon from '@mui/icons-material/LocationOff';
 
 export function PoiCard(props) {
-    const {poiId, poiName, poiDescription, poiImageUrl, poiType, poiCoordX, poiCoordY, poiSet} = props;
+    const {
+        poiId,
+        poiName,
+        poiDescription,
+        poiImageUrl,
+        poiType,
+        poiCoordX,
+        poiCoordY,
+        changePoi,
+        cardButton,
+        ...other
+    } = props;
     
     return (
         <>
@@ -20,9 +31,9 @@ export function PoiCard(props) {
 
                         <IconButton
                             size='large'
+                            onClick={changePoi}
                         >   
-                            {poiSet && <AddLocationIcon fontSize='inherit'/>}
-                            {!poiSet && <LocationOffIcon fontSize='inherit'/>}                            
+                            {cardButton()}             
                         </IconButton>
                     </div>
 

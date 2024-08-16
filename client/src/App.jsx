@@ -9,7 +9,6 @@ function App() {
       <div id="App">
         <Map />
         <Ui />
-        
       </div>
     </>
   );

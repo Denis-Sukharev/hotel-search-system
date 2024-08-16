@@ -2,3 +2,15 @@
     height: 100vh;
     width: 100%;
 }
+
+.section-title {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    user-select: none;
+    cursor: pointer;
+
+    font-size: 14px;
+    color: #717171;
+}

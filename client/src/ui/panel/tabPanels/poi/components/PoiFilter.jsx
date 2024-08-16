@@ -1,5 +1,3 @@
-import testPoiFilter from '../testPoiFilter.json';
-
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 
@@ -7,38 +5,61 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { useState } from 'react';
 
+const CheckboxElement = (props) => {
+    const {_label, _key, _name, _checked, _onChange, ...other} = props;
+    return(
+        <>
+            <FormControlLabel
+                key={`poi-district-list-${_label}`}
+                className='checkbox-container'
+                label={_label}
+                sx={{
+                    fontSize: 14
+                }}
+                control={
+                    <Checkbox
+                        key={_key}
+                        name={_name}
+                        size='small'
+                        checked={_checked}
+                        onChange={_onChange}
 
+                        sx={{
+                            paddingTop: 0,
+                            paddingBottom:0
+                        }}
+                    />
+                }
+            />
+        </>
+    );
+};
 
 const PoiFilterDistrict = (props) => {
     const {filterData, setCheck, ...other} = props;
     const handleChange = (event) => {
-        setCheck({
-            ...filterData,
-            district: {
-                ...filterData.district,
-                [event.target.name]: event.target.checked,
-            }
-        });
+        filterData.district.forEach((item, index) => {
+            if (index == event.target.name) {
+                filterData.district[event.target.name] = {
+                    ...filterData.district[event.target.name],
+                    "select": event.target.checked
+                }
+            };
+        })
+
+        setCheck({...filterData});
     };
 
-    const filterList = Object.entries(filterData.district).map((value) => {
+    const filterList = filterData.district.map((item, index) => {
         return(
-            <FormControlLabel
-                key={`poi-district-list-${value[0]}`}
-                className='checkbox-container'
-                label={value[0]} 
-                control={
-                    <Checkbox
-                        key={`poi-district-list-checkbox-${value[0]}`}
-                        name={value[0]}
-                        size='small'
-                        checked={value[1]}
-                        onChange={handleChange}
-                        defaultChecked
-                    />
-                }
+            <CheckboxElement
+                _label={item.name}
+                _key={index}
+                _name={index}
+                _checked={item.select}
+                _onChange={handleChange}
             />
-        );
+        )
     });
 
     return (
@@ -46,10 +67,6 @@ const PoiFilterDistrict = (props) => {
             <div className='poi-filter-section-column'>
                 {...filterList}
             </div>
-
-            {/* <div className='poi-filter-section-column'>
-                
-            </div> */}
         </div>
     );
 };
@@ -59,33 +76,28 @@ const PoiFilterDistrict = (props) => {
 const PoiFilterType = (props) => {
     const {filterData, setCheck, ...other} = props;
     const handleChange = (event) => {
-        setCheck({
-            ...filterData,
-            type: {
-                ...filterData.type,
-                [event.target.name]: event.target.checked,
-            }
-        });
+        filterData.type.forEach((item, index) => {
+            if (index == event.target.name) {
+                filterData.type[event.target.name] = {
+                    ...filterData.type[event.target.name],
+                    "select": event.target.checked
+                }
+            };
+        })
+
+        setCheck({...filterData});
     };
 
-    const filterList = Object.entries(filterData.type).map((value) => {
+    const filterList = filterData.type.map((item, index) => {
         return(
-            <FormControlLabel
-                key={`poi-type-list-${value[0]}`}
-                className='checkbox-container'
-                label={value[0]} 
-                control={
-                    <Checkbox
-                        key={`poi-type-list-checkbox-${value[0]}`}
-                        name={value[0]}
-                        size='small'
-                        checked={value[1]}
-                        onChange={handleChange}
-                        defaultChecked
-                    />
-                }
+            <CheckboxElement
+                _label={item.name}
+                _key={index}
+                _name={index}
+                _checked={item.select}
+                _onChange={handleChange}
             />
-        );
+        )
     });
 
     return (
@@ -93,10 +105,6 @@ const PoiFilterType = (props) => {
             <div className='poi-filter-section-column'>
                 {...filterList}
             </div>
-
-            {/* <div className='poi-filter-section-column'>
-                
-            </div> */}
         </div>
     );
 };
@@ -106,33 +114,28 @@ const PoiFilterType = (props) => {
 const PoiFilterCategory = (props) => {
     const {filterData, setCheck, ...other} = props;
     const handleChange = (event) => {
-        setCheck({
-            ...filterData,
-            category: {
-                ...filterData.category,
-                [event.target.name]: event.target.checked,
-            }
-        });
+        filterData.type.forEach((item, index) => {
+            if (index == event.target.name) {
+                filterData.type[event.target.name] = {
+                    ...filterData.type[event.target.name],
+                    "select": event.target.checked
+                }
+            };
+        })
+
+        setCheck({...filterData});
     };
 
-    const filterList = Object.entries(filterData.category).map((value) => {
+    const filterList = filterData.category.map((item, index) => {
         return(
-            <FormControlLabel
-                key={`poi-type-list-${value[0]}`}
-                className='checkbox-container'
-                label={value[0]} 
-                control={
-                    <Checkbox
-                        key={`poi-type-list-checkbox-${value[0]}`}
-                        name={value[0]}
-                        size='small'
-                        checked={value[1]}
-                        onChange={handleChange}
-                        defaultChecked
-                    />
-                }
+            <CheckboxElement
+                _label={item.name}
+                _key={index}
+                _name={index}
+                _checked={item.select}
+                _onChange={handleChange}
             />
-        );
+        )
     });
 
     return (
@@ -140,79 +143,71 @@ const PoiFilterCategory = (props) => {
             <div className='poi-filter-section-column'>
                 {...filterList}
             </div>
-
-            {/* <div className='poi-filter-section-column'>
-                
-            </div> */}
         </div>
     );
 };
 
 export function PoiFilter(props) {
-    const {visible, ...other} = props;
+    const {poiFilterData, setPoiFilterData, ...other} = props;
 
     const [isPoiFilterDistrictOpen, setIsPoiFilterDistrictOpen] = useState('false');
     const [isPoiFilterTypeOpen, setIsPoiFilterTypeOpen] = useState('false');
     const [isPoiFilterCategoryOpen, setIsPoiFilterCategoryOpen] = useState('false');
-        
-    const [poiFilterData, setPoiFilterData] = useState(testPoiFilter);
 
     return (
         <>
-            {visible === true && (
-                <div id="PoiFilter">
-                    <div id="poi-filter-title">
-                        <span>
-                            Фильтры мест
-                        </span>
-                    </div>
-
-                    {/* district */}
-                    <div
-                        className='poi-filter-list-title'
-                        onClick={() => setIsPoiFilterDistrictOpen(!isPoiFilterDistrictOpen)}
-                    >
-                        {isPoiFilterDistrictOpen && (<KeyboardArrowDownIcon/>)}
-                        {!isPoiFilterDistrictOpen && (<KeyboardArrowUpIcon/>)}
-                        
-                        <span>Район</span>
-
-                        <hr />
-                    </div>
-
-                    {isPoiFilterDistrictOpen && (<PoiFilterDistrict filterData={poiFilterData} setCheck={setPoiFilterData} />)}
-
-                    {/* type */}
-                    <div
-                        className='poi-filter-list-title'
-                        onClick={() => setIsPoiFilterTypeOpen(!isPoiFilterTypeOpen)}
-                    >
-                        {isPoiFilterTypeOpen && (<KeyboardArrowDownIcon/>)}
-                        {!isPoiFilterTypeOpen && (<KeyboardArrowUpIcon/>)}
-                        
-                        <span>Типы мест</span>
-
-                        <hr />
-                    </div>
-
-                    {isPoiFilterTypeOpen && (<PoiFilterType filterData={poiFilterData} setCheck={setPoiFilterData} />)}
-
-                    {/* category */}
-                    <div
-                        className='poi-filter-list-title'
-                        onClick={() => setIsPoiFilterCategoryOpen(!isPoiFilterCategoryOpen)}
-                    >
-                        {isPoiFilterCategoryOpen && (<KeyboardArrowDownIcon/>)}
-                        {!isPoiFilterCategoryOpen && (<KeyboardArrowUpIcon/>)}
-                        
-                        <span>Категории мест</span>
-
-                        <hr />
-                    </div>
-
-                    {isPoiFilterCategoryOpen && (<PoiFilterCategory filterData={poiFilterData} setCheck={setPoiFilterData} />)}
+            <div id="PoiFilter">
+                <div id="poi-filter-title">
+                    <span>
+                        Фильтры мест
+                    </span>
                 </div>
-            )}
+
+                {/* district */}
+                <div
+                    className='section-title'
+                    onClick={() => setIsPoiFilterDistrictOpen(!isPoiFilterDistrictOpen)}
+                >
+                    {isPoiFilterDistrictOpen && (<KeyboardArrowDownIcon/>)}
+                    {!isPoiFilterDistrictOpen && (<KeyboardArrowUpIcon/>)}
+                    
+                    <span>Район</span>
+
+                    <hr />
+                </div>
+
+                {isPoiFilterDistrictOpen && (<PoiFilterDistrict filterData={poiFilterData} setCheck={setPoiFilterData} />)}
+
+                {/* type */}
+                <div
+                    className='section-title'
+                    onClick={() => setIsPoiFilterTypeOpen(!isPoiFilterTypeOpen)}
+                >
+                    {isPoiFilterTypeOpen && (<KeyboardArrowDownIcon/>)}
+                    {!isPoiFilterTypeOpen && (<KeyboardArrowUpIcon/>)}
+                    
+                    <span>Типы мест</span>
+
+                    <hr />
+                </div>
+
+                {isPoiFilterTypeOpen && (<PoiFilterType filterData={poiFilterData} setCheck={setPoiFilterData} />)}
+
+                {/* category */}
+                <div
+                    className='section-title'
+                    onClick={() => setIsPoiFilterCategoryOpen(!isPoiFilterCategoryOpen)}
+                >
+                    {isPoiFilterCategoryOpen && (<KeyboardArrowDownIcon/>)}
+                    {!isPoiFilterCategoryOpen && (<KeyboardArrowUpIcon/>)}
+                    
+                    <span>Категории мест</span>
+
+                    <hr />
+                </div>
+
+                {isPoiFilterCategoryOpen && (<PoiFilterCategory filterData={poiFilterData} setCheck={setPoiFilterData} />)}
+            </div>
         </>
     )
 };

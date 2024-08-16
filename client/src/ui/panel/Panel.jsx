@@ -24,6 +24,17 @@ const TabPanel = (props) => {
 };
 
 function Panel() {
+    const [selectPointsData, setSelectPointsData] = useState({
+        poi: [
+
+        ],
+
+        hotels: [
+            
+        ]
+    });
+
+
     const [tabValue, setTabValue] = useState(0);
 
     const tabChange = (event, newTabValue) => {
@@ -69,14 +80,20 @@ function Panel() {
                             value={tabValue}
                             index={0}
                         >
-                            <PoiTabPanel />
+                            <PoiTabPanel
+                                selectPointsData={selectPointsData}
+                                setSelectPointsData={setSelectPointsData}
+                            />
                         </TabPanel>
 
                         <TabPanel
                             value={tabValue}
                             index={1}
                         >
-                            <HotelsTabpanel />
+                            <HotelsTabpanel
+                                selectPointsData={selectPointsData}
+                                setSelectPointsData={setSelectPointsData}
+                            />
                         </TabPanel>
 
                         <TabPanel

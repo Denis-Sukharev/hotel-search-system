@@ -1,0 +1,26 @@
+{
+    "district": [
+        {"name": "Алексеевский", "select": true},
+        {"name": "Даниловский", "select": true},
+        {"name": "Измайлово", "select": true},
+        {"name": "Замоскворечье", "select": true},
+        {"name": "Некрасовка", "select": true},
+        {"name": "Тверской", "select": true},
+        {"name": "Останкинский", "select": true},
+        {"name": "Арбат", "select": true},
+        {"name": "Коломенка", "select": true}
+    ],
+
+    "type": [
+        {"name": "Монумент", "select": true},
+        {"name": "Мемориал", "select": true},
+        {"name": "Музей", "select": true},
+        {"name": "Аттракцион", "select": true},
+        {"name": "Ворота", "select": true}
+    ],
+
+    "category": [
+        {"name": "Исторические", "select": true},
+        {"name": "Туристические", "select": true}
+    ]
+}

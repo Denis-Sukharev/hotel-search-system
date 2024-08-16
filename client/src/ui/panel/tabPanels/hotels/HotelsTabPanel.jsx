@@ -1,4 +1,6 @@
-function HotelsTabpanel() {
+function HotelsTabpanel(props) {
+    const {selectPointsData, setSelectPointsData} = props;
+    
     return ( 
         <>
             <div>

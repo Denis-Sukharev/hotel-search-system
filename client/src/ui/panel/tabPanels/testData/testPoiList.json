@@ -1,0 +1,101 @@
+[
+    {
+        "id": 1,
+        "name": "1 Мемориал",
+        "description": "Мемориал, как мемориал. Чё бубнить то?",
+        "image": "https://cdn.culture.ru/c/271172.jpg",
+        "type": "memory",
+        "x": 1,
+        "y": 1
+    },
+
+    {
+        "id": 2,
+        "name": "2 Статуя",
+        "description": "На горе стоит статуся, у статуи нету XD XD XD",
+        "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQOpKzef5ojdDmpo9jlIO5xVfynAxkKb-MEBg&s",
+        "type": "history",
+        "x": 2,
+        "y": 2
+    },
+
+    {
+        "id": 3,
+        "name": "3 Лужа",
+        "description": "Кто нассал? Ты, Паша?",
+        "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDKF44dwZ7KYNeLtvOmwcNE-EtZoJBs-GF8Q&s",
+        "type": "tourism",
+        "x": 3,
+        "y": 3
+    },
+
+    {
+        "id": 4,
+        "name": "4",
+        "description": "На горе стоит статуся, у статуи нету XD XD XD",
+        "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQOpKzef5ojdDmpo9jlIO5xVfynAxkKb-MEBg&s",
+        "type": "history",
+        "x": 2,
+        "y": 2
+    },
+
+    {
+        "id": 5,
+        "name": "5",
+        "description": "Кто нассал? Ты, Паша?",
+        "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDKF44dwZ7KYNeLtvOmwcNE-EtZoJBs-GF8Q&s",
+        "type": "tourism",
+        "x": 3,
+        "y": 3
+    },
+
+    {
+        "id": 6,
+        "name": "6",
+        "description": "На горе стоит статуся, у статуи нету XD XD XD",
+        "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQOpKzef5ojdDmpo9jlIO5xVfynAxkKb-MEBg&s",
+        "type": "history",
+        "x": 2,
+        "y": 2
+    },
+
+    {
+        "id": 7,
+        "name": "7",
+        "description": "Кто нассал? Ты, Паша?",
+        "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDKF44dwZ7KYNeLtvOmwcNE-EtZoJBs-GF8Q&s",
+        "type": "tourism",
+        "x": 3,
+        "y": 3
+    },
+
+    {
+        "id": 8,
+        "name": "8",
+        "description": "На горе стоит статуся, у статуи нету XD XD XD",
+        "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQOpKzef5ojdDmpo9jlIO5xVfynAxkKb-MEBg&s",
+        "type": "history",
+        "x": 2,
+        "y": 2
+    },
+
+    {
+        "id": 9,
+        "name": "9",
+        "description": "Кто нассал? Ты, Паша?",
+        "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDKF44dwZ7KYNeLtvOmwcNE-EtZoJBs-GF8Q&s",
+        "type": "tourism",
+        "x": 3,
+        "y": 3
+    },
+
+    {
+        "id": 10,
+        "name": "10",
+        "description": "Кто нассал? Ты, Паша?",
+        "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDKF44dwZ7KYNeLtvOmwcNE-EtZoJBs-GF8Q&s",
+        "type": "tourism",
+        "x": 3,
+        "y": 3
+    }
+]
