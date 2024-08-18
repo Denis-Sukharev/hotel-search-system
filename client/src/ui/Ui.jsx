@@ -7,7 +7,14 @@ function Ui() {
         <>
             <div id="Ui">
                 <Panel />
-                <Info />   
+                <Info
+                    sx={{
+                        display: {
+                            xs: 'none',
+                            md: 'flex'
+                        }
+                    }}
+                />
             </div>
         </>
      );

@@ -5,8 +5,9 @@ function Info() {
         <>
             <div id="Info">
                 <div id="info-qr">
-                    <div>LOGO</div>
-                    <div>QR</div>
+                    <img id="logo-img" src="../../../public/logo/logo.png" alt="Logo" />
+
+                    <img id="qr-img" src="../../../public/qr/mestechko.png" alt="QR code" />
                 </div>
             </div>
         </>
