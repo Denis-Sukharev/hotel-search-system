@@ -10,13 +10,13 @@ router = APIRouter(
 
 
 
-# @router.get("/poi/all/") # вывод 20 poi для страниц
-# async def select_poi(item: Item):
-#     with conn:
-#         with conn.cursor() as cur:          
-#             cur.execute("SELECT * FROM poi INNER JOIN poi_category ON poi.poi_id = poi_category.poi_id AND poi_category.category <> 'Проживание' OFFSET %s LIMIT 20;", (int(item.page) * 20,))
-#             poi = cur.fetchall()
-#             return poi
+@router.get("/poi/all/{page}") # вывод 20 poi для страниц
+async def select_poi(page):
+    with conn:
+        with conn.cursor() as cur:          
+            cur.execute("SELECT * FROM poi INNER JOIN poi_category ON poi.poi_id = poi_category.poi_id AND poi_category.category <> 'Проживание' OFFSET %s LIMIT 20;", (int(page) * 20,))
+            poi = cur.fetchall()
+            return poi
 
 @router.get("/poi/search_name/{name_fragment}")# поиск poi по названию
 async def select_name_poi(name_fragment):
