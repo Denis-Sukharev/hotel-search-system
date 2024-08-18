@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[2]:
+# In[1]:
 
 
 import psycopg2
@@ -13,11 +13,15 @@ import plotly.express as px
 # In[3]:
 
 
+import psycopg2
+import csv
+
 def connect_to_database():
     try:
         conn = psycopg2.connect(
-            host="localhost",
-            database="12", # !!! переименовать в osm !!!
+            host="217.71.129.139",
+            database="postgres",
+            port = "4580",
             user="postgres",
             password="postgres"
         )
@@ -40,30 +44,69 @@ def get_districts(conn):
     cursor.close()
     return districts
 
-def get_poi_types(conn):
+def get_poi_types(conn, district_names=None):
     cursor = conn.cursor()
-    cursor.execute("""
-        SELECT type, COUNT(*) 
-        FROM poi_type 
-        GROUP BY type 
-        HAVING type IN (
-            'monument', 'church', 'manor', 'museum', 'zoo', 'vehicle', 'theme_park', 'gallery', 'milestone', 'tomb', 'viewpoint', 'memorial', 'chapel', 'castle', 'monastery', 'city_gate', 'attraction', 'neighbourhood'
+
+    query = """
+        SELECT poi_type.type, COUNT(*)
+        FROM poi_type
+        JOIN poi ON poi_type.poi_id = poi.poi_id
+        JOIN district ON poi.district_id = district.district_id
+    """
+    
+    if district_names:
+        query += " WHERE district.name IN %s"
+
+    query += """
+        GROUP BY poi_type.type
+        HAVING poi_type.type IN (
+            'monument', 'church', 'manor', 'museum', 'machine', 'artwork', 'hotel', 'hostel', 'suburb',  'kiosk', 'cannon', 'ruins', 'archaeological_site', 'wayside_cross', 'zoo', 'vehicle', 'theme_park',  'gallery', 'milestone', 'tomb', 'viewpoint', 'memorial', 'chapel', 'castle', 'monastery', 'city_gate', 'attraction', 'neighbourhood'
         )
-    """)
+    """
+    
+    if district_names:
+        cursor.execute(query, (tuple(district_names),))
+    else:
+        cursor.execute(query)
+
     poi_types_with_counts = cursor.fetchall()
     cursor.close()
+
     return poi_types_with_counts
 
-def get_poi_categories(conn):
+def get_poi_categories(conn, district_names=None, poi_types=None):
     cursor = conn.cursor()
-    cursor.execute("""
-        SELECT category, COUNT(*) 
-        FROM poi_category 
-        GROUP BY category 
-        HAVING category IN ('building', 'tourism', 'historic')
-    """)
+
+    query = """
+        SELECT poi_category.category, COUNT(*)
+        FROM poi_category
+        JOIN poi ON poi_category.poi_id = poi.poi_id
+        JOIN district ON poi.district_id = district.district_id
+    """
+    
+    conditions = []
+    params = []
+
+    if district_names:
+        conditions.append("district.name IN %s")
+        params.append(tuple(district_names))
+    if poi_types:
+        conditions.append("poi.poi_id IN (SELECT poi_id FROM poi_type WHERE type IN %s)")
+        params.append(tuple(poi_types))
+    
+    if conditions:
+        query += " WHERE " + " AND ".join(conditions)
+
+    query += """
+        GROUP BY poi_category.category
+        HAVING poi_category.category IN ('building', 'tourism', 'historic')
+    """
+    
+    cursor.execute(query, params)
+
     poi_category_with_counts = cursor.fetchall()
     cursor.close()
+
     return poi_category_with_counts
 
 def get_pois_by_criteria(conn, city_name, district_names=None, poi_types=None, poi_categories=None):
@@ -72,7 +115,7 @@ def get_pois_by_criteria(conn, city_name, district_names=None, poi_types=None, p
     query = """
         SELECT poi.poi_id, poi.name, poi_coordinates.latitude, poi_coordinates.longitude, poi.district_id
         FROM poi 
-        JOIN poi_coordinates ON poi.poi_id=poi_coordinates.poi_id
+        JOIN poi_coordinates ON poi.poi_id = poi_coordinates.poi_id
         JOIN district ON poi.district_id = district.district_id
         WHERE district.city_id = (
             SELECT city_id FROM city WHERE name = %s
@@ -96,7 +139,6 @@ def get_pois_by_criteria(conn, city_name, district_names=None, poi_types=None, p
     cursor.close()
     return data
 
-
 def main():
     conn = connect_to_database()
     if not conn:
@@ -117,19 +159,19 @@ def main():
     
     print()
     print("Доступные типы точек интереса:")
-    poi_types = get_poi_types(conn)
+    poi_types = get_poi_types(conn, district_names)
     for i, (poi_type, count) in enumerate(poi_types):
         print(f"{i}: {poi_type} ({count})")
-    poi_input = input("Введите номера типов мест проживания через запятую или оставьте пустым для выбора всех: ")
+    poi_input = input("Введите номера типов точек интереса через запятую или оставьте пустым для выбора всех: ")
     poi_indices = poi_input.split(',') if poi_input else None
     poi_types_selected = [poi_types[int(index)][0] for index in poi_indices] if poi_indices else None
 
     print()
     print("Доступные категории точек интереса:")
-    poi_categories = get_poi_categories(conn)
+    poi_categories = get_poi_categories(conn, district_names, poi_types_selected)
     for i, (poi_category , count) in enumerate(poi_categories):
         print(f"{i}: {poi_category} ({count})")
-    poi_input = input("Введите номера типов мест проживания через запятую или оставьте пустым для выбора всех: ")
+    poi_input = input("Введите номера категорий точек интереса через запятую или оставьте пустым для выбора всех: ")
     poi_indices = poi_input.split(',') if poi_input else None
     poi_categories_selected = [poi_categories[int(index)][0] for index in poi_indices] if poi_indices else None
     if not poi_categories_selected:
@@ -137,7 +179,7 @@ def main():
 
     data = get_pois_by_criteria(conn, city_name, district_names, poi_types_selected, poi_categories_selected)
 
-    with open('D:\\vkrb\\csv\\poi_test.csv', 'w', newline='', encoding='utf-8-sig') as file:
+    with open('/Users/kirillbogomolov/mestechko/finding_ways/poi/poi.csv', 'w', newline='', encoding='utf-8-sig') as file:
         record = csv.writer(file)
         record.writerow(['poi_id', 'name', 'latitude', 'longitude', 'district_id'])
         record.writerows(data)
@@ -148,22 +190,23 @@ if __name__ == "__main__":
     main()
 
 
-# In[2]:
+
+# In[4]:
 
 
 # бесплатный ключ доступа можно найти здесь https://account.mapbox.com
 MAPBOX_ACCESS_TOKEN = "pk.eyJ1IjoiY3NpY3NhY3NvIiwiYSI6ImNsaWFpM3B2bzAzcTUzbXFwZ2ZjdnVpajEifQ.UY-B4Tg9KH0NXNC423X7Jg"
 
 
-# In[3]:
+# In[8]:
 
 
-data_district_sum = pd.read_csv('D:\\vkrb\\csv\\poi_test.csv')
+data_district_sum = pd.read_csv('/Users/kirillbogomolov/mestechko/finding_ways/poi/poi.csv')
 district_sum = data_district_sum.groupby('district_id').size().reset_index(name='Плотность')
 data_district_sum = pd.merge(data_district_sum, district_sum, on='district_id')
 
 
-# In[8]:
+# In[9]:
 
 
 fig = px.scatter_mapbox(data_district_sum, lat='latitude', lon='longitude',

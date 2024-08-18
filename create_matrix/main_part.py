@@ -88,8 +88,9 @@ if __name__ == '__main__':
     parser.add_argument('-s', '--start-index', type=int, action='store', default=1,
                         help='Исходный индекс для сбора данных')
     cmd_args = parser.parse_args()
-
+    print(cmd_args)
     input_file = Path(cmd_args.input)
+    print(input_file)
     if not input_file.exists():
         raise Exception(f"Не удается найти {input_file}")
 

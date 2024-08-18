@@ -11,7 +11,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 
 
-# In[7]:
+# In[3]:
 
 
 def merge_csv_files(input_files, output_file):
@@ -26,26 +26,26 @@ def merge_csv_files(input_files, output_file):
                 writer.writerows(reader)
 
 def main():
-    input_files = ['csv/hotels_test.csv', 'csv/poi_test.csv']
-    output_file = 'csv/all_points_test.csv'
+    input_files = ['/Users/kirillbogomolov/mestechko/finding_ways/poi/hotels.csv', '/Users/kirillbogomolov/mestechko/finding_ways/poi/poi.csv']
+    output_file = '/Users/kirillbogomolov/mestechko/finding_ways/poi/all_points.csv'
     merge_csv_files(input_files, output_file)
 
 if __name__ == "__main__":
     main()
 
 
-# In[8]:
+# In[4]:
 
 
 # бесплатный ключ доступа можно найти здесь https://account.mapbox.com
 MAPBOX_ACCESS_TOKEN = "pk.eyJ1IjoiY3NpY3NhY3NvIiwiYSI6ImNsaWFpM3B2bzAzcTUzbXFwZ2ZjdnVpajEifQ.UY-B4Tg9KH0NXNC423X7Jg"
 
 
-# In[16]:
+# In[5]:
 
 
-data_hotels = pd.read_csv('D:\\vkrb\\csv\\hotels_test.csv')
-data_poi = pd.read_csv('D:\\vkrb\\csv\\poi_test.csv')
+data_hotels = pd.read_csv('/Users/kirillbogomolov/mestechko/finding_ways/poi/hotels.csv')
+data_poi = pd.read_csv('/Users/kirillbogomolov/mestechko/finding_ways/poi/poi.csv')
 
 data_hotels['is_hotel'] = True
 data_poi['is_hotel'] = False

@@ -26,7 +26,7 @@ def replace_poi_ids_with_coordinates(file_path, points_data):
                         prev_line = current_line
 
 if __name__ == "__main__":
-    points_data = pd.read_csv('D:\\Project\\csv\\all_points.csv', index_col='poi_id')
+    points_data = pd.read_csv('finding_ways/poi/all_points.csv', index_col='poi_id')
 
     folder_path = 'best_routes'
     for filename in os.listdir(folder_path):

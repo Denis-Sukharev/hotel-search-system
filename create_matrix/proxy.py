@@ -91,8 +91,8 @@ if __name__ == "__main__":
         params_files = list(executor.map(lambda proxy: create_params_file(proxy, profile), proxy_list))
 
     script_path = "create_matrix/main_part.py"
-    input_file = "csv/all_points_test.csv"
-    output_file = "csv/matrix_test.csv"
+    input_file = "finding_ways/poi/all_points_test.csv"
+    output_file = "finding_ways/poi/matrix_test.csv"
     type_arg = "matrix"
     start_index = 1  # начальный индекс
 
