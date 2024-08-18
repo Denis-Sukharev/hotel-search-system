@@ -14,7 +14,7 @@ router = APIRouter(
 async def select_hotel(page:int):
     with conn:
         with conn.cursor() as cur:
-            cur.execute("select * from poi inner join poi_category on poi.poi_id = poi_category.poi_id and poi_category.category = 'Проживание' OFFSET %s LIMIT 20;", (int(page) * 20,))
+            cur.execute("select * from poi inner join poi_category on poi.poi_id = poi_category.poi_id and poi_category.category = 'Проживание' inner join poi_coordinates on poi_coordinates.poi_id = poi.poi_id OFFSET %s LIMIT 20;", (int(page) * 20,))
             hotel = cur.fetchall()
             return hotel
 
@@ -55,7 +55,25 @@ async def select_optimal_hotel(data: HotelOptimal, hotel:Hotels):
 
 '''
 
-
+def getPoiData(poiArray):
+    res: list[{}]
+    
+    for poiId in poiArray:
+        
+        (```
+        select p.name, pc.latitude, pc.longitude
+        from poi as p
+        inner join poi_coordinates as pc on pc.poi_id = p.poi_id
+        where p.poi_id = %s;
+        ```, {poiId})
+        
+        res.append({
+            "name": sql.name,
+            "x", sql.x,
+            "y": sql.y
+        })
+    
+    return res
 
 {
   "data": {
@@ -67,12 +85,14 @@ async def select_optimal_hotel(data: HotelOptimal, hotel:Hotels):
     "hotels": [
   {
     "hotel_id": 4,
+    "name":"108 Minutes",
     "latitude": "55.739982",
     "longitude": "37.62611806",
     "district_id": 4
   },
   {
     "hotel_id": 5,
+    "name":"17/3 Capsule hotel and lounge",
     "latitude": "55.763842",
     "longitude": "37.614545",
     "district_id": 5

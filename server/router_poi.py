@@ -14,7 +14,7 @@ router = APIRouter(
 async def select_poi(page):
     with conn:
         with conn.cursor() as cur:          
-            cur.execute("SELECT * FROM poi INNER JOIN poi_category ON poi.poi_id = poi_category.poi_id AND poi_category.category <> 'Проживание' OFFSET %s LIMIT 20;", (int(page) * 20,))
+            cur.execute("SELECT * FROM poi INNER JOIN poi_category ON poi.poi_id = poi_category.poi_id AND poi_category.category <> 'Проживание' inner join poi_coordinates on poi_coordinates.poi_id = poi.poi_id OFFSET %s LIMIT 20;", (int(page) * 20,))
             poi = cur.fetchall()
             return poi
 
