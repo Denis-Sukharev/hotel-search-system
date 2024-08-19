@@ -1,4 +1,4 @@
-#PoiTabPanel {
+#HotelTabPanel {
     display: flex;
     flex-direction: column;
     gap: 5px;
@@ -10,12 +10,12 @@
     align-items: center;
 }
 
-#poi-search-text-field {
+#hotel-search-text-field {
     flex: 1;
 }
 
 /* Poi Card */
-.PoiCard {
+.HotelCard {
     width: 100%;
     min-height: 120px;
     box-sizing: border-box;
@@ -27,54 +27,68 @@
     margin-bottom: 5px;
 }
 
-.PoiCard p {
+.HotelCard p {
     margin: 0px;
 }
 
-.PoiCard img {
+.HotelCard img {
     width: 100px;
     object-fit: cover;
     border-radius: 5px;
 }
 
-.poi-card-content {
+.hotel-card-content {
     display: flex;
     flex-direction: column;
     flex: 1;
     justify-content: center;
 }
 
-.poi-card-header {
+.hotel-card-header {
     display: flex;
     flex-direction: row;
 }
 
-.poi-card-name {
+.hotel-card-name {
     display: flex;
     flex: 1;
     font-size: 18px;
     align-items: center;
 }
 
-.poi-card-name span {
+.hotel-card-name span {
 
 }
 
-.poi-card-description {
+.hotel-card-description {
     display: flex;
     flex-direction: column;
     font-size: 14px;
     gap: 5px;
 }
 
-#poi-chip {
+#hotel-chip {
     display: flex;
     flex-wrap: wrap;
     gap: 5px;
 }
 
+#hotel-rating {
+    font-size: 14px;
+    display: flex;
+    align-content: center;
+}
+
+#hotel-rating span {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    margin-top: 2px;
+    margin-left: 1px;
+}
+
 /* POI FILTER */
-#PoiFilter {
+#HotelFilter {
     margin-bottom: 10px;
 
     font-size: 14px;
@@ -85,13 +99,13 @@
     color: #717171;
 } */
 
-.poi-filter-section {
+.hotel-filter-section {
     display: flex;
     width: 100%;
     margin-bottom: 5px;
 }
 
-.poi-filter-section-column {
+.hotel-filter-section-column {
     width: 100%;
     display: flex;
     flex-wrap: wrap;

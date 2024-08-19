@@ -1,0 +1,58 @@
+{
+    "district": [
+        {"id": 1, "name": "Замоскворечье", "select": true},
+        {"id": 2, "name": "Тверской", "select": true},
+        {"id": 3, "name": "Басманный", "select": true},
+        {"id": 4, "name": "Арбат", "select": true},
+        {"id": 5, "name": "Красносельский", "select": true},
+        {"id": 6, "name": "Хамовники", "select": true},
+        {"id": 7, "name": "Пресненский", "select": true},
+        {"id": 8, "name": "Таганский", "select": true},
+        {"id": 9, "name": "Якиманка", "select": true},
+        {"id": 10, "name": "Мещанский", "select": true},
+        {"id": 11, "name": "Гольяново", "select": true},
+        {"id": 12, "name": "Ивановское", "select": true},
+        {"id": 13, "name": "Даниловский", "select": true}
+    ],
+
+    "poiType": [
+        {"type": "archaeological_site", "name": "Раскопки", "select": true},
+        {"type": "artwork", "name": "Арт-объект", "select": true},
+        {"type": "manor", "name": "Усадьба", "select": true},
+        {"type": "gallery", "name": "Галлерея", "select": true},
+        {"type": "museum", "name": "Музей", "select": true},
+        {"type": "milestone", "name": "Веха", "select": true},
+        {"type": "neighbourhood", "name": "Парк", "select": true},
+        {"type": "wayside_cross", "name": "Крест", "select": true},
+        {"type": "hotel", "name": "Отель", "select": true},
+        {"type": "tomb", "name": "Могила", "select": true},
+        {"type": "cannon", "name": "Оружие", "select": true},
+        {"type": "suburb", "name": "Пригород", "select": true},
+        {"type": "ruins", "name": "Руины", "select": true},
+        {"type": "machine", "name": "Машина", "select": true},
+        {"type": "memorial", "name": "Мемориал", "select": true},
+        {"type": "castle", "name": "Дворец", "select": true},
+        {"type": "kiosk", "name": "Киоск", "select": true},
+        {"type": "hostel", "name": "Хостел", "select": true},
+        {"type": "monastery", "name": "Монастырь", "select": true},
+        {"type": "city_gate", "name": "Ворота", "select": true},
+        {"type": "attraction", "name": "Аттракцион", "select": true}
+    ],
+
+    "hotelType": [
+        {"type": "Апарт-отель", "name": "Апарт-отель", "select": true},
+        {"type": "Арт-отель", "name": "Арт-отель", "select": true},
+        {"type": "Гостевой дом", "name": "Гостевой дом", "select": true},
+        {"type": "Бизнес-отель", "name": "Бизнес-отель", "select": true},
+        {"type": "Мини-гостиница", "name": "Мини-гостиница", "select": true},
+        {"type": "Мини-отель", "name": "Мини-отель", "select": true},
+        {"type": "Гостевые комнаты", "name": "Гостевые комнаты", "select": true},
+        {"type": "Капсульный хостел", "name": "Капсульный хостел", "select": true},
+        {"type": "Дизайн-Отель", "name": "Дизайн-Отель", "select": true},
+        {"type": "Гостиница", "name": "Гостиница", "select": true},
+        {"type": "Капсульный отель", "name": "Капсульный отель", "select": true},
+        {"type": "Бутик-Отель", "name": "Бутик-Отель", "select": true},
+        {"type": "Хостел", "name": "Хостел", "select": true},
+        {"type": "Отель", "name": "Отель", "select": true}
+    ]
+}

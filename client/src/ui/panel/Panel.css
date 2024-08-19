@@ -39,3 +39,17 @@
 
     margin: 10px 0px;
 }
+
+#back-to-tab-content {
+    display: flex;
+    flex-direction: column;
+
+    justify-content: center;
+    text-align: center;
+}
+
+#back-to-tab-title {
+    font-size: 14px;
+
+    margin-bottom: 10px;
+}

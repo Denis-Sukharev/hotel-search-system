@@ -1,0 +1,33 @@
+[
+    {
+        "hotel": "Отель 1",
+        "time": 3600,
+        "distance": 150,
+        "route": [
+            4,
+            1,
+            2,
+            4
+        ],
+        "unsatisfied_points": [
+            3
+        ]
+    },
+
+    {
+        "hotel": "Отель 2",
+        "time": 3600,
+        "distance": 150,
+        "route": [
+            5,
+            1,
+            2,
+            5
+        ],
+        "unsatisfied_points": [
+            3,
+            2,
+            3
+        ]
+    }
+]

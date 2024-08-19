@@ -1,6 +1,5 @@
 import testPoiList from '../testData/testPoiList.json';
-import testPoiFilter from '../testData/testPoiFilter.json';
-import testPoiCount from '../testData/testPoiCount.json';
+import testPoiHotelFilter from '../testData/testPoiHotelFilter.json';
 
 import './PoiTabPanel.css';
 import { PoiFilter } from './components/PoiFilter';
@@ -23,11 +22,11 @@ import LocationOffIcon from '@mui/icons-material/LocationOff';
 function PoiTabPanel(props) {
     const {selectPointsData, setSelectPointsData} = props;
 
-    const [poiData, setPoiList] = useState(testPoiList);
-    const [poiCount, setPoiCount] = useState(Number(testPoiCount.count) / 20)
+    const [poiData, setPoiList] = useState(testPoiList.poi);
+    const [poiCount, setPoiCount] = useState(Math.floor(Number(testPoiList.count) / 20))
 
     const [poiSearchValue, setPoiSearchValue] = useState('');
-    const [poiFilterData, setPoiFilterData] = useState(testPoiFilter);
+    const [poiFilterData, setPoiFilterData] = useState(testPoiHotelFilter);
 
 
     const [poiTabPanelData, setPoiTabPanelData] = useState({
@@ -43,13 +42,13 @@ function PoiTabPanel(props) {
             <PoiCard
                 poiId={poiItem.id}
                 poiName={poiItem.name}
-                poiDescription={poiItem.description}
-                poiImageUrl={poiItem.image}
+                // poiDescription={poiItem.description}
+                // poiImageUrl={poiItem.image}
                 poiType={poiItem.type}
-                poiCoordX={poiItem.x}
-                poiCoordY={poiItem.y}
-                cardButton={() => {return(<AddLocationIcon fontSize='inherit'/>)}}
-                
+                poiCoordX={poiItem.latitude}
+                poiCoordY={poiItem.longitude}
+                cardButton={() => {return(<AddLocationIcon fontSize='large'/>)}}
+                cardButtonColor='success'
                 changePoi={() => {
                     if (selectPointsData.poi.length < 9) {
                         let isPoiSelect = false;
@@ -68,11 +67,11 @@ function PoiTabPanel(props) {
                                     {
                                         "id": poiItem.id,
                                         "name": poiItem.name,
-                                        "description": poiItem.description,
-                                        "image": poiItem.image,
+                                        // "description": poiItem.description,
+                                        // "image": poiItem.image,
                                         "type": poiItem.type,
-                                        "x": poiItem.x,
-                                        "y": poiItem.y
+                                        "latitude": poiItem.latitude,
+                                        "longitude": poiItem.longitude
                                     }
                                 ]
                             })
@@ -89,13 +88,13 @@ function PoiTabPanel(props) {
             <PoiCard
                 poiId={poiItem.id}
                 poiName={poiItem.name}
-                poiDescription={poiItem.description}
-                poiImageUrl={poiItem.image}
+                // poiDescription={poiItem.description}
+                // poiImageUrl={poiItem.image}
                 poiType={poiItem.type}
-                poiCoordX={poiItem.x}
-                poiCoordY={poiItem.y}
-                cardButton={() => {return(<LocationOffIcon fontSize='inherit'/>)}}
-                
+                poiCoordX={poiItem.latitude}
+                poiCoordY={poiItem.longitude}
+                cardButton={() => {return(<LocationOffIcon fontSize='large'/>)}}
+                cardButtonColor='error'
                 changePoi={() => {
                     selectPointsData.poi.forEach((item, index) => {
                         if (item.id == poiItem.id) {

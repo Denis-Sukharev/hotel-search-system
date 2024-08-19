@@ -1,0 +1,78 @@
+#RoutesTabPanel {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+#route-params {
+    display: flex;
+    flex-direction: column;
+    font-size: 14px;
+    margin-bottom: 10px;
+    margin-left: 5px;
+}
+
+.RouteCard {
+    width: 100%;
+    min-height: 120px;
+    box-sizing: border-box;
+
+    display: flex;
+    flex-direction: column;
+
+    margin-bottom: 5px;
+}
+
+.route {
+    display: flex;
+    flex-direction: column;
+}
+
+.route-point {
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+}
+
+.route-point-num {
+    width: 30px;
+    height: 30px;
+    box-sizing: border-box;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border: 3px solid #757ce8   ;
+    border-radius: 100px;
+}
+
+.route-point-title {
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    font-size: 18px;
+}
+
+.route-point-time {
+display: inline;
+    margin-top: 2px;
+    font-size: 14px;
+}
+
+.route-road {
+    display: flex;
+}
+
+.route-road-line {
+    width: 15px;
+    height: 15px;
+    box-sizing: border-box;
+
+    margin-left: 13px;
+
+    border-left: 4px solid #757ce8;
+}

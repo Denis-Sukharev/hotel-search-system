@@ -1,22 +1,50 @@
 import Chip from '@mui/material/Chip';
 import IconButton from '@mui/material/IconButton';
+import testPoiHotelFilter from '../../testData/testPoiHotelFilter.json';
 
-import AddLocationIcon from '@mui/icons-material/AddLocation';
-import LocationOffIcon from '@mui/icons-material/LocationOff';
+const RenderType = (typeData) => {
+    let typeList = typeData.typeData.map((typeDataItem) => {
+        let typeTitle = typeDataItem;
+        
+        for (let i = 0; i < testPoiHotelFilter.poiType.length; i++) {
+            if (testPoiHotelFilter.poiType[i].type == typeDataItem) {
+                typeTitle = testPoiHotelFilter.poiType[i].name;
+                break;
+            }
+        }
+
+        return(
+            <Chip
+                label={typeTitle}
+                variant='outlined'
+                size='small'
+            />
+        )
+    })
+
+    return(
+        <>
+            {...typeList}
+        </>
+    )
+};
 
 export function PoiCard(props) {
     const {
         poiId,
         poiName,
-        poiDescription,
-        poiImageUrl,
+        // poiDescription,
+        // poiImageUrl,
         poiType,
         poiCoordX,
         poiCoordY,
-        changePoi,
         cardButton,
+        cardButtonColor,
+        changePoi,
         ...other
     } = props;
+
+    let poiImageUrl  = '/logo/logo-img.png';
     
     return (
         <>
@@ -31,6 +59,7 @@ export function PoiCard(props) {
 
                         <IconButton
                             size='large'
+                            color={cardButtonColor}
                             onClick={changePoi}
                         >   
                             {cardButton()}             
@@ -38,17 +67,15 @@ export function PoiCard(props) {
                     </div>
 
                     <div className="poi-card-description">
-                        <div>
+                        {/* <div>
                             <p>
                                 {poiDescription}
                             </p>
-                        </div>
+                        </div> */}
                         
-                        <div>
-                            <Chip
-                                label={poiType}
-                                variant='outlined'
-                                size='small'
+                        <div id="poi-chip">
+                            <RenderType
+                                typeData={poiType}
                             />
                         </div>
                         

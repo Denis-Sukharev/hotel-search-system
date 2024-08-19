@@ -8,6 +8,38 @@ import { useState } from 'react';
 
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
+import Button from '@mui/material/Button';
+
+const BackToTabButton = (props) => {
+    const {tabValue, setTabValue} = props;
+    
+    let button, title;
+    
+    if (tabValue == 0) {
+        button = 'Выбрать места';
+        title = 'Места для посещения пока не выбраны(';
+    } else {
+        button = 'Выбрать Гостиницы';
+        title = 'Гостиницы пока не выбраны(';
+    }
+
+    return(
+        <>
+            <div id="back-to-tab-content">
+                <div id="back-to-tab-title">
+                    {title}
+                </div>
+
+                <Button
+                    variant="contained"
+                    onClick={() => setTabValue(tabValue)}
+                >
+                    {button}
+                </Button>
+            </div>
+        </>
+    )
+};
 
 const TabPanel = (props) => {
     const {children, value, index, ...other} = props;
@@ -25,21 +57,33 @@ const TabPanel = (props) => {
 
 function Panel() {
     const [selectPointsData, setSelectPointsData] = useState({
-        poi: [
-
-        ],
-
-        hotels: [
-            
-        ]
+        poi: [],
+        hotels: []
     });
-
 
     const [tabValue, setTabValue] = useState(0);
 
     const tabChange = (event, newTabValue) => {
         setTabValue(newTabValue);
     };
+
+
+    let routesTabContent = (<RoutesTabPanel
+                                pointList={selectPointsData.poi}
+                            />)
+
+    if (selectPointsData.poi.length <= 0) {
+        routesTabContent = (<BackToTabButton
+                                tabValue={0}
+                                setTabValue={setTabValue}
+                            />)
+    } else if (selectPointsData.hotels.length <= 0) {
+        routesTabContent = (<BackToTabButton
+                                tabValue={1}
+                                setTabValue={setTabValue}
+                            />)
+    }
+
 
     return ( 
         <>
@@ -100,7 +144,8 @@ function Panel() {
                             value={tabValue}
                             index={2}
                         >
-                            <RoutesTabPanel />
+                            
+                            {routesTabContent}
                         </TabPanel>
                     </div>
                 </div>

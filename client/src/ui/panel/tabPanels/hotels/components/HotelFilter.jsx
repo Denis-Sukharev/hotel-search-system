@@ -11,7 +11,7 @@ const CheckboxElement = (props) => {
     return(
         <>
             <FormControlLabel
-                key={`poi-district-list-${_label}`}
+                key={`hotel-district-list-${_label}`}
                 className='checkbox-container'
                 label={_label}
                 sx={{
@@ -20,6 +20,7 @@ const CheckboxElement = (props) => {
                     paddingY: '5px',
                     width: '50%',
                     boxSizing: 'border-box',
+                    lineHeight: '100%',
                 }}
                 control={
                     <Checkbox
@@ -42,7 +43,7 @@ const CheckboxElement = (props) => {
 
 
 
-const PoiFilterDistrict = (props) => {
+const HotelFilterDistrict = (props) => {
     const {filterData, setCheck, ...other} = props;
 
     const handleChange = (event) => {
@@ -82,15 +83,14 @@ const PoiFilterDistrict = (props) => {
 
 
 
-const PoiFilterType = (props) => {
+const HotelFilterType = (props) => {
     const {filterData, setCheck, ...other} = props;
 
     const handleChange = (event) => {
-
-        for (let i = 0; i < filterData.poiType.length; i++) {
-            if (filterData.poiType[i].type == event.target.name) {
-                filterData.poiType[i] = {
-                    ...filterData.poiType[i],
+        for (let i = 0; i < filterData.hotelType.length; i++) {
+            if (filterData.hotelType[i].type == event.target.name) {
+                filterData.hotelType[i] = {
+                    ...filterData.hotelType[i],
                     "select": event.target.checked
                 }
                 break;
@@ -99,7 +99,7 @@ const PoiFilterType = (props) => {
         setCheck({...filterData});
     };
 
-    const filterList = filterData.poiType.map((item) => {
+    const filterList = filterData.hotelType.map((item) => {
         return(
             <CheckboxElement
                 _label={item.name}
@@ -112,8 +112,8 @@ const PoiFilterType = (props) => {
     });
 
     return (
-        <div className='poi-filter-section'>
-            <div className='poi-filter-section-column'>
+        <div className='hotel-filter-section'>
+            <div className='hotel-filter-section-column'>
                 {...filterList}
             </div>
         </div>
@@ -123,16 +123,16 @@ const PoiFilterType = (props) => {
 
 
 
-export function PoiFilter(props) {
-    const {poiFilterData, setPoiFilterData, ...other} = props;
+export function HotelFilter(props) {
+    const {hotelFilterData, setHotelFilterData, ...other} = props;
 
-    const [isPoiFilterDistrictOpen, setIsPoiFilterDistrictOpen] = useState(false);
-    const [isPoiFilterTypeOpen, setIsPoiFilterTypeOpen] = useState(false);
+    const [isHotelFilterDistrictOpen, setIsHotelFilterDistrictOpen] = useState(false);
+    const [isHotelFilterTypeOpen, setIsHotelFilterTypeOpen] = useState(false);
 
     return (
         <>
-            <div id="PoiFilter">
-                <div id="poi-filter-title">
+            <div id="HotelFilter">
+                <div id="hotel-filter-section">
                     <span>
                         Фильтры мест
                     </span>
@@ -141,32 +141,32 @@ export function PoiFilter(props) {
                 {/* district */}
                 <div
                     className='section-title'
-                    onClick={() => setIsPoiFilterDistrictOpen(!isPoiFilterDistrictOpen)}
+                    onClick={() => setIsHotelFilterDistrictOpen(!isHotelFilterDistrictOpen)}
                 >
-                    {isPoiFilterDistrictOpen && (<KeyboardArrowDownIcon/>)}
-                    {!isPoiFilterDistrictOpen && (<KeyboardArrowUpIcon/>)}
+                    {isHotelFilterDistrictOpen && (<KeyboardArrowDownIcon/>)}
+                    {!isHotelFilterDistrictOpen && (<KeyboardArrowUpIcon/>)}
                     
                     <span>Район</span>
 
                     <hr />
                 </div>
 
-                {isPoiFilterDistrictOpen && (<PoiFilterDistrict filterData={poiFilterData} setCheck={setPoiFilterData} />)}
+                {isHotelFilterDistrictOpen && (<HotelFilterDistrict filterData={hotelFilterData} setCheck={setHotelFilterData} />)}
 
                 {/* type */}
                 <div
                     className='section-title'
-                    onClick={() => setIsPoiFilterTypeOpen(!isPoiFilterTypeOpen)}
+                    onClick={() => setIsHotelFilterTypeOpen(!isHotelFilterTypeOpen)}
                 >
-                    {isPoiFilterTypeOpen && (<KeyboardArrowDownIcon/>)}
-                    {!isPoiFilterTypeOpen && (<KeyboardArrowUpIcon/>)}
+                    {isHotelFilterTypeOpen && (<KeyboardArrowDownIcon/>)}
+                    {!isHotelFilterTypeOpen && (<KeyboardArrowUpIcon/>)}
                     
                     <span>Типы мест</span>
 
                     <hr />
                 </div>
 
-                {isPoiFilterTypeOpen && (<PoiFilterType filterData={poiFilterData} setCheck={setPoiFilterData} />)}
+                {isHotelFilterTypeOpen && (<HotelFilterType filterData={hotelFilterData} setCheck={setHotelFilterData} />)}
             </div>
         </>
     )
