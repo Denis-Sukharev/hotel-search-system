@@ -8,8 +8,8 @@
                 "Апарт-отель"
             ],
             "rating": 9.1,
-            "latitude": 55.100,
-            "longitude": 37.100
+            "latitude": 55.75,
+            "longitude": 37.65
         },
 
         {
@@ -19,8 +19,8 @@
                 "Гостевой дом"
             ],
             "rating": 8,
-            "latitude": 55.200,
-            "longitude": 37.200
+            "latitude": 55.76,
+            "longitude": 37.66
         },
 
         {
@@ -30,8 +30,8 @@
                 "Капсульный хостел"
             ],
             "rating": 3,
-            "latitude": 55.300,
-            "longitude": 37.300
+            "latitude": 55.77,
+            "longitude": 37.67
         }
     ]
 }

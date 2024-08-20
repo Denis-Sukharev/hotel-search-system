@@ -1,5 +1,7 @@
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import Slider from '@mui/material/Slider';
+import Chip from '@mui/material/Chip';
 
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
@@ -123,11 +125,72 @@ const HotelFilterType = (props) => {
 
 
 
+
+const HotelFilterRating = (props) => {
+    const {filterData, setCheck, ...other} = props;
+
+    const [minValue, setMinValue] = useState(Number(filterData.hotelRating.rateMin));
+    const [maxValue, setMaxValue] = useState(Number(filterData.hotelRating.rateMax));
+    const [value, setValue] = useState([minValue, maxValue])
+
+    const sliderChange = (event, newValue) => {
+        setMinValue(newValue[0]);
+        setMaxValue(newValue[1]);
+        setValue(newValue);
+
+        filterData.hotelRating.rateMin = minValue;
+        filterData.hotelRating.rateMax = maxValue;
+        
+        setCheck({...filterData});
+    };
+
+    console.log(filterData);
+    return (
+        <div className='hotel-filter-section'>
+            <div className='hotel-filter-section-column hotel-filter-section-column-padding'>
+                <Chip
+                    label={String(minValue)}
+                    variant="outlined"
+                />
+
+                <Slider
+                    getAriaLabel={() => 'Temperature range'}
+                    value={value}
+                    step={1}
+                    min={0}
+                    max={10}
+                    onChange={sliderChange}
+                    valueLabelDisplay="auto"
+                    getAriaValueText={() => value}
+                    // marks={[
+                    //     {value: 0, label: "0"}, {value: 1, label: "1"},
+                    //     {value: 2, label: "2"}, {value: 3, label: "3"},
+                    //     {value: 4, label: "4"}, {value: 5, label: "5"},
+                    //     {value: 6, label: "6"}, {value: 7, label: "7"},
+                    //     {value: 8, label: "8"}, {value: 9, label: "9"},
+                    //     {value: 10, label: "10"}
+                    // ]}
+                />
+
+                <Chip
+                    label={String(maxValue)}
+                    variant="outlined"
+                />
+            </div>
+        </div>
+    );
+};
+
+
+
+
+
 export function HotelFilter(props) {
     const {hotelFilterData, setHotelFilterData, ...other} = props;
 
     const [isHotelFilterDistrictOpen, setIsHotelFilterDistrictOpen] = useState(false);
     const [isHotelFilterTypeOpen, setIsHotelFilterTypeOpen] = useState(false);
+    const [isHotelFilterRatingOpen, setIsHotelFilterRatingOpen] = useState(false);
 
     return (
         <>
@@ -161,12 +224,27 @@ export function HotelFilter(props) {
                     {isHotelFilterTypeOpen && (<KeyboardArrowDownIcon/>)}
                     {!isHotelFilterTypeOpen && (<KeyboardArrowUpIcon/>)}
                     
-                    <span>Типы мест</span>
+                    <span>Типы гостиниц</span>
 
                     <hr />
                 </div>
 
                 {isHotelFilterTypeOpen && (<HotelFilterType filterData={hotelFilterData} setCheck={setHotelFilterData} />)}
+
+                {/* rating */}
+                <div
+                    className='section-title'
+                    onClick={() => setIsHotelFilterRatingOpen(!isHotelFilterRatingOpen)}
+                >
+                    {isHotelFilterRatingOpen && (<KeyboardArrowDownIcon/>)}
+                    {!isHotelFilterRatingOpen && (<KeyboardArrowUpIcon/>)}
+                    
+                    <span>Рейтинг гостиниц</span>
+
+                    <hr />
+                </div>
+
+                {isHotelFilterRatingOpen && (<HotelFilterRating filterData={hotelFilterData} setCheck={setHotelFilterData} />)}
             </div>
         </>
     )

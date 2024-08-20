@@ -54,5 +54,10 @@
         {"type": "Бутик-Отель", "name": "Бутик-Отель", "select": true},
         {"type": "Хостел", "name": "Хостел", "select": true},
         {"type": "Отель", "name": "Отель", "select": true}
-    ]
+    ],
+
+    "hotelRating": {
+        "rateMin": 0,
+        "rateMax": 10
+    }
 }

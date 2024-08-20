@@ -56,10 +56,6 @@
     align-items: center;
 }
 
-.hotel-card-name span {
-
-}
-
 .hotel-card-description {
     display: flex;
     flex-direction: column;
@@ -109,6 +105,12 @@
     width: 100%;
     display: flex;
     flex-wrap: wrap;
+}
+
+.hotel-filter-section-column-padding {
+    margin: 0px 10px;
+    flex-wrap: nowrap;
+    gap: 10px
 }
 
 .checkbox-container {

@@ -9,8 +9,8 @@
                 "machine",
                 "memorial"
             ],
-            "latitude": 55.100,
-            "longitude": 37.100
+            "latitude": 55.71,
+            "longitude": 37.61
         },
 
         {
@@ -21,8 +21,8 @@
                 "kiosk",
                 "hostel"
             ],
-            "latitude": 55.200,
-            "longitude": 37.200
+            "latitude": 55.72,
+            "longitude": 37.62
         },
 
         {
@@ -33,8 +33,8 @@
                 "city_gate",
                 "attraction"
             ],
-            "latitude": 55.300,
-            "longitude": 37.300
+            "latitude": 55.73,
+            "longitude": 37.63
         }
     ]
 }

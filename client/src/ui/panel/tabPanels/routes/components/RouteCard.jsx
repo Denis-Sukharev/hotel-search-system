@@ -43,8 +43,8 @@ const Point = (props) => {
 const Road = () => {
     return(
         <>
-            <div class="route-road">
-                <div class="route-road-line">
+            <div className="route-road">
+                <div className="route-road-line">
 
                 </div>
             </div>

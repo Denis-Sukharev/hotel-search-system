@@ -10,6 +10,23 @@ import { RouteCard } from './components/RouteCard.jsx';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
+
+const routeDecrypt = (id, pointList) => {
+    let name = id;
+    
+    for (let i = 0; i < pointList.length; i++) {
+        if (id == pointList[i].id) {
+            name = pointList[i].name;
+            break;
+        }
+    }
+
+    return(
+        name
+    )
+};
+
+
 const Section = (props) => {
     const {title, sectionData, ...other} = props;
     const [isSectionopen, setIsSectionOpen] = useState(false);
@@ -64,7 +81,7 @@ const Routes = (props) => {
 
 
 function RoutesTabPanel(props) {
-    const {pointList} = props;
+    const {selectPointsData, setSelectPointsData} = props;
 
     const [routeFilter, setRouteFilter] = useState({});
     const [routesData, setroutesData] = useState(testRoutes);
@@ -78,7 +95,7 @@ function RoutesTabPanel(props) {
                 />
 
                 <Routes
-                    pointList={pointList}
+                    pointList={selectPointsData.poi}
                     routesData={routesData}
                 />
             </div>

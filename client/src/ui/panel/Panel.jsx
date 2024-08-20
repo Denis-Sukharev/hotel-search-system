@@ -55,13 +55,8 @@ const TabPanel = (props) => {
     );
 };
 
-function Panel() {
-    const [selectPointsData, setSelectPointsData] = useState({
-        poi: [],
-        hotels: []
-    });
-
-    const [tabValue, setTabValue] = useState(0);
+function Panel(props) {
+    const {selectPointsData, setSelectPointsData, tabValue, setTabValue} = props;
 
     const tabChange = (event, newTabValue) => {
         setTabValue(newTabValue);
@@ -69,7 +64,8 @@ function Panel() {
 
 
     let routesTabContent = (<RoutesTabPanel
-                                pointList={selectPointsData.poi}
+                                selectPointsData={selectPointsData}
+                                setSelectPointsData={setSelectPointsData}
                             />)
 
     if (selectPointsData.poi.length <= 0) {

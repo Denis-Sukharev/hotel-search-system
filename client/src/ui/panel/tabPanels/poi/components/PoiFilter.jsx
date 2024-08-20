@@ -24,7 +24,7 @@ const CheckboxElement = (props) => {
                 control={
                     <Checkbox
                         key={_key}
-                        name={_name}
+                        name={String(_name)}
                         size='medium'
                         checked={_checked}
                         onChange={_onChange}

@@ -1,14 +1,29 @@
 import './App.css';
-import Map from './map/Map.jsx';
-import Ui from './ui/Ui.jsx'
+import MapLayer from './map/MapLayer.jsx';
+// import Ui from './ui/Ui.jsx'
+
+import { useState } from 'react';
 
 function App() {
+  const [tabValue, setTabValue] = useState(0);
+
+  const [selectPointsData, setSelectPointsData] = useState({
+    poi: [],
+    hotels: [],
+    routes: [],
+  });
 
   return (
     <>
       <div id="App">
-        <Map />
-        <Ui />
+        {/* <Ui /> */}
+        <MapLayer
+          selectPointsData={selectPointsData}
+          setSelectPointsData={setSelectPointsData}
+          tabValue={tabValue}
+          setTabValue={setTabValue}
+          
+        />
       </div>
     </>
   );
