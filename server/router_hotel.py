@@ -5,36 +5,158 @@ from finding_ways.start import optimal_hotel
 from typing import Union
 from fastapi import APIRouter
 from server.database import conn
-from server.schemas import HotelOptimal, Hotels
+from server.schemas import HotelOptimal, Hotels, FullInfoHotelPage, FragmentInfoHotel, IdHotel
 router = APIRouter(
     tags=['''HOTEL''']
 )
    
-@router.get("/hotel/all/{page}")# вывод 20 hotel для страниц
-async def select_hotel(page:int):
+@router.post("/hotel/all/")# вывод 20 hotel для страниц
+async def select_hotel(data_info: FullInfoHotelPage):
     with conn:
         with conn.cursor() as cur:
-            cur.execute("select * from poi inner join poi_category on poi.poi_id = poi_category.poi_id and poi_category.category = 'Проживание' inner join poi_coordinates on poi_coordinates.poi_id = poi.poi_id OFFSET %s LIMIT 20;", (int(page) * 20,))
-            hotel = cur.fetchall()
-            return hotel
+            cur.execute('''
+                select
+                distinct 
+                count(poi.poi_id)
+                from poi
+                inner join poi_category on poi_category.poi_id = poi.poi_id
+                inner join poi_coordinates on poi_coordinates.poi_id = poi.poi_id
+                inner join poi_type on poi_type.poi_id = poi_type.poi_id
+                inner join district on district.district_id = poi.district_id 
+                inner join hotel_rating on hotel_rating.poi_id = poi.poi_id 
+                where
+                poi_category.category = 'Проживание'
+                and district.district_id = ANY(%s)
+                and poi_type.type = ANY(%s)
+                and hotel_rating.rating between %s and %s
+                group by poi.poi_id, poi_coordinates.latitude, poi_coordinates.longitude, hotel_rating.rating
+                        ''', (data_info.district, data_info.type, int(data_info.rateMin), int(data_info.rateMax))
+                        )
+            count_hotel = cur.fetchall()
+            cur.execute('''
+                select
+                distinct 
+                poi.poi_id,
+                poi.name,
+                string_to_array(string_agg(distinct poi_type.type, ','), ',') as type,
+                hotel_rating.rating,
+                poi_coordinates.latitude,
+                poi_coordinates.longitude
+                from poi
+                inner join poi_category on poi_category.poi_id = poi.poi_id
+                inner join poi_coordinates on poi_coordinates.poi_id = poi.poi_id
+                inner join poi_type on poi_type.poi_id = poi.poi_id
+                inner join district on poi.district_id = district.district_id
+                inner join hotel_rating on hotel_rating.poi_id = poi.poi_id 
+                where
+                poi_category.category = 'Проживание'
+                and district.district_id = ANY(%s)
+                and poi_type.type = ANY(%s)
+                and hotel_rating.rating between %s and %s
+                group by poi.poi_id, poi_coordinates.latitude, poi_coordinates.longitude, hotel_rating.rating
+                order by poi.poi_id
+                offset %s
+                limit 20;
+            ''', (data_info.district, data_info.type, int(data_info.rateMin), int(data_info.rateMax), (data_info.page*20)))
+            data = cur.fetchall()
+            result = []
+            result.append({
+                "count": count_hotel[0][0]
+                })
+            for item in data:
+                result.append({
+                    "id": int(item[0]),
+                    "name": str(item[1]),
+                    "type": str(item[2]),
+                    "rating": float(item[3]),
+                    "latitude": str(item[4]),
+                    "longitude": str(item[5])
+                })
+            return result
 
-@router.get("/hotel/search_name/{name_fragment}")# поиск hotel по name
-async def select_name_hotel(name_fragment):
+@router.post("/hotel/search_name/")# поиск hotel по name
+async def select_name_hotel(data_info: FragmentInfoHotel):
     with conn:
         with conn.cursor() as cur:  
-            cur.execute("select poi.poi_id, poi.name from poi inner join poi_category on poi.poi_id = poi_category.poi_id and poi_category.category = 'Проживание' WHERE poi.name ILIKE %s LIMIT 5;", ('%' + name_fragment.lower() + '%',))
-            hotel = cur.fetchall()
-            return hotel 
+            cur.execute('''
+                select
+                distinct 
+                poi.poi_id,
+                poi.name,
+                string_to_array(string_agg(distinct poi_type.type, ','), ',') as type,
+                hotel_rating.rating,
+                poi_coordinates.latitude,
+                poi_coordinates.longitude
+                from poi
+                inner join poi_category on poi_category.poi_id = poi.poi_id
+                inner join poi_coordinates on poi_coordinates.poi_id = poi.poi_id
+                inner join poi_type on poi_type.poi_id = poi.poi_id
+                inner join district on district.district_id = poi.district_id
+                inner join hotel_rating on hotel_rating.poi_id = poi.poi_id
+                where
+                poi_category.category = 'Проживание'
+                and district.district_id = ANY(%s)
+                and poi_type.type = ANY(%s)
+                and hotel_rating.rating between %s and %s
+                and poi.name ilike %s
+                group by poi.poi_id, poi_coordinates.latitude, poi_coordinates.longitude, hotel_rating.rating
+                order by poi.poi_id
+                limit 5;
+            ''',(data_info.district, data_info.type, int(data_info.rateMin), int(data_info.rateMax), ('%'+data_info.fragment+'%')))
+            data = cur.fetchall()
+            result=[]
+            for item in data:
+                result.append({
+                    "id": int(item[0]),
+                    "name": str(item[1]),
+                    "type": str(item[2]),
+                    "rating": float(item[3]),
+                    "latitude": str(item[4]),
+                    "longitude": str(item[5])
+                })
+            return result 
 
-@router.get("/hotel/search_id/{id_hotel}")# поиск hotel по id
-async def select_id_hotel(id_poi:int):
+@router.post("/hotel/search_id/")# поиск hotel по id
+async def select_id_hotel(id_poi: IdHotel):
     with conn:
         with conn.cursor() as cur:  
-            cur.execute("""
-                        SELECT * FROM poi INNER JOIN poi_category ON poi.poi_id = poi_category.poi_id AND poi_category.category = 'Проживание' WHERE poi.poi_id = %s;
-                        """, (id_poi,))            
-            hotel = cur.fetchall()
-            return hotel 
+            # cur.execute("""
+            #             SELECT * FROM poi INNER JOIN poi_category ON poi.poi_id = poi_category.poi_id AND poi_category.category = 'Проживание' WHERE poi.poi_id = %s;
+            #             """, (id_poi,))   
+            cur.execute('''
+                select
+                distinct 
+                poi.poi_id,
+                poi.name,
+                string_to_array(string_agg(distinct poi_type.type, ','), ',') as type,
+                hotel_rating.rating,
+                poi_coordinates.latitude,
+                poi_coordinates.longitude
+                from poi
+                inner join poi_category on poi_category.poi_id = poi.poi_id
+                inner join poi_coordinates on poi_coordinates.poi_id = poi.poi_id
+                inner join poi_type on poi_type.poi_id = poi.poi_id
+                inner join district on district.district_id = poi.district_id
+                inner join hotel_rating on hotel_rating.poi_id = poi.poi_id
+                where
+                poi_category.category = 'Проживание'
+                and poi.poi_id = %s
+                group by poi.poi_id, poi_coordinates.latitude, poi_coordinates.longitude, hotel_rating.rating
+                order by poi.poi_id    
+            ''', (id_poi.id_hotel,))         
+
+            data = cur.fetchall()
+            result=[]
+            for item in data:
+                result.append({
+                    "id": int(item[0]),
+                    "name": str(item[1]),
+                    "type": str(item[2]),
+                    "rating": float(item[3]),
+                    "latitude": str(item[4]),
+                    "longitude": str(item[5])
+                })
+            return result
 
 
 @router.get("/hotel/count")# кол-во hotel

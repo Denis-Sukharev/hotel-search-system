@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 
+'''SCHEMAS HOTEL'''
 
 class HotelOptimal(BaseModel):
     time_limit: int
@@ -17,4 +18,37 @@ class HotelSchemas(BaseModel):
 class Hotels(BaseModel):
     hotels: list[HotelSchemas]
 
+class FullInfoHotelPage(BaseModel):
+    page: int
+    district: list[int] = []
+    type: list[str] = []
+    rateMin: int
+    rateMax: int
 
+
+
+class FragmentInfoHotel(BaseModel):
+    fragment: str
+    district: list[int] = []
+    type: list[str] = []
+    rateMin: int
+    rateMax: int
+
+class IdHotel(BaseModel):
+    id_hotel: int
+
+
+'''SCHEMAS POI'''
+
+class FullInfoPoiPage(BaseModel):
+    page: int
+    district: list[int] = []
+    type: list[str] = []
+
+class FragmentInfoPoi(BaseModel):
+    fragment: str
+    district: list[int] = []
+    type: list[str] = []
+
+class IdPoi(BaseModel):
+    id_poi: int
