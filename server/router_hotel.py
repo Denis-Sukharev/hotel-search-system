@@ -1,7 +1,4 @@
-# import sys
-# sys.path.append('../finding_ways/')
 from finding_ways.start import optimal_hotel
-
 from typing import Union
 from fastapi import APIRouter
 from server.database import conn
@@ -14,22 +11,39 @@ router = APIRouter(
 async def select_hotel(data_info: FullInfoHotelPage):
     with conn:
         with conn.cursor() as cur:
+            # cur.execute('''
+            #     select
+            #     distinct
+            #     count(*)
+            #     from poi
+            #     inner join poi_category on poi_category.poi_id = poi.poi_id
+            #     inner join poi_coordinates on poi_coordinates.poi_id = poi.poi_id
+            #     inner join poi_type on poi_type.poi_id = poi_type.poi_id
+            #     inner join district on district.district_id = poi.district_id 
+            #     inner join hotel_rating on hotel_rating.poi_id = poi.poi_id 
+            #     where
+            #     poi_category.category = 'Проживание'
+            #     and district.district_id = ANY(%s)
+            #     and poi_type.type = ANY(%s)
+            #     and hotel_rating.rating between %s and %s
+            #     group by poi.poi_id, poi_coordinates.latitude, poi_coordinates.longitude, hotel_rating.rating;
+            #             ''', (data_info.district, data_info.type, int(data_info.rateMin), int(data_info.rateMax))
+            #             )
             cur.execute('''
-                select
-                distinct 
-                count(poi.poi_id)
-                from poi
-                inner join poi_category on poi_category.poi_id = poi.poi_id
-                inner join poi_coordinates on poi_coordinates.poi_id = poi.poi_id
-                inner join poi_type on poi_type.poi_id = poi_type.poi_id
-                inner join district on district.district_id = poi.district_id 
-                inner join hotel_rating on hotel_rating.poi_id = poi.poi_id 
-                where
-                poi_category.category = 'Проживание'
-                and district.district_id = ANY(%s)
-                and poi_type.type = ANY(%s)
-                and hotel_rating.rating between %s and %s
-                group by poi.poi_id, poi_coordinates.latitude, poi_coordinates.longitude, hotel_rating.rating
+                    SELECT 
+                    COUNT(DISTINCT poi.poi_id)
+                    FROM 
+                    poi
+                    INNER JOIN poi_category ON poi_category.poi_id = poi.poi_id
+                    INNER JOIN poi_coordinates ON poi_coordinates.poi_id = poi.poi_id
+                    INNER JOIN poi_type ON poi_type.poi_id = poi.poi_id
+                    INNER JOIN district ON district.district_id = poi.district_id 
+                    INNER JOIN hotel_rating ON hotel_rating.poi_id = poi.poi_id 
+                    WHERE 
+                    poi_category.category = 'Проживание'
+                    AND district.district_id = ANY(%s)
+                    AND poi_type.type = ANY(%s)
+                    AND hotel_rating.rating BETWEEN %s AND %s;
                         ''', (data_info.district, data_info.type, int(data_info.rateMin), int(data_info.rateMax))
                         )
             count_hotel = cur.fetchall()

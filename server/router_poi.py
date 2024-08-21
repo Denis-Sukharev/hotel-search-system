@@ -1,5 +1,5 @@
 from typing import Union
-from fastapi import APIRouter, Body
+from fastapi import APIRouter
 from server.database import conn
 from server.schemas import FullInfoPoiPage, IdPoi, FragmentInfoPoi
 
@@ -15,23 +15,21 @@ async def select_poi(data_info: FullInfoPoiPage):
     with conn:
         with conn.cursor() as cur:          
             cur.execute('''
-        select
-        distinct 
-        count(poi.poi_id)
-        from poi
-        inner join poi_category on poi_category.poi_id = poi.poi_id
-        inner join poi_coordinates on poi_coordinates.poi_id = poi.poi_id
-        inner join poi_type on poi_type.poi_id = poi_type.poi_id
-        inner join district on district.district_id = poi.district_id 
-        inner join hotel_rating on hotel_rating.poi_id = poi.poi_id 
-        where
-        poi_category.category <> 'Проживание'
-        and district.district_id = ANY(%s)
-        and poi_type.type = ANY(%s)
-        group by poi.poi_id, poi_coordinates.latitude, poi_coordinates.longitude;
+                    SELECT 
+                    COUNT(DISTINCT poi.poi_id)
+                    FROM 
+                    poi
+                    INNER JOIN poi_category ON poi_category.poi_id = poi.poi_id
+                    INNER JOIN poi_coordinates ON poi_coordinates.poi_id = poi.poi_id
+                    INNER JOIN poi_type ON poi_type.poi_id = poi.poi_id
+                    INNER JOIN district ON district.district_id = poi.district_id 
+                    WHERE 
+                    poi_category.category <> 'Проживание'
+                    AND district.district_id = ANY(%s)
+                    AND poi_type.type = ANY(%s)
                         ''', (data_info.district, data_info.type)
                         )
-            count_hotel = cur.fetchall()
+            count_poi = cur.fetchall()
             cur.execute('''
                 select
                 distinct 
@@ -57,15 +55,15 @@ async def select_poi(data_info: FullInfoPoiPage):
             data = cur.fetchall()
             result = []
             result.append({
-                "count": count_hotel[0][0]
+                "count": count_poi[0][0]
                 })
             for item in data:
                 result.append({
                     "id": int(item[0]),
                     "name": str(item[1]),
                     "type": str(item[2]),
-                    "latitude": str(item[4]),
-                    "longitude": str(item[5])
+                    "latitude": str(item[3]),
+                    "longitude": str(item[4])
                 })
             return result
 
@@ -92,15 +90,16 @@ async def select_name_poi(data_info: FragmentInfoPoi):
                 where
                 poi_category.category <> 'Проживание'
                 and district.district_id = ANY(%s)
-                and poi_type.type = ANY(%s) 
+                and poi_type.type = ANY(%s)
                 and poi.name ilike %s 
                 group by poi.poi_id, poi_coordinates.latitude, poi_coordinates.longitude
                 order by poi.poi_id
                 limit 5;
-            ''', (data_info.district, data_info.type, ('%'+data_info.fragment+'%')))
+            ''', ( data_info.district, data_info.type, ('%'+data_info.fragment+'%')))
             data = cur.fetchall()
             result = []
             print(data_info)
+            
             for item in data:
                 result.append({
                     "id": int(item[0]),
