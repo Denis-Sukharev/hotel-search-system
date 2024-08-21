@@ -1,3 +1,4 @@
+import { sendAPI } from '../../../../services/axiosConfig.js';
 import testHotelList from '../testData/testHotelList.json';
 import testPoiHotelFilter from '../testData/testPoiHotelFilter.json';
 
@@ -5,7 +6,7 @@ import './HotelTabPanel.css';
 import { HotelFilter } from './components/HotelFilter.jsx';
 import { HotelCard } from './components/HotelCard.jsx';
 
-import {useState} from 'react';  
+import { useState, useEffect } from 'react';  
 
 import TextField from '@mui/material/TextField';
 import IconButton from '@mui/material/IconButton';
@@ -19,10 +20,12 @@ import AddLocationIcon from '@mui/icons-material/AddLocation';
 import LocationOffIcon from '@mui/icons-material/LocationOff';
 
 function HotelsTabpanel(props) {
+    const [test, setTest] = useState();
+
     const {selectPointsData, setSelectPointsData} = props;
 
-    const [hotelData, setHotelData] = useState(testHotelList.hotels);
-    const [hotelCount, setHotelCount] = useState(Math.floor(Number(testHotelList.count) / 20))
+    const [hotelData, setHotelData] = useState({count: 1, data: []});
+    const [hotelCount, setHotelCount] = useState({data: [[0]]})
 
     const [hotelSearchValue, setHotelSearchValue] = useState('');
     const [hotelFilterData, setHotelFilterData] = useState(testPoiHotelFilter);
@@ -33,9 +36,21 @@ function HotelsTabpanel(props) {
         isAllHotelVisible: true,
         page: 1
     });
+
+
+    useEffect(() => {
+        sendAPI('/hotel/all/', setHotelData, {
+            page: hotelTabPanelData.page,
+            district: hotelFilterData.district.map((item) => item.id),
+            type: hotelFilterData.hotelType.map((item) => item.type),
+            rateMin: hotelFilterData.hotelRating.rateMin,
+            rateMax: hotelFilterData.hotelRating.rateMax
+        })
+    }, [hotelTabPanelData.page, hotelFilterData]);
+
     
 
-    const hotelList = hotelData.map((hotelItem) => {
+    const hotelList = hotelData?.data.map((hotelItem) => {
         return(
             <HotelCard
                 hotelId={hotelItem.id}
@@ -197,14 +212,17 @@ function HotelsTabpanel(props) {
                             > 
                                 <Pagination
                                     size='small'
-                                    count={hotelCount}
+                                    count={Math.floor(Number(hotelCount?.data[0][0]??hotelData?.count) / 20)}
                                     defaultPage={hotelTabPanelData.page}
                                     siblingCount={1}
                                     boundaryCount={1}
-                                    onChange={(event, value) => setHotelTabPanelData({
+                                    onChange={(event, value) => {
+                                        setHotelData({data: []});
+                                        setHotelTabPanelData({
                                         ...hotelTabPanelData,
                                         page: value
-                                    })}
+                                        })
+                                    }}
                                 />
                             </Stack>
                         </div>

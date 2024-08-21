@@ -1,3 +1,4 @@
+import { sendAPI } from '../../../../services/axiosConfig.js';
 import testPoiList from '../testData/testPoiList.json';
 import testPoiHotelFilter from '../testData/testPoiHotelFilter.json';
 
@@ -5,7 +6,7 @@ import './PoiTabPanel.css';
 import { PoiFilter } from './components/PoiFilter';
 import { PoiCard } from './components/PoiCard.jsx';
 
-import {useState} from 'react';  
+import {useState, useEffect} from 'react';  
 
 import TextField from '@mui/material/TextField';
 import IconButton from '@mui/material/IconButton';
@@ -23,11 +24,10 @@ function PoiTabPanel(props) {
     const {selectPointsData, setSelectPointsData} = props;
 
     const [poiData, setPoiList] = useState(testPoiList.poi);
-    const [poiCount, setPoiCount] = useState(Math.floor(Number(testPoiList.count) / 20))
+    const [poiCount, setPoiCount] = useState();
 
     const [poiSearchValue, setPoiSearchValue] = useState('');
     const [poiFilterData, setPoiFilterData] = useState(testPoiHotelFilter);
-
 
     const [poiTabPanelData, setPoiTabPanelData] = useState({
         isPoiFilterVisible: false,
@@ -35,7 +35,15 @@ function PoiTabPanel(props) {
         isAllPoiVisible: true,
         page: 1
     });
-    
+
+    useEffect(() => {
+        sendAPI('/poi/count', setPoiCount);
+        // sendAPI('/poi/all/', setTest, {
+        //     page: poiTabPanelData.page,
+        //     district: poiFilterData.district.map((item) => item.id),
+        //     type: poiFilterData.poiType.map((item) => item.type)
+        // })
+    }, [poiFilterData, poiTabPanelData]);
 
     const poiList = poiData.map((poiItem) => {
         return(
@@ -83,6 +91,7 @@ function PoiTabPanel(props) {
     });
 
 
+
     const selectPoiList = selectPointsData.poi.map((poiItem) => {
         return(
             <PoiCard
@@ -107,6 +116,8 @@ function PoiTabPanel(props) {
             />
         );
     });
+
+
 
     return ( 
         <>
@@ -196,7 +207,7 @@ function PoiTabPanel(props) {
                             > 
                                 <Pagination
                                     size='small'
-                                    count={poiCount}
+                                    count={Math.floor(Number(poiCount?.data[0][0]) / 20)}
                                     defaultPage={poiTabPanelData.page}
                                     siblingCount={1}
                                     boundaryCount={1}

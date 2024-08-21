@@ -4,16 +4,7 @@ import StarIcon from '@mui/icons-material/Star';
 import testPoiHotelFilter from '../../testData/testPoiHotelFilter.json';
 
 const RenderType = (typeData) => {
-    let typeList = typeData.typeData.map((typeDataItem) => {
-        // let typeTitle = typeDataItem;
-        
-        // for (let i = 0; i < testPoiHotelFilter.hotelType.length; i++) {
-        //     if (testPoiHotelFilter.hotelType[i].type == typeDataItem) {
-        //         typeTitle = testPoiHotelFilter.hotelType[i].name;
-        //         break;
-        //     }
-        // }
-
+    let typeList = typeData.typeData?.map((typeDataItem) => {
         return(
             <Chip
                 label={typeDataItem}
@@ -23,11 +14,13 @@ const RenderType = (typeData) => {
         )
     })
 
-    return(
-        <>
-            {...typeList}
-        </>
-    )
+    if (typeList) {
+        return(
+            <>
+                {...typeList}
+            </>
+        )
+    }
 };
 
 export function HotelCard(props) {

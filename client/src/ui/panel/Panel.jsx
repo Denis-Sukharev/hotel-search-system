@@ -4,8 +4,6 @@ import PoiTabPanel from './tabPanels/poi/PoiTabPanel';
 import HotelsTabpanel from './tabPanels/hotels/HotelsTabPanel';
 import RoutesTabPanel from './tabPanels/routes/RoutesTabPanel.jsx'
 
-import { useState } from 'react';
-
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Button from '@mui/material/Button';
@@ -79,7 +77,6 @@ function Panel(props) {
                                 setTabValue={setTabValue}
                             />)
     }
-
 
     return ( 
         <>

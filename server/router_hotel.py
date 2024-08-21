@@ -67,7 +67,7 @@ async def select_hotel(data_info: FullInfoHotelPage):
                 result.append({
                     "id": int(item[0]),
                     "name": str(item[1]),
-                    "type": str(item[2]),
+                    "type": list(item[2]),
                     "rating": float(item[3]),
                     "latitude": str(item[4]),
                     "longitude": str(item[5])
