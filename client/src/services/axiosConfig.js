@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import envConfig from '../../env-config.json';
 import axios from 'axios';
 
@@ -11,6 +12,7 @@ const config = {
     withCredentials: true,
     method: "get",
 }
+
 
 export const sendAPI = async (urlAPI, setRes, body) => {
     config.url = urlAPI;
@@ -27,5 +29,50 @@ export const sendAPI = async (urlAPI, setRes, body) => {
     })
     .catch((error) => {
         console.log(error);
+    })
+}
+
+
+export const getHolteAll = async (setHotels, setHotelsCount, body) => {
+    config.url = 'fragment' in body ? '/hotel/search_name/' : '/hotel/all/';
+    config.method = 'post';
+    config.data = JSON.stringify(body);
+    
+    await axios(config)
+    .then((response) => {
+        // console.log("count:" + response.data[0].count);
+        // console.log("hotels:" + response.data[0].hotels);
+        setHotels(response.data.hotels);
+
+        'count' in response.data ? 
+            setHotelsCount(response.data.count) :
+            setHotelsCount(0)
+    })
+    .catch((error) => {
+        console.log(error);
+        setHotels([]);
+        setHotelsCount(0);
+    })
+}
+
+export const getPoiAll = async (setPoi, setPoiCount, body) => {
+    config.url = 'fragment' in body ? '/poi/search_name/' : '/poi/all/';
+    config.method = 'post';
+    config.data = JSON.stringify(body);
+    
+    await axios(config)
+    .then((response) => {
+        // console.log("count:" + response.data[0].count);
+        // console.log("hotels:" + response.data[0].hotels);
+        setPoi(response.data.poi);
+
+        'count' in response.data ? 
+            setPoiCount(response.data.count) :
+            setPoiCount(0)
+    })
+    .catch((error) => {
+        console.log(error);
+        setPoi([]);
+        setPoiCount(0);
     })
 }

@@ -15,10 +15,10 @@ const BackToTabButton = (props) => {
     
     if (tabValue == 0) {
         button = 'Выбрать места';
-        title = 'Места для посещения пока не выбраны(';
+        title = 'Места для посещения пока не выбраны :(';
     } else {
         button = 'Выбрать Гостиницы';
-        title = 'Гостиницы пока не выбраны(';
+        title = 'Гостиницы пока не выбраны :(';
     }
 
     return(
@@ -30,6 +30,7 @@ const BackToTabButton = (props) => {
 
                 <Button
                     variant="contained"
+                    size="small"
                     onClick={() => setTabValue(tabValue)}
                 >
                     {button}

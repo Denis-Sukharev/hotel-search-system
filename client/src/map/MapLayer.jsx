@@ -51,6 +51,8 @@ function MapLayer(props) {
         preferCanvas: false,
     }
 
+    
+
     return ( 
         <>
             <div id='MapLayer'>
@@ -60,6 +62,12 @@ function MapLayer(props) {
                     zoomControl={mapConfig.zoomControl}
                     preferCanvas={mapConfig.preferCanvas}
                 >
+
+                    <SelectPointMarker
+                        selectPointsData={selectPointsData}
+                        tabValue={tabValue}
+                    />
+
                     <TileLayer
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     />
@@ -67,22 +75,17 @@ function MapLayer(props) {
                     <ZoomControl
                         position='topright'
                     />
-                
-                <div className='leaflet-control' id="Ui">
-                    <Panel
-                        selectPointsData={selectPointsData}
-                        setSelectPointsData={setSelectPointsData}
-                        tabValue={tabValue}
-                        setTabValue={setTabValue}
-                    />
 
-                    <Info/>
-                </div>
+                    <div className='leaflet-control' id="Ui">
+                        <Panel
+                            selectPointsData={selectPointsData}
+                            setSelectPointsData={setSelectPointsData}
+                            tabValue={tabValue}
+                            setTabValue={setTabValue}
+                        />
 
-                <SelectPointMarker
-                    selectPointsData={selectPointsData}
-                    tabValue={tabValue}
-                />
+                        <Info/>
+                    </div>
 
                 </MapContainer>
             </div>

@@ -53,18 +53,22 @@ async def select_poi(data_info: FullInfoPoiPage):
                 limit 20;
             ''', (data_info.district, data_info.type, (data_info.page*20)))
             data = cur.fetchall()
-            result = []
-            result.append({
-                "count": count_poi[0][0]
-                })
+
+            result_poi = []
             for item in data:
-                result.append({
+                result_poi.append({
                     "id": int(item[0]),
                     "name": str(item[1]),
-                    "type": str(item[2]),
+                    "type": list(item[2]),
                     "latitude": str(item[3]),
                     "longitude": str(item[4])
                 })
+
+            result = {
+                "count": count_poi[0][0],
+                "poi": result_poi
+            }
+            
             return result
 
 @router.post("/poi/search_name/")# поиск poi по названию
@@ -97,17 +101,21 @@ async def select_name_poi(data_info: FragmentInfoPoi):
                 limit 5;
             ''', ( data_info.district, data_info.type, ('%'+data_info.fragment+'%')))
             data = cur.fetchall()
-            result = []
-            print(data_info)
-            
+
+            result_poi = []
             for item in data:
-                result.append({
+                result_poi.append({
                     "id": int(item[0]),
                     "name": str(item[1]),
-                    "type": str(item[2]),
+                    "type": list(item[2]),
                     "latitude": str(item[3]),
                     "longitude": str(item[4])
                 })
+
+            result = {
+                "poi": result_poi
+            }
+
             return result
         
 @router.post("/poi/search_id/")# поиск poi по id
@@ -157,25 +165,25 @@ async def select_count_poi():
                         """)            
             poi = cur.fetchall()
             return poi
-'''
-class Hotel(BaseModel):
-    name: str
-    address: str
-    rating: int
+
+# class Hotel(BaseModel):
+#     name: str
+#     address: str
+#     rating: int
     
-@router.get("/hotels/{hotel_id}")
-async def read_hotel(hotel_id: int):
-    return {"name": "Hotel 1", "address": "Address 1", "rating": 5}
+# @router.get("/hotels/{hotel_id}")
+# async def read_hotel(hotel_id: int):
+#     return {"name": "Hotel 1", "address": "Address 1", "rating": 5}
 
-@router.post("/hotels/")
-async def create_hotel(hotel: Hotel):
-    return hotel
+# @router.post("/hotels/")
+# async def create_hotel(hotel: Hotel):
+#     return hotel
 
-@router.put("/hotels/{hotel_id}")
-async def update_hotel(hotel_id: int, hotel: Hotel):
-    return hotel
+# @router.put("/hotels/{hotel_id}")
+# async def update_hotel(hotel_id: int, hotel: Hotel):
+#     return hotel
 
-@router.delete("/hotels/{hotel_id}")
-async def delete_hotel(hotel_id: int):
-    return {"message": "Hotel deleted"}'''
+# @router.delete("/hotels/{hotel_id}")
+# async def delete_hotel(hotel_id: int):
+#     return {"message": "Hotel deleted"}
 

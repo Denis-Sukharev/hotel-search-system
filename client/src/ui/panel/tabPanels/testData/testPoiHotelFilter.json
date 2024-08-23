@@ -56,8 +56,8 @@
         {"type": "Отель", "name": "Отель", "select": true}
     ],
 
-    "hotelRating": {
-        "rateMin": 0,
-        "rateMax": 10
-    }
+    "hotelRating": [
+        0,
+        10
+    ]
 }

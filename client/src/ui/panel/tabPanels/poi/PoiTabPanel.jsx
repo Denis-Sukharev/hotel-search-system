@@ -1,4 +1,4 @@
-import { sendAPI } from '../../../../services/axiosConfig.js';
+import { getPoiAll } from '../../../../services/axiosConfig.js';
 import testPoiList from '../testData/testPoiList.json';
 import testPoiHotelFilter from '../testData/testPoiHotelFilter.json';
 
@@ -23,27 +23,31 @@ import LocationOffIcon from '@mui/icons-material/LocationOff';
 function PoiTabPanel(props) {
     const {selectPointsData, setSelectPointsData} = props;
 
-    const [poiData, setPoiList] = useState(testPoiList.poi);
-    const [poiCount, setPoiCount] = useState();
+    const [poiData, setPoiData] = useState([]);
+    const [poiCount, setPoiCount] = useState(0);
 
     const [poiSearchValue, setPoiSearchValue] = useState('');
     const [poiFilterData, setPoiFilterData] = useState(testPoiHotelFilter);
 
     const [poiTabPanelData, setPoiTabPanelData] = useState({
         isPoiFilterVisible: false,
-        isSelectPoiVisible: true,
+        isSelectPoiVisible: false,
         isAllPoiVisible: true,
         page: 1
     });
 
     useEffect(() => {
-        sendAPI('/poi/count', setPoiCount);
-        // sendAPI('/poi/all/', setTest, {
-        //     page: poiTabPanelData.page,
-        //     district: poiFilterData.district.map((item) => item.id),
-        //     type: poiFilterData.poiType.map((item) => item.type)
-        // })
-    }, [poiFilterData, poiTabPanelData]);
+        let body = {
+            page: poiTabPanelData.page - 1,
+            district: poiFilterData.district.flatMap((item) => (item.select ? item.id : [])),
+            type: poiFilterData.poiType.flatMap((item) => (item.select ? item.type : []))
+        }
+
+        if (poiSearchValue != '')
+            body.fragment = poiSearchValue
+
+        getPoiAll(setPoiData, setPoiCount, body)
+    }, [poiTabPanelData.page, poiFilterData, poiSearchValue]);
 
     const poiList = poiData.map((poiItem) => {
         return(
@@ -154,6 +158,8 @@ function PoiTabPanel(props) {
                     <PoiFilter
                     poiFilterData={poiFilterData}
                     setPoiFilterData={setPoiFilterData}
+                    poiTabPanelData={poiTabPanelData}
+                    setPoiTabPanelData={setPoiTabPanelData}
                     />
                 )}
 
@@ -199,7 +205,7 @@ function PoiTabPanel(props) {
                     <>
                         {...poiList}
 
-                        <div className='pagination-block'>
+                        {poiCount > 20 && (<div className='pagination-block'>
                             <Stack
                                 spacing={2}
                                 marginTop={'5px'}
@@ -207,7 +213,7 @@ function PoiTabPanel(props) {
                             > 
                                 <Pagination
                                     size='small'
-                                    count={Math.floor(Number(poiCount?.data[0][0]) / 20)}
+                                    count={Math.floor(Number(poiCount) / 20)}
                                     defaultPage={poiTabPanelData.page}
                                     siblingCount={1}
                                     boundaryCount={1}
@@ -217,7 +223,7 @@ function PoiTabPanel(props) {
                                     })}
                                 />
                             </Stack>
-                        </div>
+                        </div>)}
                     </>
                 )}
             </div>

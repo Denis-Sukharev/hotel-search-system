@@ -23,7 +23,7 @@ const RenderType = (typeData) => {
     }
 };
 
-export function HotelCard(props) {
+export const HotelCard = (props) => {
     const {
         hotelId,
         hotelName,

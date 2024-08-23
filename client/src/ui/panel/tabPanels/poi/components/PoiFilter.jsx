@@ -1,9 +1,12 @@
+import { useState } from 'react';
+
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
 
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import { useState } from 'react';
 
 const CheckboxElement = (props) => {
     const {_label, _key, _name, _checked, _onChange, ...other} = props;
@@ -13,7 +16,13 @@ const CheckboxElement = (props) => {
             <FormControlLabel
                 key={`poi-district-list-${_label}`}
                 className='checkbox-container'
-                label={_label}
+                label={
+                    <Typography
+                        fontSize={14}
+                    >
+                       {_label}
+                    </Typography>
+                }
                 sx={{
                     fontSize: 14,
                     margin: 0,
@@ -46,7 +55,6 @@ const PoiFilterDistrict = (props) => {
     const {filterData, setCheck, ...other} = props;
 
     const handleChange = (event) => {
-
         for (let i = 0; i < filterData.district.length; i++) {
             if (filterData.district[i].id == event.target.name) {
                 filterData.district[i] = {
@@ -124,7 +132,17 @@ const PoiFilterType = (props) => {
 
 
 export function PoiFilter(props) {
-    const {poiFilterData, setPoiFilterData, ...other} = props;
+    const {
+        poiFilterData,
+        setPoiFilterData,
+        poiTabPanelData,
+        setPoiTabPanelData,
+        ...other} = props;
+
+    const [poiFilter, setPoiFilter] = useState({
+        district: poiFilterData.district,
+        poiType: poiFilterData.poiType,
+    })
 
     const [isPoiFilterDistrictOpen, setIsPoiFilterDistrictOpen] = useState(false);
     const [isPoiFilterTypeOpen, setIsPoiFilterTypeOpen] = useState(false);
@@ -151,7 +169,7 @@ export function PoiFilter(props) {
                     <hr />
                 </div>
 
-                {isPoiFilterDistrictOpen && (<PoiFilterDistrict filterData={poiFilterData} setCheck={setPoiFilterData} />)}
+                {isPoiFilterDistrictOpen && (<PoiFilterDistrict filterData={poiFilter} setCheck={setPoiFilter} />)}
 
                 {/* type */}
                 <div
@@ -166,7 +184,30 @@ export function PoiFilter(props) {
                     <hr />
                 </div>
 
-                {isPoiFilterTypeOpen && (<PoiFilterType filterData={poiFilterData} setCheck={setPoiFilterData} />)}
+                {isPoiFilterTypeOpen && (<PoiFilterType filterData={poiFilter} setCheck={setPoiFilter} />)}
+
+                <Button
+                    onClick={() => {
+                        setPoiFilterData({
+                        ...poiFilterData,
+                        district: poiFilter.district,
+                        poiType: poiFilter.poiType
+                        })
+
+                        setPoiTabPanelData({
+                            ...poiTabPanelData,
+                            page: 1
+                        })
+                    }}
+                    variant='contained'
+                    size='small'
+                    fullWidth
+                    sx={{
+                        marginTop: 1,
+                    }}
+                >
+                    Применить фильтры
+                </Button>
             </div>
         </>
     )

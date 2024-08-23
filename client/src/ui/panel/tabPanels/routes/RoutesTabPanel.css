@@ -76,3 +76,10 @@ display: inline;
 
     border-left: 4px solid #757ce8;
 }
+
+/* ROUTES FILTER */
+#RoutesFilter {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}

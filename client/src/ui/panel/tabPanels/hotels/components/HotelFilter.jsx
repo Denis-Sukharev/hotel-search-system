@@ -1,11 +1,14 @@
+import { useState } from 'react';
+
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Slider from '@mui/material/Slider';
 import Chip from '@mui/material/Chip';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
 
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import { useState } from 'react';
 
 const CheckboxElement = (props) => {
     const {_label, _key, _name, _checked, _onChange, ...other} = props;
@@ -15,7 +18,13 @@ const CheckboxElement = (props) => {
             <FormControlLabel
                 key={`hotel-district-list-${_label}`}
                 className='checkbox-container'
-                label={_label}
+                label={
+                    <Typography
+                        fontSize={14}
+                    >
+                       {_label}
+                    </Typography>
+                }
                 sx={{
                     fontSize: 14,
                     margin: 0,
@@ -49,7 +58,6 @@ const HotelFilterDistrict = (props) => {
     const {filterData, setCheck, ...other} = props;
 
     const handleChange = (event) => {
-
         for (let i = 0; i < filterData.district.length; i++) {
             if (filterData.district[i].id == event.target.name) {
                 filterData.district[i] = {
@@ -128,28 +136,21 @@ const HotelFilterType = (props) => {
 
 const HotelFilterRating = (props) => {
     const {filterData, setCheck, ...other} = props;
-
-    const [minValue, setMinValue] = useState(Number(filterData.hotelRating.rateMin));
-    const [maxValue, setMaxValue] = useState(Number(filterData.hotelRating.rateMax));
-    const [value, setValue] = useState([minValue, maxValue])
+    const [value, setValue] = useState(filterData.hotelRating)
 
     const sliderChange = (event, newValue) => {
-        setMinValue(newValue[0]);
-        setMaxValue(newValue[1]);
         setValue(newValue);
-
-        filterData.hotelRating.rateMin = minValue;
-        filterData.hotelRating.rateMax = maxValue;
-        
-        setCheck({...filterData});
+        setCheck({
+            ...filterData,
+            hotelRating : [Number(newValue[0]), Number(newValue[1])]
+        });
     };
 
-    console.log(filterData);
     return (
         <div className='hotel-filter-section'>
             <div className='hotel-filter-section-column hotel-filter-section-column-padding'>
                 <Chip
-                    label={String(minValue)}
+                    label={String(filterData.hotelRating[0])}
                     variant="outlined"
                 />
 
@@ -173,7 +174,7 @@ const HotelFilterRating = (props) => {
                 />
 
                 <Chip
-                    label={String(maxValue)}
+                    label={String(filterData.hotelRating[1])}
                     variant="outlined"
                 />
             </div>
@@ -186,7 +187,18 @@ const HotelFilterRating = (props) => {
 
 
 export function HotelFilter(props) {
-    const {hotelFilterData, setHotelFilterData, ...other} = props;
+    const {
+        hotelFilterData,
+        setHotelFilterData,
+        hotelTabPanelData,
+        setHotelTabPanelData,
+        ...other} = props;
+
+    const [hotelFilter, setHotelFilter] = useState({
+        district: hotelFilterData.district,
+        hotelType: hotelFilterData.hotelType,
+        hotelRating: hotelFilterData.hotelRating
+    })
 
     const [isHotelFilterDistrictOpen, setIsHotelFilterDistrictOpen] = useState(false);
     const [isHotelFilterTypeOpen, setIsHotelFilterTypeOpen] = useState(false);
@@ -214,7 +226,7 @@ export function HotelFilter(props) {
                     <hr />
                 </div>
 
-                {isHotelFilterDistrictOpen && (<HotelFilterDistrict filterData={hotelFilterData} setCheck={setHotelFilterData} />)}
+                {isHotelFilterDistrictOpen && (<HotelFilterDistrict filterData={hotelFilter} setCheck={setHotelFilter} />)}
 
                 {/* type */}
                 <div
@@ -229,7 +241,7 @@ export function HotelFilter(props) {
                     <hr />
                 </div>
 
-                {isHotelFilterTypeOpen && (<HotelFilterType filterData={hotelFilterData} setCheck={setHotelFilterData} />)}
+                {isHotelFilterTypeOpen && (<HotelFilterType filterData={hotelFilter} setCheck={setHotelFilter} />)}
 
                 {/* rating */}
                 <div
@@ -244,7 +256,31 @@ export function HotelFilter(props) {
                     <hr />
                 </div>
 
-                {isHotelFilterRatingOpen && (<HotelFilterRating filterData={hotelFilterData} setCheck={setHotelFilterData} />)}
+                {isHotelFilterRatingOpen && (<HotelFilterRating filterData={hotelFilter} setCheck={setHotelFilter} />)}
+
+                <Button
+                    onClick={() => {
+                        setHotelFilterData({
+                        ...hotelFilterData,
+                        district: hotelFilter.district,
+                        hotelType: hotelFilter.hotelType,
+                        hotelRating: hotelFilter.hotelRating
+                        })
+                        
+                        setHotelTabPanelData({
+                            ...hotelTabPanelData,
+                            page: 1
+                        })
+                    }}
+                    variant='contained'
+                    size='small'
+                    fullWidth
+                    sx={{
+                        marginTop: 1,
+                    }}
+                >
+                    Применить фильтры
+                </Button>
             </div>
         </>
     )

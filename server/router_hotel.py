@@ -66,19 +66,18 @@ async def select_hotel(data_info: FullInfoHotelPage):
                 poi_category.category = 'Проживание'
                 and district.district_id = ANY(%s)
                 and poi_type.type = ANY(%s)
-                and hotel_rating.rating between %s and %s
+                and hotel_rating.rating >= %s
+                and hotel_rating.rating <= %s
                 group by poi.poi_id, poi_coordinates.latitude, poi_coordinates.longitude, hotel_rating.rating
                 order by poi.poi_id
                 offset %s
                 limit 20;
             ''', (data_info.district, data_info.type, int(data_info.rateMin), int(data_info.rateMax), (data_info.page*20)))
             data = cur.fetchall()
-            result = []
-            result.append({
-                "count": count_hotel[0][0]
-                })
+
+            result_hotels = []
             for item in data:
-                result.append({
+                result_hotels.append({
                     "id": int(item[0]),
                     "name": str(item[1]),
                     "type": list(item[2]),
@@ -86,6 +85,12 @@ async def select_hotel(data_info: FullInfoHotelPage):
                     "latitude": str(item[4]),
                     "longitude": str(item[5])
                 })
+
+            result = {
+                "count": count_hotel[0][0],
+                "hotels": result_hotels
+            }
+
             return result
 
 @router.post("/hotel/search_name/")# поиск hotel по name
@@ -111,24 +116,31 @@ async def select_name_hotel(data_info: FragmentInfoHotel):
                 poi_category.category = 'Проживание'
                 and district.district_id = ANY(%s)
                 and poi_type.type = ANY(%s)
-                and hotel_rating.rating between %s and %s
+                and hotel_rating.rating >= %s
+                and hotel_rating.rating <= %s
                 and poi.name ilike %s
                 group by poi.poi_id, poi_coordinates.latitude, poi_coordinates.longitude, hotel_rating.rating
                 order by poi.poi_id
                 limit 5;
             ''',(data_info.district, data_info.type, int(data_info.rateMin), int(data_info.rateMax), ('%'+data_info.fragment+'%')))
             data = cur.fetchall()
-            result=[]
+            
+            result_hotels = []
             for item in data:
-                result.append({
+                result_hotels.append({
                     "id": int(item[0]),
                     "name": str(item[1]),
-                    "type": str(item[2]),
+                    "type": list(item[2]),
                     "rating": float(item[3]),
                     "latitude": str(item[4]),
                     "longitude": str(item[5])
                 })
-            return result 
+                
+            result = {
+                "hotels": result_hotels
+            }
+            
+            return result
 
 @router.post("/hotel/search_id/")# поиск hotel по id
 async def select_id_hotel(id_poi: IdHotel):

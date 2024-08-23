@@ -2,7 +2,7 @@ import testRoutes from '../testData/testRoutes.json';
 
 import './RoutesTabPanel.css';
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { RoutesFilter } from './components/RoutesFilter.jsx';
 import { RouteCard } from './components/RouteCard.jsx';
@@ -83,15 +83,46 @@ const Routes = (props) => {
 function RoutesTabPanel(props) {
     const {selectPointsData, setSelectPointsData} = props;
 
-    const [routeFilter, setRouteFilter] = useState({});
     const [routesData, setroutesData] = useState(testRoutes);
+    const [routeFilterData, setRouteFilterData] = useState({
+        time_limit: 7,
+        days: 1
+    });
+
+
+    useEffect(() => {
+        let body = {
+            data: {
+                time_limit: routeFilterData.time_limit,
+                days: routeFilterData.days,
+                points_sequence: selectPointsData.poi.map((item) => item.id)
+            },
+            hotel: {
+                hotels: selectPointsData.hotels.map((item) => ({
+                    hotel_id: item.id,
+                    name: item.name,
+                    latitude: item.latitude,
+                    longitude: item.longitude,
+                    district_id: 0
+              }))
+            }
+        };
+        
+        console.log(body)
+    }, [routeFilterData])
+
 
     return ( 
         <>
             <div id="RoutesTabPanel">
                 <Section
                     title='Параметры маршрута'
-                    sectionData={<RoutesFilter/>}
+                    sectionData={
+                        <RoutesFilter
+                            routeFilterData={routeFilterData}
+                            setRouteFilterData={setRouteFilterData}
+                        />
+                    }
                 />
 
                 <Routes
