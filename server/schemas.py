@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
-'''SCHEMAS HOTEL'''
+#'''SCHEMAS HOTEL'''
 
 class HotelOptimal(BaseModel):
     time_limit: int
@@ -38,7 +38,7 @@ class IdHotel(BaseModel):
     id_hotel: int
 
 
-'''SCHEMAS POI'''
+#'''SCHEMAS POI'''
 
 class FullInfoPoiPage(BaseModel):
     page: int

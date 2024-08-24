@@ -95,10 +95,10 @@ def get_available_categories():
 def main():
     city = input("Введите название города: ")
 
-    print("Доступные категории мест к посещению:")
+    # print("Доступные категории мест к посещению:")
     available_categories = get_available_categories()
-    for index, category in enumerate(available_categories, start=1):
-        print(f"{index}. {category}")
+    # for index, category in enumerate(available_categories, start=1):
+    #     print(f"{index}. {category}")
 
     while True:
         category_index = input("Введите номер категории: ")
@@ -121,7 +121,7 @@ def main():
         try:
             district = get_district(latitude, longitude)
         except geopy.exc.GeocoderUnavailable as e:
-            print(f"Произошла ошибка при получении района для координат ({latitude}, {longitude}): {e}")
+            # print(f"Произошла ошибка при получении района для координат ({latitude}, {longitude}): {e}")
             continue
         
         selected_tags = [(tag[0], tag[1]) for tag in poi_types if tag[0] in key]
@@ -136,7 +136,7 @@ def main():
                     add_poi_category_to_db(poi_id, category)
                     add_poi_type_to_db(poi_id, poi_type)
 
-                print(f"Данные '{name}' получены")
+                # print(f"Данные '{name}' получены")
             else:
                 print(f"'{name}' за пределами '{city}'")
        

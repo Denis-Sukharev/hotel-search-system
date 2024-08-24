@@ -23,11 +23,11 @@ profile_options = {
     '3': 'cycling-regular'
 }
 
-print("Выберите профиль:")
-for key, value in profile_options.items():
-    print(f"{key}. {value}")
+# print("Выберите профиль:")
+# for key, value in profile_options.items():
+#     print(f"{key}. {value}")
 
-profile_choice = input("Введите цифру, соответствующую раннее использованному профилю: ")
+profile_choice = input()#"Введите цифру, соответствующую раннее использованному профилю: ")
 profile = profile_options.get(profile_choice)
 if not profile:
     print("Неверный выбор профиля.")

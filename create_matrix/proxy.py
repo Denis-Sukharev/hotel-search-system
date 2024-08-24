@@ -15,7 +15,7 @@ def get_proxy_ip(proxy):
             data = response.json()
             return data['origin']
         else:
-            print("Не удалось получить IP-адрес. Код состояния:", response.status_code)
+            # print("Не удалось получить IP-адрес. Код состояния:", response.status_code)
             return None
     except Exception as e:
         print("Произошла ошибка:", str(e))
@@ -36,7 +36,7 @@ def create_params_file(proxy_data, profile):
     proxy_ip = get_proxy_ip(proxy)
     
     if proxy_ip:
-        print(f"proxy ip", proxy_ip)
+        # print(f"proxy ip", proxy_ip)
 
         suffix = ''.join(random.choices(string.ascii_lowercase + string.digits, k=8))
         params_file = f"params/params_proxy_{proxy_ip.replace('.', '_')}_{suffix}.yaml"
@@ -58,7 +58,7 @@ def execute_script_through_proxy(script_path, input_file, output_file, params_fi
         command = f'python "{script_path}" -i "{input_file}" -o "{output_file}" -p "{params_file}" -t "{type_arg}" -s {start_index}'
         os.environ['HTTP_PROXY'] = proxy["http"]
         subprocess.run(command, shell=True)
-        print(f"Выполнение скрипта через прокси {params_file} успешно")
+        # print(f"Выполнение скрипта через прокси {params_file} успешно")
     except Exception as e:
         print("Произошла ошибка:", str(e))
     finally:
@@ -71,7 +71,7 @@ if __name__ == "__main__":
         '3': 'cycling-regular'
     }
     
-    print("Выберите профиль:")
+    # print("Выберите профиль:")
     for key, value in profile_options.items():
         print(f"{key}. {value}")
 

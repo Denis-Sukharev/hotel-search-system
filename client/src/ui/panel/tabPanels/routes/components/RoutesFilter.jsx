@@ -34,6 +34,7 @@ export function RoutesFilter(props) {
                             size="small"
                             value={Number(routeFilter.days)}
                             type='number'
+                            disabled={true}
                             sx={{
                                 width: 70,
                                 marginRight: '5px',
@@ -69,6 +70,7 @@ export function RoutesFilter(props) {
                             size="small"
                             value={Number(routeFilter.time_limit)}
                             type='number'
+                            disabled={true}
                             sx={{
                                 width: 70,
                                 marginRight: '5px',

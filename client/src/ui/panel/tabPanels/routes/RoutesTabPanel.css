@@ -24,20 +24,25 @@
 }
 
 .route {
+    height: min-content;
+    box-sizing: border-box;
+
     display: flex;
     flex-direction: column;
 }
 
 .route-point {
     display: flex;
-    align-items: center;
+    align-items: stretch;
 
     gap: 10px;
 }
 
 .route-point-num {
     width: 30px;
+    min-width: 30px;
     height: 30px;
+    min-height: 30px;
     box-sizing: border-box;
 
     display: flex;
@@ -54,11 +59,13 @@
 
     gap: 10px;
 
-    font-size: 18px;
+    font-size: 14px;
 }
 
 .route-point-time {
-display: inline;
+    min-width: 40px;
+    display: flex;
+    flex-direction: column;
     margin-top: 2px;
     font-size: 14px;
 }
@@ -67,9 +74,29 @@ display: inline;
     display: flex;
 }
 
+.route-point-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
 .route-road-line {
     width: 15px;
     height: 15px;
+    box-sizing: border-box;
+
+    align-items: stretch;
+
+    margin-left: 13px;
+
+    border-left: 4px solid #757ce8;
+}
+
+.route-road-line-point {
+    display: flex;
+    width: 15px;
+    height: 100%;
+    min-height: 1px;
     box-sizing: border-box;
 
     margin-left: 13px;

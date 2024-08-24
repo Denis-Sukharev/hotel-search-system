@@ -144,34 +144,34 @@ def main():
     if not conn:
         return
 
-    print()
-    print("Доступные города:", ', '.join(get_cities(conn)))
-    city_name = input("Введите название города: ")
+    # print()
+    # print("Доступные города:", ', '.join(get_cities(conn)))
+    city_name = input()#"Введите название города: ")
 
-    print()
-    print("Доступные районы:")
+    # print()
+    # print("Доступные районы:")
     districts = get_districts(conn)
-    for i, district in enumerate(districts):
-        print(f"{i}: {district}")
-    district_input = input("Введите номера районов через запятую или оставьте пустым для выбора всех: ")
+    # for i, district in enumerate(districts):
+    #     print(f"{i}: {district}")
+    district_input = input()#"Введите номера районов через запятую или оставьте пустым для выбора всех: ")
     district_indices = district_input.split(',') if district_input else None
     district_names = [districts[int(index)] for index in district_indices] if district_indices else None
     
-    print()
-    print("Доступные типы точек интереса:")
+    # print()
+    # print("Доступные типы точек интереса:")
     poi_types = get_poi_types(conn, district_names)
-    for i, (poi_type, count) in enumerate(poi_types):
-        print(f"{i}: {poi_type} ({count})")
-    poi_input = input("Введите номера типов точек интереса через запятую или оставьте пустым для выбора всех: ")
+    # for i, (poi_type, count) in enumerate(poi_types):
+    #     print(f"{i}: {poi_type} ({count})")
+    poi_input = input()#"Введите номера типов точек интереса через запятую или оставьте пустым для выбора всех: ")
     poi_indices = poi_input.split(',') if poi_input else None
     poi_types_selected = [poi_types[int(index)][0] for index in poi_indices] if poi_indices else None
 
-    print()
-    print("Доступные категории точек интереса:")
+    # print()
+    # print("Доступные категории точек интереса:")
     poi_categories = get_poi_categories(conn, district_names, poi_types_selected)
-    for i, (poi_category , count) in enumerate(poi_categories):
-        print(f"{i}: {poi_category} ({count})")
-    poi_input = input("Введите номера категорий точек интереса через запятую или оставьте пустым для выбора всех: ")
+    # for i, (poi_category , count) in enumerate(poi_categories):
+    #     print(f"{i}: {poi_category} ({count})")
+    poi_input = input()#"Введите номера категорий точек интереса через запятую или оставьте пустым для выбора всех: ")
     poi_indices = poi_input.split(',') if poi_input else None
     poi_categories_selected = [poi_categories[int(index)][0] for index in poi_indices] if poi_indices else None
     if not poi_categories_selected:
@@ -209,13 +209,16 @@ data_district_sum = pd.merge(data_district_sum, district_sum, on='district_id')
 # In[9]:
 
 
-fig = px.scatter_mapbox(data_district_sum, lat='latitude', lon='longitude',
-                        # color='Плотность', #size='Плотность',
-                        # width=1000, height=800, 
-                        hover_name='name',
-                        zoom = 9,
-                        # mapbox_style='open-street-map'
-                        mapbox_style='carto-positron'
-                        )
+fig = px.scatter_mapbox(
+    data_district_sum,
+    lat='latitude',
+    lon='longitude',
+    # color='Плотность', #size='Плотность',
+    # width=1000, height=800, 
+    hover_name='name',
+    zoom = 9,
+    # mapbox_style='open-street-map'
+    mapbox_style='carto-positron'
+)
 fig.show()
 

@@ -190,25 +190,25 @@ def main():
     if not conn:
         return
 
-    print()
-    print("Доступные города:", ', '.join(get_cities(conn)))
-    city_name = input("Введите название города: ")
+    # print()
+    # print("Доступные города:", ', '.join(get_cities(conn)))
+    city_name = input()#"Введите название города: ")
 
-    print()
-    print("Доступные районы:")
+    # print()
+    # print("Доступные районы:")
     districts = get_districts(conn)
-    for i, district in enumerate(districts):
-        print(f"{i}: {district}")
-    district_input = input("Введите номера районов через запятую или оставьте пустым для выбора всех: ")
+    # for i, district in enumerate(districts):
+    #     print(f"{i}: {district}")
+    district_input = input()#"Введите номера районов через запятую или оставьте пустым для выбора всех: ")
     district_indices = district_input.split(',') if district_input else None
     district_names = [districts[int(index)] for index in district_indices] if district_indices else None
 
-    print()
-    print("Доступные типы точек интереса:")
+    # print()
+    # print("Доступные типы точек интереса:")
     poi_types = get_poi_types(conn, district_names)
-    for i, (poi_type, count) in enumerate(poi_types):
-        print(f"{i}: {poi_type} ({count})")
-    poi_input = input("Введите номера типов мест проживания через запятую или оставьте пустым для выбора всех: ")
+    # for i, (poi_type, count) in enumerate(poi_types):
+    #     print(f"{i}: {poi_type} ({count})")
+    poi_input = input()#"Введите номера типов мест проживания через запятую или оставьте пустым для выбора всех: ")
     poi_indices = poi_input.split(',') if poi_input else None
     poi_types_selected = [poi_types[int(index)][0] for index in poi_indices] if poi_indices else None
 
@@ -223,12 +223,12 @@ def main():
     # if star_indices:
     #     star_indices_selected = [star_counts[int(index)][0] for index in star_indices]
 
-    print()
-    print("Доступные диапазоны рейтинга:")
+    # print()
+    # print("Доступные диапазоны рейтинга:")
     rating_ranges = get_rating_ranges(conn, poi_types_selected, district_names)
-    for i, (range_name, count) in enumerate(rating_ranges):
-        print(f"{i}: {range_name} ({count} мест проживания)")
-    rating_range_input = input("Введите номера диапазонов рейтинга через запятую или оставьте пустым для выбора всех: ").strip()
+    # for i, (range_name, count) in enumerate(rating_ranges):
+    #     print(f"{i}: {range_name} ({count} мест проживания)")
+    rating_range_input = input()#"Введите номера диапазонов рейтинга через запятую или оставьте пустым для выбора всех: ").strip()
     rating_range_indices = rating_range_input.split(',') if rating_range_input else None
     rating_ranges_selected = []
     if rating_range_indices:
@@ -265,14 +265,17 @@ data_district_sum = pd.merge(data_district_sum, district_sum, on='district_id')
 # In[9]:
 
 
-fig = px.scatter_mapbox(data_district_sum, lat='latitude', lon='longitude',
-                        # color='Плотность', #size='Плотность',
-                        # width=1000, height=800, 
-                        hover_name='name',
-                        zoom = 9,
-                        # mapbox_style='open-street-map'
-                        mapbox_style='carto-positron',
-                        color_discrete_sequence=['red']
-                        )
+fig = px.scatter_mapbox(
+    data_district_sum,
+    lat='latitude',
+    lon='longitude',
+    # color='Плотность', #size='Плотность',
+    # width=1000, height=800, 
+    hover_name='name',
+    zoom = 9,
+    # mapbox_style='open-street-map'
+    mapbox_style='carto-positron',
+    color_discrete_sequence=['red']
+)
 fig.show()
 

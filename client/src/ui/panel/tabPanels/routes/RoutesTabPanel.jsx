@@ -1,4 +1,5 @@
 import testRoutes from '../testData/testRoutes.json';
+import { getHotelOptimal } from '../../../../services/axiosConfig.js';
 
 import './RoutesTabPanel.css';
 
@@ -83,7 +84,7 @@ const Routes = (props) => {
 function RoutesTabPanel(props) {
     const {selectPointsData, setSelectPointsData} = props;
 
-    const [routesData, setroutesData] = useState(testRoutes);
+    const [routesData, setroutesData] = useState([]);
     const [routeFilterData, setRouteFilterData] = useState({
         time_limit: 7,
         days: 1
@@ -93,7 +94,7 @@ function RoutesTabPanel(props) {
     useEffect(() => {
         let body = {
             data: {
-                time_limit: routeFilterData.time_limit,
+                time_limit: (routeFilterData.time_limit - selectPointsData.poi.length) >= 0 ? (routeFilterData.time_limit - selectPointsData.poi.length) : 0,
                 days: routeFilterData.days,
                 points_sequence: selectPointsData.poi.map((item) => item.id)
             },
@@ -107,10 +108,12 @@ function RoutesTabPanel(props) {
               }))
             }
         };
-        
-        console.log(body)
+
+        // console.log(JSON.stringify(body))
+        getHotelOptimal(setroutesData, body);
     }, [routeFilterData])
 
+    console.log(routesData)
 
     return ( 
         <>

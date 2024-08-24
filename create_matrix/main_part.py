@@ -22,14 +22,14 @@ def distance_matrix_for_point_pairs(points: List[GeoPoint], computer: ORSWrapper
                 try:
                     matrix = computer.distance_matrix(locations=[origin, destination])
                 except Exception as e:
-                    print("Превышено ограничение. Повторная отправка запросов через 24 часа")
+                    # print("Превышено ограничение. Повторная отправка запросов через 24 часа")
                     time.sleep(24*60*60+1)
                     continue
 
                 request_count += 1
 
                 if request_count > 5000:
-                    print(f"Превышено максимальное количество запросов прокси {params_file}. Процесс остановлен")
+                    # print(f"Превышено максимальное количество запросов прокси {params_file}. Процесс остановлен")
                     sys.exit()
 
                 durations = matrix.get("durations")
@@ -88,9 +88,9 @@ if __name__ == '__main__':
     parser.add_argument('-s', '--start-index', type=int, action='store', default=1,
                         help='Исходный индекс для сбора данных')
     cmd_args = parser.parse_args()
-    print(cmd_args)
+    # print(cmd_args)
     input_file = Path(cmd_args.input)
-    print(input_file)
+    # print(input_file)
     if not input_file.exists():
         raise Exception(f"Не удается найти {input_file}")
 

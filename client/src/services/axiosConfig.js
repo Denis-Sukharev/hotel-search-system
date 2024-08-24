@@ -40,8 +40,6 @@ export const getHolteAll = async (setHotels, setHotelsCount, body) => {
     
     await axios(config)
     .then((response) => {
-        // console.log("count:" + response.data[0].count);
-        // console.log("hotels:" + response.data[0].hotels);
         setHotels(response.data.hotels);
 
         'count' in response.data ? 
@@ -62,8 +60,6 @@ export const getPoiAll = async (setPoi, setPoiCount, body) => {
     
     await axios(config)
     .then((response) => {
-        // console.log("count:" + response.data[0].count);
-        // console.log("hotels:" + response.data[0].hotels);
         setPoi(response.data.poi);
 
         'count' in response.data ? 
@@ -74,5 +70,20 @@ export const getPoiAll = async (setPoi, setPoiCount, body) => {
         console.log(error);
         setPoi([]);
         setPoiCount(0);
+    })
+}
+
+export const getHotelOptimal = async (setRoutes, body) => {
+    config.url = '/hotel/optimal/';
+    config.method = 'post';
+    config.data = JSON.stringify(body);
+    
+    await axios(config)
+    .then((response) => {
+        setRoutes(response.data);
+    })
+    .catch((error) => {
+        console.log(error);
+        setRoutes([]);
     })
 }

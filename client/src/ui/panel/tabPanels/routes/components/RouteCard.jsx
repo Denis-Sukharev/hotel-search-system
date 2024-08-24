@@ -21,8 +21,14 @@ const Point = (props) => {
     return(
         <>
             <div className="route-point">
-                <div className="route-point-num">
-                    {num}
+                <div className="route-point-container">
+                    {!(hotel && num==1) && (<div className="route-road-line-point"/>)}
+
+                    <div className="route-point-num">
+                        {num}
+                    </div>
+
+                    {!(hotel && num > 1) && (<div className="route-road-line-point"/>)}
                 </div>
                 
                 <div className="route-point-title">
@@ -90,29 +96,31 @@ export function RouteCard(props) {
             <div id="Routecard">
                 <div id="route-params">
                     <span>
-                        Общее время: {routeData.time} ч.
+                        Общее время: {Number(((Number(routeData.time)) / 3600).toFixed(1)) + routeData.route.length - 2 } ч.
                     </span>
 
                     <span>
-                        Дистанция: {routeData.distance} м.
+                        Дистанция: {(Number(routeData.distance) / 1000).toFixed(1)} км.
                     </span>
 
-                    <span>
-                        Неучтённые места: {
-                            routeData.unsatisfied_points.map((item, index) => {
-                                return(
-                                    (poiDecrypt(item, pointList) + String((index != (routeData.unsatisfied_points.length - 1))? ', ' : ''))
-                                )
-                            })
-                        }
-                    </span>
+                    {routeData.unsatisfied_points.length > 0 && (
+                        <span>
+                            Неучтённые места:
+                            {routeData.unsatisfied_points.map((item, index) => {
+                                    return(
+                                        (poiDecrypt(item, pointList) + String((index != (routeData.unsatisfied_points.length - 1))? ', ' : ''))
+                                    )
+                                })
+                            }
+                        </span>
+                    )}
                 </div>
 
-                <div id="route">
+                <div className="route">
                     <Route
                         pointList={pointList}
                         hotel={routeData.hotel}
-                        route={routeData.route}
+                        route={routeData.unsatisfied_points.length > 0 ? routeData.route[0] : routeData.route}
                     />
                 </div>
             </div>

@@ -1,4 +1,5 @@
 import itertools
+from fastapi import HTTPException, status
 
 def is_valid_route(route, matrix, time_limit):
     total_time = 0
@@ -67,11 +68,11 @@ def find_optimal_solution(time_matrix, distance_matrix, start_node, time_limit, 
     optimal_variant = find_optimal_variant(unique_variants)
     
     if optimal_variant:
-        print("Решение полным перебором за несколько дней:")
+        # print("Решение полным перебором за несколько дней:")
         total_distance = sum(distance_matrix.loc[route[i-1], route[i]] for route, _ in optimal_variant for i in range(1, len(route)))
         route_list_str = [[point for point in route] for route, _ in optimal_variant]
-        for i, (route, time) in enumerate(optimal_variant, start=1):
-            print(f"День: {i}, Маршрут: {route_list_str[i-1]}, Время: {time}, Расстояние: {sum(distance_matrix.loc[route[i-1], route[i]] for i in range(1, len(route)))}")
+        # for i, (route, time) in enumerate(optimal_variant, start=1):
+        #     print(f"День: {i}, Маршрут: {route_list_str[i-1]}, Время: {time}, Расстояние: {sum(distance_matrix.loc[route[i-1], route[i]] for i in range(1, len(route)))}")
         total_route_times = [time for _, time in optimal_variant]
         total_time = sum(total_route_times)
         optimal_points = set()
@@ -79,10 +80,14 @@ def find_optimal_solution(time_matrix, distance_matrix, start_node, time_limit, 
             optimal_points.update(route[1:-1])
 
         missing_points = set(points_sequence) - optimal_points
-        if missing_points:
-            print(f"Точки не учтены: {missing_points}")
+        # if missing_points:
+        #     print(f"Точки не учтены: {missing_points}")
     else:
         print("Невозможно предложить решение полным перебором. Точки находятся слишком далеко")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="INTERNAL SERVER ERROR"
+        )
 
     return total_time, total_distance, route_list_str, missing_points
 

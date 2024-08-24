@@ -48,13 +48,13 @@ def optimal_hotel(data, data_hotels):
     points_sequence = data.points_sequence
     hotels = []
     hotels = data_hotels.hotels
-    print(hotels[0])
-    print(hotels[1])
+    # print(hotels[0])
+    # print(hotels[1])
     for hotel in hotels:
         
-        print(hotel.hotel_id)
+        # print(hotel.hotel_id)
         start_node = hotel.hotel_id
-        print(f"\nОбработка отеля (poi_id: {start_node}):")
+        # print(f"\nОбработка отеля (poi_id: {start_node}):")
 
         # ВВОДНЫЕ ДАННЫЕ:
         script_dir = os.path.dirname(__file__)
@@ -69,8 +69,8 @@ def optimal_hotel(data, data_hotels):
 
         if is_possible_brute:
             total_distance_brute = sum(distance_matrix[best_route_brute[i - 1]][best_route_brute[i]] for i in range(1, len(best_route_brute)))
-            print("Маршрут за 1 день полным перебором:")
-            print(f"Маршрут: {best_route_brute}, Время: {best_time_brute}, Расстояние: {total_distance_brute}")
+            # print("Маршрут за 1 день полным перебором:")
+            # print(f"Маршрут: {best_route_brute}, Время: {best_time_brute}, Расстояние: {total_distance_brute}")
             total_time_brute = best_time_brute
             route_list_str = best_route_brute
         else:
@@ -80,15 +80,15 @@ def optimal_hotel(data, data_hotels):
         routes_greedy, times_greedy, any_day_possible, unsatisfied_points = greedy_algorithm(time_matrix, distance_matrix, start_node, points_sequence, days, time_limit)
 
         if any_day_possible:
-            print("\nРешение жадным алгоритмом:")
+            # print("\nРешение жадным алгоритмом:")
             total_distance_greedy = sum([calculate_total_distance(route, distance_matrix) for route in routes_greedy])
 
             for i, route in enumerate(routes_greedy, 1):
                 total_distance_route = calculate_total_distance(route, distance_matrix)
-                print(f"День: {i}, Маршрут: {route}, Время: {times_greedy[i-1]}, Расстояние: {total_distance_route}")
+                # print(f"День: {i}, Маршрут: {route}, Время: {times_greedy[i-1]}, Расстояние: {total_distance_route}")
 
-            if unsatisfied_points:
-                print(f"Точки не учтены: {unsatisfied_points}")
+            # if unsatisfied_points:
+            #     print(f"Точки не учтены: {unsatisfied_points}")
 
             total_time_greedy = sum(times_greedy)
 
@@ -116,9 +116,9 @@ def optimal_hotel(data, data_hotels):
 
     results.sort(key=lambda x: (len(x['unsatisfied_points']), x['time']))
 
-    print("\n")
-    for i, result in enumerate(results[:5], 1):
-        print(f"{i}: {result['hotel']}, маршрут: {result['route']}, общее время: {result['time']}, общее расстояние: {result['distance']}, неучтенные точки : {result['unsatisfied_points']}")
+    # print("\n")
+    # for i, result in enumerate(results[:5], 1):
+    #     print(f"{i}: {result['hotel']}, маршрут: {result['route']}, общее время: {result['time']}, общее расстояние: {result['distance']}, неучтенные точки : {result['unsatisfied_points']}")
         # print(result['hotel'])
 
         # return result_hotel

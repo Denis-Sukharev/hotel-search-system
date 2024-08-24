@@ -62,7 +62,7 @@ function PoiTabPanel(props) {
                 cardButton={() => {return(<AddLocationIcon fontSize='large'/>)}}
                 cardButtonColor='success'
                 changePoi={() => {
-                    if (selectPointsData.poi.length < 9) {
+                    if (selectPointsData.poi.length < 5) {
                         let isPoiSelect = false;
 
                         selectPointsData.poi.map((selectPoi) => {
@@ -177,7 +177,7 @@ function PoiTabPanel(props) {
 
                     <hr />
 
-                    <span>{selectPointsData.poi.length}/9</span> 
+                    <span>{selectPointsData.poi.length}/5</span> 
                 </div>
 
                 {poiTabPanelData.isSelectPoiVisible && (

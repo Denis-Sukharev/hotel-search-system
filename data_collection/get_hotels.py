@@ -84,7 +84,7 @@ def process_hotel(href, hotel_name, poi_type, city_id, city):
     try:
         new_html = requests.get(new_url, headers={"User-Agent": "Mozilla/5.0"})
         if new_html.status_code != 200:
-            print(f"Failed to fetch {new_url}, status code: {new_html.status_code}")
+            # print(f"Failed to fetch {new_url}, status code: {new_html.status_code}")
             return
         
         rating_match = re.search(r'<span class="hotel-rating-item__rating-number">(\d+\.\d+)</span>', new_html.text)
@@ -108,7 +108,7 @@ def process_hotel(href, hotel_name, poi_type, city_id, city):
                     add_hotel_rating_to_db(poi_id, rating)
                     if stars_count > 0:
                         add_hotel_stars_to_db(poi_id, stars_count)
-                    print(f"Данные '{hotel_name}' получены")
+                    # print(f"Данные '{hotel_name}' получены")
                 else:
                     print(f"'{hotel_name}' за пределами '{city}'")
             except GeocoderInsufficientPrivileges as error:
@@ -116,7 +116,7 @@ def process_hotel(href, hotel_name, poi_type, city_id, city):
                 time.sleep(3600)
                 return
     except requests.exceptions.RequestException as e:
-        print(f"Request failed: {e}")
+        # print(f"Request failed: {e}")
         return
 
 def main():
@@ -129,7 +129,7 @@ def main():
     try:
         html = requests.get(url, headers={"User-Agent": "Mozilla/5.0"})
         if html.status_code != 200:
-            print(f"Failed to fetch {url}, status code: {html.status_code}")
+            # print(f"Failed to fetch {url}, status code: {html.status_code}")
             return
 
         s = BeautifulSoup(html.content, 'html.parser')
