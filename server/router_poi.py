@@ -38,17 +38,19 @@ async def select_poi(data_info: FullInfoPoiPage):
                     poi.name,
                     string_to_array(string_agg(distinct poi_type.type, ','), ',') as type,
                     poi_coordinates.latitude,
-                    poi_coordinates.longitude
+                    poi_coordinates.longitude,
+                    COALESCE(photo.photo_url, '') AS photo_url
                     from poi
                     inner join poi_category on poi_category.poi_id = poi.poi_id
                     inner join poi_coordinates on poi_coordinates.poi_id = poi.poi_id
                     inner join poi_type on poi_type.poi_id = poi.poi_id
                     inner join district on poi.district_id = district.district_id
+                    left join photo on photo.poi_id = poi.poi_id
                     where
                     poi_category.category <> 'Проживание'
                     and district.district_id = ANY(%s)
                     and poi_type.type = ANY(%s)
-                    group by poi.poi_id, poi_coordinates.latitude, poi_coordinates.longitude 
+                    group by poi.poi_id, poi_coordinates.latitude, poi_coordinates.longitude,COALESCE(photo.photo_url, '')
                     order by poi.poi_id
                     offset %s
                     limit 20;
@@ -62,7 +64,8 @@ async def select_poi(data_info: FullInfoPoiPage):
                         "name": str(item[1]),
                         "type": list(item[2]),
                         "latitude": str(item[3]),
-                        "longitude": str(item[4])
+                        "longitude": str(item[4]),
+                        "photo": str(item[5])
                     })
 
                 result = {
@@ -93,18 +96,20 @@ async def select_name_poi(data_info: FragmentInfoPoi):
                     poi.name,
                     string_to_array(string_agg(distinct poi_type.type, ','), ',') as type,
                     poi_coordinates.latitude,
-                    poi_coordinates.longitude
+                    poi_coordinates.longitude,
+                    COALESCE(photo.photo_url, '') AS photo_url
                     from poi
                     inner join poi_category on poi_category.poi_id = poi.poi_id
                     inner join poi_coordinates on poi_coordinates.poi_id = poi.poi_id
                     inner join poi_type on poi_type.poi_id = poi.poi_id
                     inner join district on district.district_id = poi.district_id
+                    left join photo on photo.poi_id = poi.poi_id
                     where
                     poi_category.category <> 'Проживание'
                     and district.district_id = ANY(%s)
                     and poi_type.type = ANY(%s)
                     and poi.name ilike %s 
-                    group by poi.poi_id, poi_coordinates.latitude, poi_coordinates.longitude
+                    group by poi.poi_id, poi_coordinates.latitude, poi_coordinates.longitude, COALESCE(photo.photo_url, '')
                     order by poi.poi_id
                     limit 5;
                 ''', ( data_info.district, data_info.type, ('%'+data_info.fragment+'%')))
@@ -117,7 +122,8 @@ async def select_name_poi(data_info: FragmentInfoPoi):
                         "name": str(item[1]),
                         "type": list(item[2]),
                         "latitude": str(item[3]),
-                        "longitude": str(item[4])
+                        "longitude": str(item[4]),
+                        "photo": str(item[5])
                     })
 
                 result = {
