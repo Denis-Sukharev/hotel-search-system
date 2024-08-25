@@ -73,17 +73,32 @@ export const getPoiAll = async (setPoi, setPoiCount, body) => {
     })
 }
 
-export const getHotelOptimal = async (setRoutes, body) => {
+export const getRouteSequence = async (setRouteSequence, body) => {
     config.url = '/hotel/optimal/';
     config.method = 'post';
     config.data = JSON.stringify(body);
     
     await axios(config)
     .then((response) => {
-        setRoutes(response.data);
+        setRouteSequence(response.data);
     })
     .catch((error) => {
         console.log(error);
-        setRoutes([]);
+        setRouteSequence([]);
     })
 }
+
+export const getRoute = async (body) => {
+    config.baseURL = '';//'https://api.openrouteservice.org/v2/directions/driving-car';
+    config.headers.Authorization = envConfig.apiOsm
+    config.method = 'post';
+    config.data = JSON.stringify(body);
+
+    await axios(config)
+    .then((response) => {
+        console.log(response.data)
+    })  
+    .catch((error) => {
+        console.log(error)
+    })
+};

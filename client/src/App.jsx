@@ -10,7 +10,8 @@ function App() {
   const [selectPointsData, setSelectPointsData] = useState({
     poi: [],
     hotels: [],
-    routes: [],
+    route: [],
+    selectRouteIndex: -1,
   });
 
   return (

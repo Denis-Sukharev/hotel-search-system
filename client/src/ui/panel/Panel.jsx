@@ -59,6 +59,14 @@ function Panel(props) {
 
     const tabChange = (event, newTabValue) => {
         setTabValue(newTabValue);
+
+        if (newTabValue != 2) {
+            setSelectPointsData({
+                ...selectPointsData,
+                route: [],
+                selectRouteIndex: -1,
+            })
+        }
     };
 
 

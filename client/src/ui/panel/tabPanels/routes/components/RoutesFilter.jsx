@@ -98,6 +98,7 @@ export function RoutesFilter(props) {
                     variant='contained'
                     size='small'
                     fullWidth
+                    disabled={true}
                     sx={{
                         marginTop: 1,
                     }}

@@ -1,5 +1,5 @@
 import testRoutes from '../testData/testRoutes.json';
-import { getHotelOptimal } from '../../../../services/axiosConfig.js';
+import { getRouteSequence, getRoute } from '../../../../services/axiosConfig.js';
 
 import './RoutesTabPanel.css';
 
@@ -12,23 +12,7 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
 
-const routeDecrypt = (id, pointList) => {
-    let name = id;
-    
-    for (let i = 0; i < pointList.length; i++) {
-        if (id == pointList[i].id) {
-            name = pointList[i].name;
-            break;
-        }
-    }
-
-    return(
-        name
-    )
-};
-
-
-const Section = (props) => {
+const SectionFilter = (props) => {
     const {title, sectionData, ...other} = props;
     const [isSectionopen, setIsSectionOpen] = useState(false);
 
@@ -36,10 +20,12 @@ const Section = (props) => {
         <>
             <div
                 className='section-title'
-                onClick={() => setIsSectionOpen(!isSectionopen)}
+                onClick={() => {
+                    setIsSectionOpen(!isSectionopen);
+                }}
             >
                 {isSectionopen && (<KeyboardArrowDownIcon/>)}
-                {!isSectionopen && (<KeyboardArrowUpIcon/>)}
+                {!isSectionopen &&  (<KeyboardArrowUpIcon/>)}
                 
                 <span>{title}</span>
 
@@ -52,15 +38,50 @@ const Section = (props) => {
 }
 
 
+const Section = (props) => {
+    const {title, sectionData, setSelectPointsData, selectPointsData, index, route, ...other} = props;
+
+    return(
+        <>
+            <div
+                className='section-title'
+                onClick={() => {
+                    if (selectPointsData.selectRouteIndex != index) {
+                        setSelectPointsData({
+                            ...selectPointsData,
+                            route: route.route,
+                            selectRouteIndex: index
+                        })
+                    }
+                }}
+            >
+                {selectPointsData.selectRouteIndex == index && (<KeyboardArrowDownIcon/>)}
+                {selectPointsData.selectRouteIndex != index &&  (<KeyboardArrowUpIcon/>)}
+                
+                <span>{title}</span>
+
+                <hr />
+            </div>
+
+            {selectPointsData.selectRouteIndex == index && ({...sectionData})}
+        </>
+    )
+}
+
+
 
 const Routes = (props) => {
-    const {routesData, pointList, ...other} = props;
+    const {routesData, pointList, setSelectPointsData, selectPointsData, ...other} = props;
     
     let routesList = routesData.map((route, index) => {
         return(
             <>
                 <Section
-                    title={'Маршрут ' + Number(Number(index)+1)}
+                    title={route.hotel}
+                    setSelectPointsData={setSelectPointsData}
+                    selectPointsData={selectPointsData}
+                    route={route}
+                    index={index}
                     sectionData={
                         <RouteCard
                             pointList={pointList}
@@ -85,6 +106,8 @@ function RoutesTabPanel(props) {
     const {selectPointsData, setSelectPointsData} = props;
 
     const [routesData, setroutesData] = useState([]);
+    const [route, setRoute] = useState([]);
+    const [routeTabIndex, setRouteTabIndex] = useState(-1);
     const [routeFilterData, setRouteFilterData] = useState({
         time_limit: 7,
         days: 1
@@ -109,16 +132,13 @@ function RoutesTabPanel(props) {
             }
         };
 
-        // console.log(JSON.stringify(body))
-        getHotelOptimal(setroutesData, body);
+        getRouteSequence(setroutesData, body);
     }, [routeFilterData])
-
-    console.log(routesData)
 
     return ( 
         <>
             <div id="RoutesTabPanel">
-                <Section
+                <SectionFilter
                     title='Параметры маршрута'
                     sectionData={
                         <RoutesFilter
@@ -131,6 +151,8 @@ function RoutesTabPanel(props) {
                 <Routes
                     pointList={selectPointsData.poi}
                     routesData={routesData}
+                    setSelectPointsData={setSelectPointsData}
+                    selectPointsData={selectPointsData}
                 />
             </div>
         </>
