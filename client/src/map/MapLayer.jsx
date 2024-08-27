@@ -194,10 +194,10 @@ function MapLayer(props) {
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     />
 
-                    <ZoomControl
+                    {/* <ZoomControl
                         position='topright'
                         
-                    />
+                    /> */}
 
 
                     <SelectPointMarker
