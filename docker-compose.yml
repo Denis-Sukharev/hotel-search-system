@@ -19,6 +19,7 @@ services:
       context: ./server
     networks:
       - dev
+    network_mode: host
   
   frontend:
     build:
