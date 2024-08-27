@@ -3,7 +3,7 @@ import envConfig from '../../env-config.json';
 import axios from 'axios';
 
 const config = {
-    baseURL: `${envConfig.protocol}://${envConfig.serverHost}:${envConfig.serverPort}`,
+    baseURL: `${envConfig.protocol}://${envConfig.serverHost}:${envConfig.serverPort}${envConfig.serverLocation}`,
     timeout: envConfig.timeout,
     headers: {
         'Accept': 'application/json',
