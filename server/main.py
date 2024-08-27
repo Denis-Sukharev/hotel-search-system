@@ -25,5 +25,11 @@ app.add_middleware(
         ],
 )
 
-app.include_router(router_hotel)
-app.include_router(router_poi)
+app.include_router(
+    router_hotel,
+    prefix="/api",
+)
+app.include_router(
+    router_poi,
+    prefix="/api",
+)
