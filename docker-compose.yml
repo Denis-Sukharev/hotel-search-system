@@ -3,7 +3,7 @@ networks:
 
 services:
   nginx:
-    image: nginx:stable-aalpine
+    image: nginx:stable-alpine
     ports:
       - "80:80"
     volumes:
