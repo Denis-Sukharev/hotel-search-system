@@ -28,11 +28,11 @@ app.add_middleware(
 
 app.include_router(
     router_hotel,
-    prefix="/api",
+    # prefix="/api",
 )
 app.include_router(
     router_poi,
-    prefix="/api",
+    # prefix="/api",
 )
 
 if __name__ == "__main__":
