@@ -1,4 +1,4 @@
-from finding_ways.start import optimal_hotel
+from server.finding_ways.start import optimal_hotel
 from typing import Union
 from fastapi import APIRouter, HTTPException, status
 from server.database import conn
