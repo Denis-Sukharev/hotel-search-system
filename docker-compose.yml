@@ -3,7 +3,7 @@ version: "3"
 networks:
   dev:
     driver: bridge
-    name: webnet
+    name: dev
 
 services:
   nginx:
