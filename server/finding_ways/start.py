@@ -2,9 +2,9 @@ import os
 import pandas as pd
 
 # from greedy import greedy_algorithm, calculate_total_distance
-from full_1 import brute_force_algorithm
-from full_2 import find_optimal_solution
-from greedy import calculate_total_distance, greedy_algorithm
+from finding_ways.full_1 import brute_force_algorithm
+from finding_ways.full_2 import find_optimal_solution
+from finding_ways.greedy import calculate_total_distance, greedy_algorithm
 
 
 def save_best_routes(results):
