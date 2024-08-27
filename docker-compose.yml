@@ -21,7 +21,6 @@ services:
       context: ./server
     networks:
       - dev
-    command: --net=host
   
   frontend:
     build:
