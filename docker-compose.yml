@@ -15,13 +15,13 @@ services:
       - frontend
     networks:
       - dev
-    command: --new=host
 
   backend:
     build:
       context: ./server
     networks:
       - dev
+    command: --net=host
   
   frontend:
     build:
