@@ -1,3 +1,5 @@
+version: "3"
+
 networks:
   dev:
 
@@ -13,13 +15,13 @@ services:
       - frontend
     networks:
       - dev
+    command: --new=host
 
   backend:
     build:
       context: ./server
     networks:
       - dev
-    network_mode: host
   
   frontend:
     build:
