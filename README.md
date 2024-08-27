@@ -4,6 +4,8 @@
 
 ### Добавление необходимых файлов
 
+Клонируем проект с репозитория.
+
 В корневой папке создать файл `.env`.
 Добавить в него слудующую инфрмацию:
 ```
@@ -21,11 +23,47 @@ DB_NAME=Название_БД
     "protocol": "Протокол_соединения_с_сервером",
     "serverHost": "Адрес_сервера",
     "serverPort": "Порт_сервера",
-    "timeout": 5000
+    "serverLocation": "/api",
+    "timeout": 600000,
+    "apiOsm": "API OSM",
+    "apiGh": "API GH"
 }
 ```
 
+## Запуск
+
+Установка `docker`:
+
+1. Set up Docker's `apt` repository
+```bash
+# Add Docker's official GPG key:
+sudo apt-get update
+sudo apt-get install ca-certificates curl
+sudo install -m 0755 -d /etc/apt/keyrings
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+# Add the repository to Apt sources:
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt-get update
+```
+
+2. Install the `Docker` packages
+```bash
+sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+```
+
+Запуск проекта
+```bash
+docker compose up --build
+```
+
 ---
+## Архив
+
 
 ## Серверная часть
 
@@ -36,29 +74,29 @@ DB_NAME=Название_БД
 pip install -r requirements.txt
 ```
 
-Установка зависимостей из файла requirements.txt
+Установка зависимостей из файла `requirements.txt`
 ```bash
 python -m venv venv
 ```
 
-Запуск виртуального окружения (Windows) (1 вариант)
+Запуск виртуального окружения (`Windows`) (1 вариант)
 ```bash
 .\venv\Scripts\activate.bat
 ```
 
-Запуск виртуального окружения (Windows) (2 вариант)
+Запуск виртуального окружения (`Windows`) (2 вариант)
 ```bash
 .\venv\Scripts\Activate.ps1
 ```
 
-Запуск виртуального окружения (Linux)
+Запуск виртуального окружения (`Linux`)
 ```bash
 source venv/bin/activate
 ```
 
-Запуск локального сервера
+Запуск локального сервера из папки `server`
 ```bash
-uvicorn server.main:app --reload
+uvicorn main:app --reload
 ```
 
 ### Внешние ресурсы
@@ -73,7 +111,7 @@ uvicorn server.main:app --reload
 
 Предварительно необходимо установить:
 1. [NodeJS](https://nodejs.org/en)
-2. [Nmp](https://www.npmjs.com/) (Устанавливается с NodeJS)
+2. [Nmp](https://www.npmjs.com/) (Устанавливается с `NodeJS`)
 
 Находясь в корневой папке проекта переходим в папку веб-клиента
 ```bash
@@ -85,7 +123,7 @@ cd ./client
 npm install
 ```
 
-Запуск проекта в режиме разработки (исползуется Vite):
+Запуск проекта в режиме разработки (исползуется `Vite`):
 ```bash
 npm run dev
 ```
@@ -114,7 +152,7 @@ npm install @fontsource/roboto
 3. Карты [OpenRoute Service](https://openrouteservice.org/)
 
 
-## Архив
+
 
 ### Запуск
 * Команда для запуска скрипта вычисления матрицы расстояний
