@@ -229,7 +229,7 @@ async def select_name_hotel(data_info: FragmentInfoHotel):
 #             return hotel
         
 
-@router.post("/route/optimal", description="Требуется: лимит времени в часах, кол-во дней, poi_id. Ответ: название отеля, маршрут[hotel_id, poi_id,poi_id, ..., hotel_id], время в пути, расстояние, неучтеные точки")
+@router.post("/route/optimal/")
 async def select_optimal_route(data: HotelOptimal, hotel:Hotels):
     try:
         # return data.time_limit,data.days,data.points_sequence
@@ -244,7 +244,7 @@ async def select_optimal_route(data: HotelOptimal, hotel:Hotels):
 
 @router.post("/hotel/optimal/")
 async def select_optimal_hotel(data: GetHotelOptimalSchema):
-    # try:
+    try:
         with conn:
             with conn.cursor() as cur:
                 cur.execute('''
@@ -330,12 +330,12 @@ async def select_optimal_hotel(data: GetHotelOptimalSchema):
                 }
                 
                 return result
-    # except Exception as e:
-    #     print (e)
-    #     raise HTTPException(
-    #         status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-    #         detail="INTERNAL SERVER ERROR"
-    #     )
+    except Exception as e:
+        print (e)
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="INTERNAL SERVER ERROR"
+        )
     
 
 
