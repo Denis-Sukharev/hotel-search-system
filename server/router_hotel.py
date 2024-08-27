@@ -1,8 +1,8 @@
-from server.finding_ways.start import optimal_hotel
+from finding_ways.start import optimal_hotel
 from typing import Union
 from fastapi import APIRouter, HTTPException, status
-from server.database import conn
-from server.schemas import Empty, HotelOptimal, Hotels, FullInfoHotelPage, FragmentInfoHotel, IdHotel, GetHotelOptimalSchema
+from database import conn
+from schemas import Empty, HotelOptimal, Hotels, FullInfoHotelPage, FragmentInfoHotel, IdHotel, GetHotelOptimalSchema
 
 
 router = APIRouter(

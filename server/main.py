@@ -2,8 +2,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.httpsredirect import HTTPSRedirectMiddleware
 
-from server.router_hotel import router as router_hotel
-from server.router_poi import router as router_poi
+from router_hotel import router as router_hotel
+from router_poi import router as router_poi
 
 app = FastAPI()
 

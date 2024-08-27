@@ -1,7 +1,7 @@
 from typing import Union
 from fastapi import APIRouter, HTTPException, status
-from server.database import conn
-from server.schemas import FullInfoPoiPage, IdPoi, FragmentInfoPoi
+from database import conn
+from schemas import FullInfoPoiPage, IdPoi, FragmentInfoPoi
 
 
 router = APIRouter(
