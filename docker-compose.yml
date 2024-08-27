@@ -1,20 +1,18 @@
 networks:
   dev:
 
-
 services:
   nginx:
     image: nginx:stable-aalpine
     ports:
-      -"80:80"
+      - "80:80"
     volumes:
-      -'./nginx.conf:/etc/nginx/nginx.conf'
+      - "./nginx.conf:/etc/nginx/nginx.conf"
     depends_on:
       - backend
       - frontend
     networks:
       - dev
-
 
   backend:
     build:
