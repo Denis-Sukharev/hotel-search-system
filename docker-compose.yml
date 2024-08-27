@@ -20,12 +20,14 @@ services:
       - dev
 
   backend:
+    container_name: backend
     build:
       context: ./server
     networks:
       - dev
   
   frontend:
+    container_name: frontend
     build:
       context: ./client
     networks:
