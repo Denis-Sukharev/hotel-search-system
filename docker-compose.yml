@@ -18,11 +18,11 @@ services:
       - frontend
     networks:
       - dev
-    restart: unless_stopped
+    restart: unless-stopped
 
   backend:
     container_name: backend
-    restart: unless_stopped
+    restart: unless-stopped
     build:
       context: ./server
     networks:
@@ -30,7 +30,7 @@ services:
   
   frontend:
     container_name: frontend
-    restart: unless_stopped
+    restart: unless-stopped
     build:
       context: ./client
     networks:
