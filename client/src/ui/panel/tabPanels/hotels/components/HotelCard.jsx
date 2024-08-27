@@ -28,7 +28,7 @@ export const HotelCard = (props) => {
         hotelId,
         hotelName,
         // hotelDescription,
-        // hotelImageUrl,
+        hotelImageUrl,
         hotelType,
         hotelRating,
         hotelCoordX,
@@ -38,8 +38,6 @@ export const HotelCard = (props) => {
         changeHotel,
         ...other
     } = props;
-
-    let hotelImageUrl  = '/logo/logo-img.png';
     
     return (
         <>

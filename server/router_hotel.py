@@ -2,7 +2,7 @@ from finding_ways.start import optimal_hotel
 from typing import Union
 from fastapi import APIRouter, HTTPException, status
 from server.database import conn
-from server.schemas import HotelOptimal, Hotels, FullInfoHotelPage, FragmentInfoHotel, IdHotel
+from server.schemas import Empty, HotelOptimal, Hotels, FullInfoHotelPage, FragmentInfoHotel, IdHotel, GetHotelOptimalSchema
 
 
 router = APIRouter(
@@ -164,6 +164,8 @@ async def select_name_hotel(data_info: FragmentInfoHotel):
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="INTERNAL SERVER ERROR"
         )
+    
+
 
         
 
@@ -227,8 +229,8 @@ async def select_name_hotel(data_info: FragmentInfoHotel):
 #             return hotel
         
 
-@router.post("/hotel/optimal", description="Требуется: лимит времени в часах, кол-во дней, poi_id. Ответ: название отеля, маршрут[hotel_id, poi_id,poi_id, ..., hotel_id], время в пути, расстояние, неучтеные точки")
-async def select_optimal_hotel(data: HotelOptimal, hotel:Hotels):
+@router.post("/route/optimal", description="Требуется: лимит времени в часах, кол-во дней, poi_id. Ответ: название отеля, маршрут[hotel_id, poi_id,poi_id, ..., hotel_id], время в пути, расстояние, неучтеные точки")
+async def select_optimal_route(data: HotelOptimal, hotel:Hotels):
     try:
         # return data.time_limit,data.days,data.points_sequence
         return optimal_hotel(data, hotel)
@@ -237,6 +239,104 @@ async def select_optimal_hotel(data: HotelOptimal, hotel:Hotels):
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="INTERNAL SERVER ERROR"
         )
+
+
+
+@router.post("/hotel/optimal/")
+async def select_optimal_hotel(data: GetHotelOptimalSchema):
+    # try:
+        with conn:
+            with conn.cursor() as cur:
+                cur.execute('''
+                    select
+                    distinct 
+                    poi.poi_id,
+                    poi.name,
+                    poi_coordinates.latitude,
+                    poi_coordinates.longitude   
+                    from poi
+                    inner join poi_category on poi_category.poi_id = poi.poi_id
+                    inner join poi_coordinates on poi_coordinates.poi_id = poi.poi_id
+                    inner join poi_type on poi_type.poi_id = poi.poi_id
+                    inner join district on poi.district_id = district.district_id
+                    inner join hotel_rating on hotel_rating.poi_id = poi.poi_id
+                    where
+                    poi_category.category = 'Проживание'
+                    and district.district_id = ANY(%s)
+                    and poi_type.type = ANY(%s)
+                    and hotel_rating.rating >= %s
+                    and hotel_rating.rating <= %s
+                    group by poi.poi_id, poi_coordinates.latitude, poi_coordinates.longitude, hotel_rating.rating
+                    order by poi.poi_id;
+                ''', (data.district, data.type, int(data.rateMin), int(data.rateMax)))
+                hotels_data = cur.fetchall()
+
+                hotels = []
+                for item in hotels_data:
+                    hotels.append({
+                        "hotel_id": int(item[0]),
+                        "name": str(item[1]),
+                        "latitude": str(item[2]),
+                        "longitude": str(item[3]),
+                        "district_id": 0
+                    })
+
+                data_ = HotelOptimal(time_limit=int(data.time_limit), days=int(data.days), points_sequence=data.points_sequence)
+
+                hotels_ = Hotels(hotels=hotels)
+
+
+                optimal_hotels = []
+                tmp_optimal_hotels = optimal_hotel(data_, hotels_)
+                for item in tmp_optimal_hotels:
+                    optimal_hotels.append(int(item['route'][0]))
+
+                cur.execute('''
+                    select
+                    distinct 
+                    poi.poi_id,
+                    poi.name,
+                    string_to_array(string_agg(distinct poi_type.type, ','), ',') as type,
+                    hotel_rating.rating,
+                    poi_coordinates.latitude,
+                    poi_coordinates.longitude,
+                    COALESCE(photo.photo_url, '') AS photo_url
+                    from poi
+                    inner join poi_coordinates on poi_coordinates.poi_id = poi.poi_id
+                    inner join poi_type on poi_type.poi_id = poi.poi_id
+                    inner join district on district.district_id = poi.district_id
+                    inner join hotel_rating on hotel_rating.poi_id = poi.poi_id
+                    inner join photo on photo.poi_id = poi.poi_id                    
+                    where
+                    poi.poi_id = ANY(%s)
+                    group by poi.poi_id, poi_coordinates.latitude, poi_coordinates.longitude, hotel_rating.rating, COALESCE(photo.photo_url, '');
+                ''',(optimal_hotels,))
+                optimal_hotels_data = cur.fetchall()
+
+                result_hotels = []
+                for item in optimal_hotels_data:
+                    result_hotels.append({
+                        "id": int(item[0]),
+                        "name": str(item[1]),
+                        "type": list(item[2]),
+                        "rating": float(item[3]),
+                        "latitude": str(item[4]),
+                        "longitude": str(item[5]),
+                        "photo": str(item[6])
+                    })
+                    
+                result = {
+                    "hotels": result_hotels
+                }
+                
+                return result
+    # except Exception as e:
+    #     print (e)
+    #     raise HTTPException(
+    #         status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+    #         detail="INTERNAL SERVER ERROR"
+    #     )
+    
 
 
 # def getPoiData(poiArray):

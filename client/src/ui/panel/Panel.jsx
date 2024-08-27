@@ -4,9 +4,15 @@ import PoiTabPanel from './tabPanels/poi/PoiTabPanel';
 import HotelsTabpanel from './tabPanels/hotels/HotelsTabPanel';
 import RoutesTabPanel from './tabPanels/routes/RoutesTabPanel.jsx'
 
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import { useState } from 'react';
 
 const BackToTabButton = (props) => {
     const {tabValue, setTabValue} = props;
@@ -56,6 +62,7 @@ const TabPanel = (props) => {
 
 function Panel(props) {
     const {selectPointsData, setSelectPointsData, tabValue, setTabValue} = props;
+    const[isPanelUp, setIsPanelUp] = useState(true);   
 
     const tabChange = (event, newTabValue) => {
         setTabValue(newTabValue);
@@ -64,6 +71,8 @@ function Panel(props) {
             setSelectPointsData({
                 ...selectPointsData,
                 route: [],
+                routeCoord: [],
+                routeLine: [],
                 selectRouteIndex: -1,
             })
         }
@@ -88,11 +97,38 @@ function Panel(props) {
     }
 
     return ( 
-        <>
+        <Box
+            sx={{
+                marginTop: {
+                    xs: isPanelUp ? 0 : '80vh',
+                    sm: 0,
+                }
+            }}
+        >
             <div id="Panel">
                 <div id="panel-content">
                     <div id="panel-city-block">
-                        Город: <u>Москва</u>
+                        <div>
+                            Город: <u>Москва</u>
+                        </div>
+
+                            <IconButton
+                                size='small'
+                                sx={{
+                                    display: {
+                                        xs: 'block',
+                                        sm: 'none',
+                                    },
+                                    margin: 0,
+                                    padding: 0
+                                }}
+                                onClick={() => {
+                                    setIsPanelUp(!isPanelUp)
+                                }}
+                            >
+                                {!isPanelUp && (<ArrowUpwardIcon fontSize='inherit'/>)}
+                                {isPanelUp && (<ArrowDownwardIcon fontSize='inherit'/>)}
+                            </IconButton>
                     </div>
 
                     <div id="Tabs">
@@ -152,7 +188,7 @@ function Panel(props) {
                     </div>
                 </div>
             </div>
-        </>
+        </Box>
      );
 }
 

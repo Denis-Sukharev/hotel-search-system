@@ -11,6 +11,8 @@ function App() {
     poi: [],
     hotels: [],
     route: [],
+    routeCoord: [],
+    routeLine: [],
     selectRouteIndex: -1,
   });
 

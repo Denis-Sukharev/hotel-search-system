@@ -55,7 +55,7 @@ const CheckboxElement = (props) => {
 
 
 const HotelFilterDistrict = (props) => {
-    const {filterData, setCheck, ...other} = props;
+    const {filterData, setCheck, hotelFilterOptimal, ...other} = props;
 
     const handleChange = (event) => {
         for (let i = 0; i < filterData.district.length; i++) {
@@ -192,11 +192,18 @@ export function HotelFilter(props) {
         setHotelFilterData,
         hotelTabPanelData,
         setHotelTabPanelData,
+        hotelFilterOptimal,
         ...other} = props;
 
     const [hotelFilter, setHotelFilter] = useState({
-        district: hotelFilterData.district,
-        hotelType: hotelFilterData.hotelType,
+        district: hotelFilterData.district/*.map((item) => {
+            item.select = hotelFilterOptimal ? false : true;
+            return item;
+        })*/,
+        hotelType: hotelFilterData.hotelType/*.map((item) => {
+            item.select = hotelFilterOptimal ? false : true;
+            return item;
+        })*/,
         hotelRating: hotelFilterData.hotelRating
     })
 
@@ -226,7 +233,11 @@ export function HotelFilter(props) {
                     <hr />
                 </div>
 
-                {isHotelFilterDistrictOpen && (<HotelFilterDistrict filterData={hotelFilter} setCheck={setHotelFilter} />)}
+                {isHotelFilterDistrictOpen && (<HotelFilterDistrict
+                    filterData={hotelFilter}
+                    setCheck={setHotelFilter}
+                    hotelFilterOptimal={hotelFilterOptimal}
+                />)}
 
                 {/* type */}
                 <div

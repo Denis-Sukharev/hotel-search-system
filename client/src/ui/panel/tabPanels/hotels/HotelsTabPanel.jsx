@@ -15,6 +15,7 @@ import Stack from '@mui/material/Stack';
 import Switch from '@mui/material/Switch';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Typography from '@mui/material/Typography';
+import Skeleton from '@mui/material/Skeleton';
 
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
@@ -42,43 +43,29 @@ function HotelsTabpanel(props) {
 
 
     useEffect(() => {
-        if (hotelFilterOptimal) {
-            let body = {
-                data: {
-                    time_limit: 25200,
-                    days: 1,
-                    points_sequence: selectPointsData.poi.map((item) => item.id)
-                },
-                hotel: {
-                    hotels: selectPointsData.hotels.map((item) => ({
-                        hotel_id: item.id,
-                        name: item.name,
-                        latitude: item.latitude,
-                        longitude: item.longitude,
-                        district_id: 0
-                  }))
-                }
-            };
-    
-            setHotelData([]);
-    
-            console.log(body)
+        let body = {
+            district: hotelFilterData.district.flatMap((item) => (item.select ? item.id : [])),
+            type: hotelFilterData.hotelType.flatMap((item) => (item.select ? item.type : [])),
+            rateMin: hotelFilterData.hotelRating[0],
+            rateMax: hotelFilterData.hotelRating[1]
+        }
 
+        if (hotelFilterOptimal) {
+            body.time_limit = 7;
+            body.days = 1;
+            body.points_sequence = selectPointsData.poi.map((item) => item.id);
+            setHotelData([]);
+            
         } else {
-            let body = {
-                page: hotelTabPanelData.page - 1,
-                district: hotelFilterData.district.flatMap((item) => (item.select ? item.id : [])),
-                type: hotelFilterData.hotelType.flatMap((item) => (item.select ? item.type : [])),
-                rateMin: hotelFilterData.hotelRating[0],
-                rateMax: hotelFilterData.hotelRating[1]
-            }
+            body.page = hotelTabPanelData.page - 1;
             if (hotelSearchValue != '') {
                 body.fragment = hotelSearchValue;
             }
-    
-            getHolteAll(setHotelData, setHotelCount, body)
         }
-    }, [hotelTabPanelData.page, hotelFilterData, hotelSearchValue, hotelFilterOptimal]);
+
+        getHolteAll(setHotelData, setHotelCount, body)
+    }, [hotelTabPanelData.page, hotelFilterData, hotelSearchValue]);
+
 
 
     const hotelList = hotelData.map((hotelItem) => {
@@ -87,7 +74,7 @@ function HotelsTabpanel(props) {
                 hotelId={hotelItem.id}
                 hotelName={hotelItem.name}
                 // hotelDescription={poiItem.description}
-                // hotelImageUrl={poiItem.image}
+                hotelImageUrl={hotelItem.photo != '' ? hotelItem.photo : '/logo/logo-img.png'}
                 hotelType={hotelItem.type}
                 hotelRating={hotelItem.rating}
                 hotelCoordX={hotelItem.latitude}
@@ -113,7 +100,7 @@ function HotelsTabpanel(props) {
                                         "id": hotelItem.id,
                                         "name": hotelItem.name,
                                         // "description": hotelItem.description,
-                                        // "image": hotelItem.image,
+                                        "photo": hotelItem.photo,
                                         "type": hotelItem.type,
                                         "rating": hotelItem.rating,
                                         "latitude": hotelItem.latitude,
@@ -135,7 +122,7 @@ function HotelsTabpanel(props) {
                 hotelId={hotelItem.id}
                 hotelName={hotelItem.name}
                 // hotelDescription={poiItem.description}
-                // hotelImageUrl={poiItem.image}
+                hotelImageUrl={hotelItem.photo != '' ? hotelItem.photo : '/logo/logo-img.png'}
                 hotelType={hotelItem.type}
                 hotelRating={hotelItem.rating}
                 hotelCoordX={hotelItem.latitude}
@@ -174,7 +161,6 @@ function HotelsTabpanel(props) {
 
                     <IconButton
                         size="large"
-                        disabled={hotelFilterOptimal}
                         onClick={() => {
                             setHotelTabPanelData({
                                 ...hotelTabPanelData,
@@ -188,15 +174,6 @@ function HotelsTabpanel(props) {
                     </IconButton>
                 </div>
                 
-                {hotelTabPanelData.isHotelFilterVisible && (
-                    <HotelFilter
-                        hotelFilterData={hotelFilterData}
-                        setHotelFilterData={setHotelFilterData}
-                        hotelTabPanelData={hotelTabPanelData}
-                        setHotelTabPanelData={setHotelTabPanelData}
-                    />
-                )}
-
 
                 <div>
                     <FormControlLabel
@@ -217,20 +194,34 @@ function HotelsTabpanel(props) {
                                 size='medium'
                                 checked={hotelFilterOptimal}
                                 onChange={() => {
-                                    setHotelFilterOptimal(!hotelFilterOptimal);
-                                    setHotelTabPanelData({
-                                        ...hotelTabPanelData,
-                                        isHotelFilterVisible: false,
-                                        isAllHotelVisible: true,
-                                        page: 1
+                                    if ((!hotelFilterOptimal && selectPointsData.poi.length > 0) || hotelFilterOptimal) {
+                                        setHotelFilterOptimal(!hotelFilterOptimal);
+                                        setHotelTabPanelData({
+                                            ...hotelTabPanelData,
+                                            isHotelFilterVisible: !hotelFilterOptimal ? true : hotelTabPanelData.isHotelFilterVisible,
+                                            isAllHotelVisible: true,
+                                            // 
                                     });
+                                    }
                                 }}
                             />
                         }
                     />
                 </div>
                 
+
                     
+                {hotelTabPanelData.isHotelFilterVisible && (
+                    <HotelFilter
+                        hotelFilterData={hotelFilterData}
+                        setHotelFilterData={setHotelFilterData}
+                        hotelTabPanelData={hotelTabPanelData}
+                        setHotelTabPanelData={setHotelTabPanelData}
+                        hotelFilterOptimal={hotelFilterOptimal}
+                    />
+                )}
+
+
 
                 <div
                     className='section-title'
@@ -272,34 +263,36 @@ function HotelsTabpanel(props) {
 
                     <hr />
                 </div>
+                
+                {hotelList.length > 0 ? (<>
+                    {hotelTabPanelData.isAllHotelVisible && (
+                        <>
+                            {...hotelList}
 
-                {hotelTabPanelData.isAllHotelVisible && (
-                    <>
-                        {...hotelList}
-
-                        {hotelCount > 20 && !hotelFilterOptimal && (<div className='pagination-block'>
-                            <Stack
-                                spacing={2}
-                                marginTop={'5px'}
-                                alignItems={'center'}
-                            > 
-                                <Pagination
-                                    size='small'
-                                    count={Math.ceil(Number(hotelCount) / 20)}
-                                    defaultPage={hotelTabPanelData.page}
-                                    siblingCount={1}
-                                    boundaryCount={1}
-                                    onChange={(event, value) => {
-                                        setHotelTabPanelData({
-                                        ...hotelTabPanelData,
-                                        page: value
-                                        })
-                                    }}
-                                />
-                            </Stack>
-                        </div>)}
-                    </>
-                )}
+                            {hotelCount > 20 && !hotelFilterOptimal && (<div className='pagination-block'>
+                                <Stack
+                                    spacing={2}
+                                    marginTop={'5px'}
+                                    alignItems={'center'}
+                                > 
+                                    <Pagination
+                                        size='small'
+                                        count={Math.ceil(Number(hotelCount) / 20)}
+                                        defaultPage={hotelTabPanelData.page}
+                                        siblingCount={1}
+                                        boundaryCount={1}
+                                        onChange={(event, value) => {
+                                            setHotelTabPanelData({
+                                            ...hotelTabPanelData,
+                                            page: value
+                                            })
+                                        }}
+                                    />
+                                </Stack>
+                            </div>)}
+                        </>
+                    )}
+                </>) : <><Skeleton variant="rectangular" fullWidth height={150} /><Skeleton variant="rectangular" fullWidth height={150} /></>}
             </div>
         </>
      );

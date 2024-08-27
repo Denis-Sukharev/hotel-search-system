@@ -15,14 +15,18 @@ const config = {
 
 
 export const sendAPI = async (urlAPI, setRes, body) => {
-    config.url = urlAPI;
+    let _config = {
+        ...config,
+        url: urlAPI
+    }
+
     if (body) {
-        config.method = 'post';
-        config.data = JSON.stringify(body);
-        console.log(config.data);
+        _config.method = 'post';
+        _config.data = JSON.stringify(body);
+        _config.log(config.data);
     }
     
-    await axios(config)
+    await axios(_config)
     .then((response) => {
         setRes(response);
         // console.log(response);
@@ -34,11 +38,16 @@ export const sendAPI = async (urlAPI, setRes, body) => {
 
 
 export const getHolteAll = async (setHotels, setHotelsCount, body) => {
-    config.url = 'fragment' in body ? '/hotel/search_name/' : '/hotel/all/';
-    config.method = 'post';
-    config.data = JSON.stringify(body);
+    let _config = {
+        ...config,
+        url: 'fragment' in body ?
+        '/hotel/search_name/' :
+        ('page' in body ? '/hotel/all/' : '/hotel/optimal/'),
+        method: 'post',
+        data: JSON.stringify(body)
+    }
     
-    await axios(config)
+    await axios(_config)
     .then((response) => {
         setHotels(response.data.hotels);
 
@@ -54,11 +63,14 @@ export const getHolteAll = async (setHotels, setHotelsCount, body) => {
 }
 
 export const getPoiAll = async (setPoi, setPoiCount, body) => {
-    config.url = 'fragment' in body ? '/poi/search_name/' : '/poi/all/';
-    config.method = 'post';
-    config.data = JSON.stringify(body);
+    let _config = {
+        ...config,
+        url: 'fragment' in body ? '/poi/search_name/' : '/poi/all/',
+        method: 'post',
+        data: JSON.stringify(body)
+    }
     
-    await axios(config)
+    await axios(_config)
     .then((response) => {
         setPoi(response.data.poi);
 
@@ -74,11 +86,14 @@ export const getPoiAll = async (setPoi, setPoiCount, body) => {
 }
 
 export const getRouteSequence = async (setRouteSequence, body) => {
-    config.url = '/hotel/optimal/';
-    config.method = 'post';
-    config.data = JSON.stringify(body);
+    let _config = {
+        ...config,
+        url: '/route/optimal/',
+        method: 'post',
+        data: JSON.stringify(body)
+    }
     
-    await axios(config)
+    await axios(_config)
     .then((response) => {
         setRouteSequence(response.data);
     })
@@ -89,12 +104,15 @@ export const getRouteSequence = async (setRouteSequence, body) => {
 }
 
 export const getRoute = async (body) => {
-    config.baseURL = '';//'https://api.openrouteservice.org/v2/directions/driving-car';
-    config.headers.Authorization = envConfig.apiOsm
-    config.method = 'post';
-    config.data = JSON.stringify(body);
+    let _config = {
+        ...config,
+        baseURL: 'https://api.openrouteservice.org/v2/directions/driving-car',
+        headers: {Authorization: envConfig.apiOsm},
+        method: 'post',
+        data: JSON.stringify(body)
+    }
 
-    await axios(config)
+    await axios(_config)
     .then((response) => {
         console.log(response.data)
     })  

@@ -12,6 +12,7 @@ import TextField from '@mui/material/TextField';
 import IconButton from '@mui/material/IconButton';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
+import Skeleton from '@mui/material/Skeleton';
 
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
@@ -200,8 +201,9 @@ function PoiTabPanel(props) {
 
                     <hr />
                 </div>
-
-                {poiTabPanelData.isAllPoiVisible && (
+                
+                {poiList.length > 0 ? (<>
+                    {poiTabPanelData.isAllPoiVisible && (
                     <>
                         {...poiList}
 
@@ -226,6 +228,10 @@ function PoiTabPanel(props) {
                         </div>)}
                     </>
                 )}
+                
+                
+                </>) : <><Skeleton variant="rectangular" fullWidth height={150} /><Skeleton variant="rectangular" fullWidth height={150} /></>}
+                
             </div>
         </>
      );
