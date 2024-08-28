@@ -113,7 +113,7 @@ export function RouteCard(props) {
             <div id="Routecard">
                 <div id="route-params">
                     <span>
-                        Общее время: {Number(((Number(routeData.time)) / 3600).toFixed(1)) + routeData.route.length - 2 } ч.
+                        Общее время: {Number((((Number(routeData.time)) / 3600) + routeData.route.length - 2 ).toFixed(1))} ч.
                     </span>
 
                     <span>
