@@ -129,7 +129,8 @@ async function run(body) {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            profile: 'bike',
+            // profile: 'bike',
+            profile: 'foot',
             points: body,
             points_encoded: false,  
             // point_hints: [
@@ -230,7 +231,6 @@ function RoutesTabPanel(props) {
                 }
             }
 
-            
             // let _config = {
             //     method: 'post',
             //     timeout: 600000,
@@ -269,7 +269,7 @@ function RoutesTabPanel(props) {
             //     console.log(error)
             // })
 
-            routeLineParse.push(await run(tmpRouteCoord))
+            routeLineParse.push(await run([...tmpRouteCoord, tmpRouteCoord[0]]))
 
             
             routeParse.id.push(tmpRouteId);

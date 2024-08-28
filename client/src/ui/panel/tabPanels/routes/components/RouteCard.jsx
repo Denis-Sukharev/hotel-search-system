@@ -120,6 +120,10 @@ export function RouteCard(props) {
                         Дистанция: {(Number(routeData.distance) / 1000).toFixed(1)} км.
                     </span>
 
+                    <span>
+                        Тип передвижения: пеший
+                    </span>
+
                     {routeData.unsatisfied_points.length > 0 && (
                         <span>
                             Неучтённые места:

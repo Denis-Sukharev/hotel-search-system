@@ -101,7 +101,6 @@ const SelectPointLine = (props) => {
     let lineCoord = selectPointsData.routeLine[selectPointsData.selectRouteIndex].map((item) => {
         return [item[1], item[0]]
     })
-    lineCoord.push(lineCoord[0])
 
     return(
         <>
