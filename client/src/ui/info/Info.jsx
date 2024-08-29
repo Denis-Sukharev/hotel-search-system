@@ -12,14 +12,22 @@ function Info() {
                     display: {
                         xs: 'none',
                         sm: 'flex'
-                    }
+                    },
                 }}
             >
                 <div id="info-qr">
-                    <img id="logo-img" src="/logo/logo.png" alt="Logo" />
+                    <span>
+                        Сервис планирования путешествий
+                    </span>
 
-                    <img id="qr-img" src="/qr/mestechko.png" alt="QR code" />
-                </div>
+                    <div id="info-img">
+                        <img id="logo-img" src="/logo/logo.png" alt="Logo" />
+
+                        <img id="qr-img" src="/qr/mestechko.png" alt="QR code" />
+                    </div>
+                   
+                </div> 
+                
             </Box>
         </>
      );
