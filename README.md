@@ -1,5 +1,12 @@
 # Инстуркция по установке и запуске программного обеспечения для оптимизации маршрутов путешествий
 
+<p align="left">
+  <a href="https://drive.google.com/file/d/1OOoG3fP3ziqn7mgIZ9w52-49_kiqpBwi/view?usp=drive_link" target="_blank">
+    <img src="https://img.shields.io/badge/ПРЕЗЕНТАЦИЯ ПРОЕКТА-blue?style=for-the-badge&logo=google-slides&logoColor=white"/>
+  </a>
+</p>
+
+
 ## Конфигураця проекта
 
 ### Добавление необходимых файлов
